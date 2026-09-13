@@ -1,5 +1,55 @@
-/*
-body {
-  border-radius: 0;
+/* Home page of cbadatos.com.ar, on top of the Midnight Blue theme. */
+.homepage .cba-hero .container .row {
+  padding: 56px 24px 48px;
+  text-align: center;
 }
-*/
+.homepage .cba-hero h1 {
+  font-size: 44px;
+  margin-bottom: 16px;
+}
+.homepage .cba-hero .cba-lead {
+  color: #dfe5ff;
+  font-size: 20px;
+  max-width: 760px;
+  margin: 0 auto 32px;
+}
+.homepage .cba-hero .cba-lead a {
+  color: #fff;
+  text-decoration: underline;
+}
+.cba-search {
+  display: flex;
+  max-width: 760px;
+  margin: 0 auto 24px;
+  gap: 8px;
+}
+.cba-search input {
+  flex: 1;
+  font-size: 20px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  border: 0;
+}
+.cba-search button {
+  font-size: 18px;
+  padding: 0 28px;
+  border-radius: 8px;
+}
+.cba-counts {
+  color: #fff;
+  font-size: 16px;
+  margin: 0;
+}
+.cba-counts strong {
+  font-size: 22px;
+}
+.cba-counts span + span::before {
+  content: "\00b7";
+  margin: 0 12px;
+  color: #93a1e9;
+}
+@media (max-width: 767px) {
+  .homepage .cba-hero h1 { font-size: 30px; }
+  .cba-search { flex-direction: column; }
+  .cba-search button { padding: 10px; }
+}

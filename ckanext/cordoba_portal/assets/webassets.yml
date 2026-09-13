@@ -1,14 +1,4 @@
-# cordoba_portal-js:
-#   filters: rjsmin
-#   output: ckanext-cordoba_portal/%(version)s-cordoba_portal.js
-#   contents:
-#     - js/cordoba_portal.js
-#   extra:
-#     preload:
-#       - base/main
-
-# cordoba_portal-css:
-#   filters: cssrewrite
-#   output: ckanext-cordoba_portal/%(version)s-cordoba_portal.css
-#   contents:
-#     - css/cordoba_portal.css
+cordoba_portal-css:
+  output: ckanext-cordoba_portal/%(version)s-cordoba_portal.css
+  contents:
+    - style.css
