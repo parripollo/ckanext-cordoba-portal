@@ -107,6 +107,19 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
   grafias) -> `update_frequency`; `depto` -> `departamento`; `muncom` ->
   `municipio`. El resto de extras se conserva tal cual.
 
+- [x] 2026-09-13: harvester `ckan_with_files` (metadatos): procedencia,
+      orgs con prefijo y logo copiado (SVG queda como link), `single_org`
+      + `remote_orgs_as_groups` para estadistica, extras que chocan se
+      descartan. Probado en local contra gestion abierta: 156/156, 19 orgs,
+      13 grupos. 19 tests. Bug encontrado en ckanext-harvest (reindex de la
+      fuente con dict sin validar, CKAN >= 2.12): fork PR #3, en revision;
+      mezclarlo ANTES de desplegar harvest en cbadatos.
+- [ ] OJO harvest: los objetos con error NO se reintentan en la corrida
+      siguiente (el harvester `ckan` pide solo lo modificado desde el
+      ultimo job). Tras arreglar algo, correr una vez con `force_all`.
+- [ ] La org "Córdoba Datos" cuenta la fuente de harvest como dataset (tipo
+      `harvest`); ver si ocultarla del conteo.
+
 ## 3. Harvest con archivos (ser backup, no un indice de links)
 
 - ckanext-harvest NO baja archivos: su harvester `ckan` borra `url_type`
