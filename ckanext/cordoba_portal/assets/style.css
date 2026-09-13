@@ -54,8 +54,40 @@
   .cba-search button { padding: 10px; }
 }
 
-/* Provenance box (dataset sidebar) and line (resource page) */
+/* Provenance: a relevant fact, so it gets its own background wherever it
+   shows (dataset sidebar box, resource page line, organization sidebar) */
+.cba-source {
+  background: #fff7e6;
+  border: 1px solid #f3d9a4;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.cba-source .module-heading {
+  background: #f9e7c3;
+  color: #5c3d00;
+  border-bottom: 1px solid #f3d9a4;
+}
 .cba-source .module-heading i { margin-right: 6px; }
+.cba-source .module-content { padding: 12px 16px; }
 .cba-source .cba-source-portal { font-weight: 600; margin-bottom: 8px; }
-.cba-source-line { color: #4a5568; }
+.cba-source .cba-source-portal a { color: #5c3d00; }
+.cba-source-line {
+  background: #fff7e6;
+  border: 1px solid #f3d9a4;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #5c3d00;
+  margin: 8px 0 16px;
+}
+.cba-source-line a { color: #5c3d00; text-decoration: underline; }
 .cba-source-line i { margin-right: 4px; }
+.cba-source-org {
+  background: #fff7e6;
+  border: 1px solid #f3d9a4;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  color: #5c3d00;
+  font-size: 14px;
+}
+.cba-source-org a { color: #5c3d00; text-decoration: underline; }

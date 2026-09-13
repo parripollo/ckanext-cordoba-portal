@@ -117,6 +117,18 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
 - [ ] OJO harvest: los objetos con error NO se reintentan en la corrida
       siguiente (el harvester `ckan` pide solo lo modificado desde el
       ultimo job). Tras arreglar algo, correr una vez con `force_all`.
+      Las copias de archivos si se reintentan: el harvester revisa los
+      archivos tambien en los datasets "sin cambios".
+- [ ] BUG ckanext-harvest (2026-09-13): con `ckan.harvest.log_scope`
+      distinto de -1 el `DBLogHandler` hace `Session.commit()` por cada
+      linea de log, en medio de la transaccion de `package_update`: se
+      cierra el savepoint y el `HarvestSource` no se actualiza
+      (`harvest_source_update` dice OK pero la tabla queda vieja;
+      `harvest_source_patch` da 500 "This transaction is closed"). El DEMO
+      lo tiene activo (`log_scope = 0`). cbadatos no lo usa. PR al fork:
+      que el handler use una sesion propia, o sacarlo.
+- [ ] `harvest_source_patch` falla siempre por los extras de la fuente
+      (ya visto en el demo): usar `harvest_source_update` completo.
 - [ ] La org "Córdoba Datos" cuenta la fuente de harvest como dataset (tipo
       `harvest`); ver si ocultarla del conteo.
 
