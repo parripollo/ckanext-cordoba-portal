@@ -255,6 +255,7 @@ class CordobaCKANHarvester(CKANHarvester):
             "url": filename,
             "hash": sha256,
             "size": size,
+            "mimetype": content_type.split(";")[0] or None,
             "source_etag": etag,
             "source_downloaded": now,
         })
