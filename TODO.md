@@ -11,22 +11,28 @@ vive en el repo de deploy, no aca.
 - [x] 2026-09-13: instancia `cbadatos` definida en el repo de deploy (rama
       `cbadatos`, en revision): clon y venv propios, puerto 8102, vhost
       `cbadatos.com.ar` + redirect de `www`, certificado propio.
-- [ ] Dominio: delegar `cbadatos.com.ar` a Cloudflare (NIC.ar), CNAME apex
-      -> `uni.cluster311.com` (proxied), `www` -> apex, SSL Full (strict),
-      certificado Origin CA de la zona instalado en el servidor (root).
-- [ ] Mezclar la rama `cbadatos` del deploy, `bootstrap.sh cbadatos` (root
-      corre el SQL de los pasos 3 y 4), `deploy.sh cbadatos`, root instala
-      `nginx-cbadatos.conf`. Portal vacio en linea con el tema nuevo.
+- [x] 2026-09-13: dominio delegado a Cloudflare (andres); A `@` -> IP del
+      servidor, CNAME `www` -> `@`, ambos proxied.
+- [ ] Cloudflare: SSL Full (strict) y certificado Origin CA de la zona
+      instalado en el servidor (root, SERVER.md paso 6).
+- [x] 2026-09-13: rama `cbadatos` del deploy mezclada en main.
+- [x] 2026-09-13: instancia local andando (ckanito-cbadatos.ini, puerto
+      5001, bases ckanito_cbadatos*, admin / cbadatos-dev-2026) con la home.
+- [ ] Servidor: `deploy.sh demo` (units nuevas), `bootstrap.sh cbadatos`
+      (root corre el SQL de los pasos 3 y 4), `deploy.sh cbadatos`, root
+      instala los vhosts por instancia y borra el `ckanito.conf` viejo.
 
 ## 1. Home page
 
-- [ ] Tema Midnight Blue (`templates-midnight-blue` / `public-midnight-blue`,
-      el default de la proxima version de CKAN). Ya va en el env de la
-      instancia; la extension solo extiende esos templates.
-- [ ] `home/index.html` propio: texto corto que diga que es una iniciativa
-      ciudadana para reunir en un solo lugar los datos de la provincia de
-      Cordoba, y una caja de busqueda grande. Debajo, contadores (datasets,
-      portales de origen, organizaciones) y accesos por portal de origen.
+- [x] 2026-09-13: tema Midnight Blue (env de la instancia y test.ini).
+- [x] 2026-09-13: `home/index.html`: iniciativa ciudadana, buscador grande,
+      contadores (datasets, organizaciones), datasets recientes. Test.
+- [ ] Contador y accesos por portal de origen cuando exista `source_portal`.
+- [ ] "Recent Datasets" / "View all datasets" salen en ingles: al tema
+      Midnight Blue del core le faltan esas cadenas en el .po espanol.
+      Arreglo en el core (traducciones), no en la extension.
+- [ ] Pie de pagina: sacar la marca CKAN, poner el texto de la iniciativa
+      y el link a "Acerca de" / "Fuentes". Logo propio (decidir).
 - [ ] Textos en espanol, sin logos ni nombres oficiales del gobierno (no
       somos el gobierno: decirlo en la home y en "Acerca de").
 - [ ] Pagina "Acerca de" y "Fuentes" (que portales se cosechan, con que
@@ -54,42 +60,45 @@ Hallazgos (2026-09-13):
   (Direccion General de Estadistica y Censos). Extras `depto` (565) y
   `muncom` (537): departamento y municipio/comuna del dato.
 
-Propuesta (a decidir):
+Propuesta (conversada el 2026-09-13, sigue abierta):
 
-- Tres campos de dataset en el esquema scheming de la extension:
+- Dos campos de dataset en el esquema scheming de la extension, siempre
+  visibles en la ficha del dataset y en la del recurso:
   - `source_portal` (select, obligatorio, facet "Portal de origen"). Las
     opciones viven en la extension: `cbadatos` (produccion propia),
     `datosgestionabierta`, `datosestadistica`, y se agregan las que
     vengan. Cada opcion tiene etiqueta y URL del portal.
-  - `source_url` (URL del dataset en el portal de origen; link "Ver en el
-    portal de origen"). Vacio en produccion propia.
-  - `producer` (texto, facet "Productor"): quien produjo el dato. En
-    gestion abierta es el titulo de la organizacion remota (Ministerio de
-    Salud, ...). En estadistica es un valor fijo de la fuente (Direccion
-    General de Estadistica y Censos) y sus "organizaciones" tematicas
-    pasan a grupos (temas). En produccion propia lo carga quien sube.
-- Organizaciones CKAN: una por portal de origen (la organizacion de la
-  fuente de harvest: "Portal de Gestion Abierta", "Estadistica y Censos")
-  mas las organizaciones propias. No se crean organizaciones remotas
-  (`remote_orgs` en `only_local`), asi nunca chocan dos "Ministerio de
-  Salud" de portales distintos. La organizacion dice de donde viene, el
-  campo `producer` dice quien lo hizo, `source_portal` es el facet.
-  Alternativa B: crear las organizaciones remotas con prefijo por portal
-  y colgarlas de una organizacion padre por portal con ckanext-hierarchy;
-  mas fiel para gestion abierta, inutil para estadistica (temas), 32
-  organizaciones mas. Recomendacion: A, con B como cambio posible despues.
-- Recursos: campo `source_url` tambien en el recurso (URL original del
-  archivo), ademas del archivo copiado (ver 3).
+  - `source_url`: URL del dataset en el portal de origen ("Ver en el
+    portal de origen"). Se arma con la URL de la fuente y el id remoto
+    (`harvest_object.guid`), asi sigue valiendo aunque el nombre local
+    cambie. En el recurso, `source_url` es la URL original del archivo.
+- Organizacion = quien produjo el dato, como siempre en CKAN. Sin campo
+  `producer` aparte (andres: no quedaba claro que org usar entonces).
+  - Gestion abierta: `remote_orgs: create` del harvester estandar crea
+    las 25 organizaciones remotas con su id y nombre remotos (Ministerio
+    de Salud, ...). Verificado en el codigo: si otro portal trajera una
+    org con el mismo nombre, la creacion falla y el dataset queda en la
+    org de la fuente (queda en el informe del job; no se mezcla en
+    silencio). Si alguna vez pasa, se prefija por portal.
+  - Estadistica: sus 7 "organizaciones" son temas; `remote_orgs:
+    only_local` deja todo en la org de la fuente ("Direccion General de
+    Estadistica y Censos") y los temas pasan a grupos (pocas lineas en
+    `modify_package_dict`).
+  - Produccion propia: organizaciones propias, `source_portal =
+    cbadatos`.
+  - A cada organizacion cosechada se le guarda tambien `source_portal`
+    (esquema de organizacion), para que su pagina diga de que portal
+    viene.
+- Donde se hace: `modify_package_dict(package_dict, harvest_object)` del
+  harvester `ckan` de ckanext-harvest. Verificado: corre despues de que el
+  harvester resolvio organizaciones, grupos y `default_extras`, y justo
+  antes de `package_create/update`, con acceso a la fuente
+  (`harvest_object.source.url` y su config). Ahi se ponen `source_portal`
+  (de la config de la fuente), `source_url`, se mapean los extras y se
+  descartan los que chocan con el esquema (scheming los rechaza).
 - Mapear extras remotos a campos: `Frecuencia de actualización` (las tres
   grafias) -> `update_frequency`; `depto` -> `departamento`; `muncom` ->
-  `municipio`. El resto de extras se conserva tal cual. Los extras que
-  chocan con nombres de campos del esquema se descartan (si no, el
-  dataset se rechaza en la validacion).
-- Todo esto lo hace un harvester propio de la extension,
-  `cordoba_ckan` (subclase del `ckan` de ckanext-harvest con
-  `modify_package_dict`), configurado por fuente con `source_portal`,
-  `producer` fijo (opcional) y `user_agent`. Es codigo de la extension, no
-  del core ni del fork de harvest.
+  `municipio`. El resto de extras se conserva tal cual.
 
 ## 3. Harvest con archivos (ser backup, no un indice de links)
 
@@ -99,23 +108,32 @@ Propuesta (a decidir):
   2026-09-13. ckanext-archiver bajaria copias a un cache propio, pero no
   reemplaza la URL del recurso ni lo mete en el datastore: no sirve como
   backup navegable.
-- [ ] Nuestro harvester `cordoba_ckan` baja cada recurso subido en el
-      origen (`url_type = upload`) y lo guarda como upload propio
-      (storage del portal); el link original queda en `source_url` del
-      recurso. Los recursos que en el origen ya son links (121 "ENLACE",
-      instagram, mapascordoba) quedan como links.
+- [ ] Camino elegido (andres, 2026-09-13): simplicidad, usar lo que
+      ckanext-harvest da. Un harvester `ckan_with_files` en la extension:
+      subclase de `CKANHarvester`, `modify_package_dict` para la
+      procedencia (arriba) e `import_stage` que llama al de la base (crea
+      o actualiza el dataset con links) y despues baja, uno por uno, los
+      recursos alojados en el portal de origen (URL bajo la URL de la
+      fuente: 972 de 1.093 y 12.303 de 12.304) y los convierte en upload
+      propio con `resource_patch(upload=...)`; el original queda en
+      `source_url`. Los que ya eran links quedan como links. Ojo: el
+      harvester base borra `url_type` antes de `modify_package_dict`, por
+      eso se detecta por URL y no por `url_type`.
+      Si el harvester queda generico y probado, se propone despues como
+      mejora del fork de ckanext-harvest (opcion `download_resources`).
 - [ ] Con cuidado con el servidor remoto: un archivo por vez, pausa entre
       pedidos (1-2 s), User-Agent identificable (`cbadatos.com.ar
       harvester`), reintentos con espera, tope de tamano por archivo
       (decidir: 200 MB?), y NO volver a bajar lo que no cambio (comparar
       `last_modified`/`size`/`hash` remotos con lo guardado; ETag /
       If-Modified-Since cuando el servidor los da).
-- [ ] La descarga NO va dentro del import_stage (bloquearia el consumer):
-      un job de CKAN por dataset (`ckan.lib.jobs`), encolado al terminar
-      el import, con un solo worker para no paralelizar contra el origen.
-- [ ] Frecuencia: primera pasada completa (12k archivos a ~1/s son dias:
-      esta bien), luego semanal por fuente; el harvest de metadatos puede
-      ser diario porque es barato.
+- [ ] Donde corre la descarga: dentro del `import_stage` (el fetch
+      consumer procesa un objeto a la vez, asi que ya es "un archivo a la
+      vez" sin jobs ni colas extra). Cuenta: 12.300 archivos x (descarga +
+      3 s de pausa) = unas 12-15 horas la primera vez, despues solo lo que
+      cambio. Alternativa si molesta que un job dure horas: encolar la
+      descarga como job de CKAN por dataset con un solo worker.
+- [ ] Frecuencia: primera pasada completa, luego semanal por fuente.
 - [ ] Backup de verdad: cuando un dataset desaparece del origen, NO
       borrarlo (el harvester `ckan` lo borra por defecto): marcarlo
       ("ya no esta en el portal de origen", fecha) y dejarlo visible.
