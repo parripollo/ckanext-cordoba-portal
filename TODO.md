@@ -140,6 +140,13 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
   2026-09-13. ckanext-archiver bajaria copias a un cache propio, pero no
   reemplaza la URL del recurso ni lo mete en el datastore: no sirve como
   backup navegable.
+- [x] 2026-09-13: copia de archivos HECHA en el harvester (import_stage
+      -> _copy_files: un archivo por vez, pausa `copy_pause` (3 s), tope
+      `copy_max_mb` (200), timeout largo + 1 reintento, SHA-256 en `hash`,
+      `source_etag`, `source_downloaded`; conserva la copia en las
+      actualizaciones; If-None-Match). 8 tests. EN PROD 2026-09-13: fuentes
+      `gestion-abierta` y `estadistica` (WEEKLY) creadas y primera corrida
+      lanzada; xloader activo. Velocidad en prod: varios MB/s.
 - [ ] Camino elegido (andres, 2026-09-13): simplicidad, usar lo que
       ckanext-harvest da. Un harvester `ckan_with_files` en la extension:
       subclase de `CKANHarvester`, `modify_package_dict` para la
