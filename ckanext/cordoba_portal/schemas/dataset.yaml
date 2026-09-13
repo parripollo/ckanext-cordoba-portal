@@ -1,0 +1,131 @@
+# Dataset schema of cbadatos.com.ar (ckanext-scheming): CKAN's default
+# fields plus the provenance of every dataset, `source_portal` and
+# `source_url`. The harvester fills them; own datasets pick the portal in
+# the form ("Producción propia").
+#
+#   scheming.dataset_schemas = ckanext.cordoba_portal:schemas/dataset.yaml
+
+scheming_version: 2
+dataset_type: dataset
+about: Esquema de datasets de cbadatos.com.ar
+about_url: https://github.com/parripollo/ckanext-cordoba-portal
+
+dataset_fields:
+
+- field_name: title
+  label: Título
+  preset: title
+  form_placeholder: "Ej.: Presupuesto provincial 2026"
+
+- field_name: name
+  label: URL
+  preset: dataset_slug
+  form_placeholder: "Ej.: presupuesto-provincial-2026"
+
+- field_name: notes
+  label: Descripción
+  form_snippet: markdown.html
+  form_placeholder: Qué contiene, cómo se obtuvo, limitaciones conocidas
+
+- field_name: source_portal
+  label: Portal de origen
+  preset: select
+  choices_helper: cordoba_portal_source_choices
+  required: true
+  display_snippet: null
+  help_text: De qué portal viene este conjunto de datos. "Producción propia" para datos cargados acá.
+
+- field_name: source_url
+  label: URL en el portal de origen
+  validators: ignore_missing unicode_safe url_validator
+  display_snippet: null
+  form_placeholder: https://...
+
+- field_name: tag_string
+  label: Etiquetas
+  preset: tag_string_autocomplete
+  form_placeholder: "Ej.: presupuesto, salud, educación"
+
+- field_name: license_id
+  label: Licencia
+  form_snippet: license.html
+
+- field_name: owner_org
+  label: Organización
+  preset: dataset_organization
+
+- field_name: url
+  label: Fuente
+  form_placeholder: http://ejemplo.com/datos.json
+  display_property: foaf:homepage
+  display_snippet: link.html
+
+- field_name: version
+  label: Versión
+  validators: ignore_missing unicode_safe package_version_validator
+  form_placeholder: "1.0"
+
+- field_name: author
+  label: Autor
+  form_placeholder: Quién produjo el dato
+  display_property: dc:creator
+
+- field_name: author_email
+  label: Email del autor
+  form_placeholder: joe@example.com
+  display_property: dc:creator
+  display_snippet: email.html
+  display_email_name_field: author
+
+- field_name: maintainer
+  label: Mantenedor
+  form_placeholder: Quién mantiene el dato
+  display_property: dc:contributor
+
+- field_name: maintainer_email
+  label: Email del mantenedor
+  form_placeholder: joe@example.com
+  display_property: dc:contributor
+  display_snippet: email.html
+  display_email_name_field: maintainer
+
+resource_fields:
+
+- field_name: url
+  label: URL
+  preset: resource_url_upload
+
+- field_name: name
+  label: Nombre
+  form_placeholder: "Ej.: Datos de enero 2026"
+
+- field_name: description
+  label: Descripción
+  form_snippet: markdown.html
+
+- field_name: format
+  label: Formato
+  preset: resource_format_autocomplete
+
+# Provenance of the file, filled by the harvester (not editable in the form)
+- field_name: source_url
+  label: Archivo original
+  validators: ignore_missing unicode_safe url_validator
+  form_snippet: null
+  display_snippet: link.html
+
+- field_name: source_downloaded
+  label: Copia guardada
+  validators: ignore_missing unicode_safe
+  form_snippet: null
+
+- field_name: source_last_modified
+  label: Modificado en el origen
+  validators: ignore_missing unicode_safe
+  form_snippet: null
+
+- field_name: source_etag
+  label: ETag en el origen
+  validators: ignore_missing unicode_safe
+  form_snippet: null
+  display_snippet: null

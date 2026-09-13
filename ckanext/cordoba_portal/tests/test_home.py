@@ -6,8 +6,8 @@ from ckan.tests import factories
 @pytest.mark.usefixtures("clean_db", "with_plugins")
 def test_home_shows_the_initiative_and_the_counts(app):
     org = factories.Organization()
-    factories.Dataset(owner_org=org["id"])
-    factories.Dataset(owner_org=org["id"])
+    factories.Dataset(owner_org=org["id"], source_portal="cbadatos")
+    factories.Dataset(owner_org=org["id"], source_portal="cbadatos")
 
     page = app.get("/").body
 

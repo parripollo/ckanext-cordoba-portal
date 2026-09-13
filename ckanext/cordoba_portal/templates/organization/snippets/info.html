@@ -1,0 +1,12 @@
+{% ckan_extends %}
+
+{% block heading %}
+  {{ super() }}
+  {% set portal = h.cordoba_portal_source(organization.source_portal) %}
+  {% if portal and portal.prefix %}
+    <p class="cba-source-portal text-muted">
+      Organización del <a href="{{ portal.url }}" rel="nofollow">{{ portal.label }}</a>
+      {% if organization.source_url %}(<a href="{{ organization.source_url }}" rel="nofollow">ver allí</a>){% endif %}
+    </p>
+  {% endif %}
+{% endblock %}

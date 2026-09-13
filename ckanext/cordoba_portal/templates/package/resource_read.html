@@ -1,0 +1,17 @@
+{% ckan_extends %}
+
+{% block resource_read_url %}
+  {{ super() }}
+  {% set portal = h.cordoba_portal_source(pkg.source_portal) %}
+  <p class="cba-source-line">
+    <i class="fa fa-location-arrow"></i>
+    {% if portal %}
+      Procedencia: <a href="{{ h.url_for('dataset.search', source_portal=portal.value) }}">{{ portal.label }}</a>.
+    {% else %}
+      Procedencia: sin portal de origen registrado.
+    {% endif %}
+    {% if res.source_url %}
+      <a href="{{ res.source_url }}" rel="nofollow">Archivo original</a>{% if res.source_downloaded %}, copia guardada el {{ h.render_datetime(res.source_downloaded, with_hours=True) }}{% endif %}.
+    {% endif %}
+  </p>
+{% endblock %}

@@ -53,3 +53,9 @@
   .cba-search { flex-direction: column; }
   .cba-search button { padding: 10px; }
 }
+
+/* Provenance box (dataset sidebar) and line (resource page) */
+.cba-source .module-heading i { margin-right: 6px; }
+.cba-source .cba-source-portal { font-weight: 600; margin-bottom: 8px; }
+.cba-source-line { color: #4a5568; }
+.cba-source-line i { margin-right: 4px; }

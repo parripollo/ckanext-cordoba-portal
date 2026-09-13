@@ -4,3 +4,4 @@ include requirements.txt
 recursive-include ckanext/cordoba_portal *.html *.json *.js *.less *.css *.mo *.yml
 recursive-include ckanext/cordoba_portal/migration *.ini *.py *.mako
 recursive-include ckanext/cordoba_portal/public *.*
+recursive-include ckanext/cordoba_portal/schemas *.yaml

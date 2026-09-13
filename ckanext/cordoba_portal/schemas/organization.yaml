@@ -1,0 +1,42 @@
+# Organization schema of cbadatos.com.ar (ckanext-scheming): the default
+# fields plus where the organization comes from, so its page can say it.
+#
+#   scheming.organization_schemas = ckanext.cordoba_portal:schemas/organization.yaml
+
+scheming_version: 2
+organization_type: organization
+about: Esquema de organizaciones de cbadatos.com.ar
+
+fields:
+
+- field_name: title
+  label: Nombre
+  validators: ignore_missing unicode_safe
+  form_snippet: large_text.html
+  form_attrs:
+    data-module: slug-preview-target
+
+- field_name: name
+  label: URL
+  validators: not_empty unicode_safe name_validator group_name_validator
+  form_snippet: slug.html
+
+- field_name: description
+  label: Descripción
+  form_snippet: markdown.html
+
+- field_name: image_url
+  label: Imagen
+  preset: organization_url_upload
+
+- field_name: source_portal
+  label: Portal de origen
+  preset: select
+  choices_helper: cordoba_portal_source_choices
+  validators: ignore_missing scheming_choices
+  display_snippet: null
+
+- field_name: source_url
+  label: URL en el portal de origen
+  validators: ignore_missing unicode_safe url_validator
+  display_snippet: null

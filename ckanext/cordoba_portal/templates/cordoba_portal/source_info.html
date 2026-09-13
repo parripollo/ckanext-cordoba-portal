@@ -1,0 +1,27 @@
+{#
+  Where a dataset comes from: the portal of origin and the link to the
+  original. Shown on every dataset page, whatever the user looks at.
+
+  pkg - the dataset dict
+#}
+{% set portal = h.cordoba_portal_source(pkg.source_portal) %}
+<section class="module module-narrow module-shallow cba-source" id="source-info">
+  <h2 class="module-heading"><i class="fa fa-location-arrow"></i> Procedencia</h2>
+  <div class="module-content">
+    {% if portal %}
+      <p class="cba-source-portal">
+        <a href="{{ h.url_for('dataset.search', source_portal=portal.value) }}">{{ portal.label }}</a>
+      </p>
+    {% elif pkg.source_portal %}
+      <p class="cba-source-portal">{{ pkg.source_portal }}</p>
+    {% else %}
+      <p class="cba-source-portal text-muted">Sin portal de origen registrado</p>
+    {% endif %}
+    {% if pkg.source_url %}
+      <p><a class="btn btn-secondary btn-sm" href="{{ pkg.source_url }}" rel="nofollow"><i class="fa fa-external-link"></i> Ver en el portal de origen</a></p>
+    {% endif %}
+    {% if pkg.organization %}
+      <p class="text-muted">Producido por <a href="{{ h.url_for('organization.read', id=pkg.organization.name) }}">{{ pkg.organization.title or pkg.organization.name }}</a></p>
+    {% endif %}
+  </div>
+</section>

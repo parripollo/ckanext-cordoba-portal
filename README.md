@@ -19,11 +19,21 @@ Runs on the PostgreSQL-only CKAN: https://github.com/parripollo/ckanito
     pip install -e .
     pip install -r requirements.txt
 
-Add `cordoba_portal` to `ckan.plugins` in your CKAN config and restart CKAN.
+Add the plugins to `ckan.plugins`, with `cordoba_portal` **before** the
+scheming ones (it overrides some of their templates, and CKAN gives the
+plugin listed first the highest template priority):
+
+    ckan.plugins = ... cordoba_portal scheming_datasets scheming_organizations ...
+    scheming.dataset_schemas = ckanext.cordoba_portal:schemas/dataset.yaml
+    scheming.organization_schemas = ckanext.cordoba_portal:schemas/organization.yaml
+
+Then restart CKAN.
 
 ## Config settings
 
-None yet.
+Only the scheming ones above. The portals the site gathers data from are
+listed in `ckanext/cordoba_portal/plugin.py` (`SOURCE_PORTALS`): that list
+feeds the `source_portal` field, the about page and the harvest sources.
 
 ## Developer installation
 

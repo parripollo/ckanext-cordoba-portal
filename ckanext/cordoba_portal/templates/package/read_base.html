@@ -1,0 +1,6 @@
+{% ckan_extends %}
+
+{% block package_info %}
+  {{ super() }}
+  {% snippet 'cordoba_portal/source_info.html', pkg=pkg %}
+{% endblock %}
