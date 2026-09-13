@@ -1,0 +1,30 @@
+<p>
+  Esta iniciativa apunta a agrupar en un solo lugar los datos que ya están
+  abiertos en los portales de la provincia de Córdoba. Cada conjunto de datos
+  indica de qué portal viene y quién lo produjo, y los archivos se copian acá
+  para que sigan disponibles aunque el original cambie o desaparezca.
+</p>
+
+<h2>Portales de origen</h2>
+<p>Hoy reunimos los datos de estos portales oficiales:</p>
+<ul>
+  {% for portal in h.cordoba_portal_sources() %}
+    <li><a href="{{ portal.url }}">{{ portal.label }}</a></li>
+  {% endfor %}
+</ul>
+<p>
+  Estamos trabajando para procesar más datos: otros portales de la provincia
+  y de sus municipios, y datos de producción propia.
+</p>
+
+<h2>Sobre este sitio</h2>
+<p>
+  Es una iniciativa ciudadana, independiente del Gobierno de la Provincia de
+  Córdoba. Los datos son de sus productores; acá solo se reúnen y se
+  redistribuyen tal como fueron publicados, con la licencia de cada uno.
+</p>
+<p>
+  Este sitio es una instancia experimental de CKAN: corre una
+  <a href="https://ckanito.cluster311.com/">propuesta de CKAN que funciona
+  solo con PostgreSQL</a>, no la versión oficial de CKAN.
+</p>
