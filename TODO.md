@@ -121,12 +121,30 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
       eso se detecta por URL y no por `url_type`.
       Si el harvester queda generico y probado, se propone despues como
       mejora del fork de ckanext-harvest (opcion `download_resources`).
-- [ ] Con cuidado con el servidor remoto: un archivo por vez, pausa entre
-      pedidos (1-2 s), User-Agent identificable (`cbadatos.com.ar
-      harvester`), reintentos con espera, tope de tamano por archivo
-      (decidir: 200 MB?), y NO volver a bajar lo que no cambio (comparar
-      `last_modified`/`size`/`hash` remotos con lo guardado; ETag /
-      If-Modified-Since cuando el servidor los da).
+- [ ] Con cuidado con el servidor remoto: un archivo por vez, pausa de
+      unos segundos entre pedidos, reintentos con espera, tope de tamano
+      por archivo (decidir: 200 MB?).
+- [ ] User-Agent (medido 2026-09-13): los dos portales dan 404 a cualquier
+      UA que no tenga tokens de Chrome (probados "cbadatos.com.ar
+      harvester", "Mozilla/5.0 (compatible; ...)", python-requests,
+      ckan-harvest). Usar `Mozilla/5.0 (X11; Linux x86_64)
+      AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36
+      cbadatos.com.ar` (pasa, y nos identifica al final). Va en
+      `user_agent` de la config de la fuente; el harvester lo usa para la
+      API y para bajar archivos.
+- [ ] No volver a bajar lo que no cambio, en tres niveles (medido):
+      1. el harvester `ckan` solo pide al origen los datasets con
+         `metadata_modified` posterior a la ultima corrida;
+      2. por recurso, comparar el `last_modified` remoto (presente en el
+         100% de los recursos subidos; `size` y `hash` remotos solo en
+         16%/1% y 25%/3%: no sirven de base) con `source_last_modified`
+         guardado; igual = nada;
+      3. si cambio, GET condicional con `If-None-Match` (los dos
+         servidores dan ETag y Last-Modified y responden 304); si 200,
+         SHA-256 del contenido y reemplazar el archivo solo si difiere del
+         `hash` guardado. Campos del recurso: `source_url`,
+         `source_last_modified`, `source_etag`, `hash` (sha256 nuestro),
+         `source_downloaded`.
 - [ ] Donde corre la descarga: dentro del `import_stage` (el fetch
       consumer procesa un objeto a la vez, asi que ya es "un archivo a la
       vez" sin jobs ni colas extra). Cuenta: 12.300 archivos x (descarga +
