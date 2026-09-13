@@ -62,6 +62,13 @@ Hallazgos (2026-09-13):
 
 Propuesta (conversada el 2026-09-13, sigue abierta):
 
+- [x] 2026-09-13: esquemas scheming (dataset, recurso, organizacion) con
+      `source_portal` + `source_url`; caja "Procedencia" en la ficha del
+      dataset, linea en la del recurso, origen en la pagina de la
+      organizacion, facet "Portal de origen" con nombres cortos; desplegado
+      en cbadatos.com.ar. Orgs con prefijo por portal (`prefix` en la
+      lista de portales); estadistica a una sola org y sus temas a grupos;
+      grupos y tags tal cual (decidido con andres).
 - Dos campos de dataset en el esquema scheming de la extension, siempre
   visibles en la ficha del dataset y en la del recurso:
   - `source_portal` (select, obligatorio, facet "Portal de origen"). Las
