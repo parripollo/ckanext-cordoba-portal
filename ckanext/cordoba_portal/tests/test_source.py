@@ -8,7 +8,7 @@ GESTION = "https://datosgestionabierta.cba.gov.ar"
 
 
 @pytest.fixture
-def harvested(clean_db):
+def harvested(with_plugins, clean_db):
     org = factories.Organization(
         name="gestion-o-salud",
         title="Ministerio de Salud",
@@ -61,7 +61,7 @@ class TestProvenanceOnThePages:
         assert "Portal de Datos Abiertos de Gestión" in page
         assert 'href="' + GESTION + '/organization/o-salud"' in page
 
-    def test_own_dataset_shows_own_production(self, app, clean_db):
+    def test_own_dataset_shows_own_production(self, app, with_plugins, clean_db):
         dataset = factories.Dataset(source_portal="cbadatos")
 
         page = app.get("/dataset/" + dataset["name"]).body

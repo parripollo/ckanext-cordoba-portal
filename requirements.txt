@@ -1,3 +1,4 @@
 # CKAN extensions this one builds on (our forks, tested against the
 # PostgreSQL-only CKAN)
 ckanext-scheming @ git+https://github.com/parripollo/ckanext-scheming.git@master
+ckanext-harvest @ git+https://github.com/parripollo/ckanext-harvest.git@master
