@@ -45,6 +45,28 @@ SOURCES = [
             }),
         },
     },
+    {
+        "organization": {
+            "name": "villamaria",
+            "title": "Municipalidad de Villa María",
+            "description": ("Datos publicados por la Municipalidad de Villa María en su "
+                            "portal de datos abiertos."),
+            "source_portal": "villamaria",
+            "source_url": "https://datos.villamaria.gob.ar/",
+        },
+        "source": {
+            "name": "villamaria",
+            "title": "Villa María (datos abiertos)",
+            "url": "https://datos.villamaria.gob.ar",
+            "source_type": "villamaria",
+            "frequency": "WEEKLY",
+            "notes": "Portal de datos abiertos de la Municipalidad de Villa María.",
+            "config": json.dumps({
+                "single_org": "villamaria", "pause": 1, "copy_pause": 3,
+                "user_agent": USER_AGENT,
+            }),
+        },
+    },
 ]
 OWN_ORGANIZATION = "cbadatos"
 
@@ -84,8 +106,14 @@ def init_sources():
         except toolkit.ObjectNotFound:
             return None
 
+    harvesters = {h["name"] for h in toolkit.get_action("harvesters_info_show")(dict(context), {})}
     for entry in SOURCES:
         org = entry["organization"]
+        if entry["source"]["source_type"] not in harvesters:
+            # its harvester plugin is not loaded on this instance
+            click.echo("skipped: source %s (no %s harvester here)"
+                       % (entry["source"]["name"], entry["source"]["source_type"]))
+            continue
         if exists("organization_show", org["name"]):
             click.echo("exists: organization %s" % org["name"])
         else:

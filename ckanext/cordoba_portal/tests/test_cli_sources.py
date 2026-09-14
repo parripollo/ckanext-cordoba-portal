@@ -1,7 +1,10 @@
 """ckan cordoba-portal init-sources: the harvest sources the portal ships with."""
 import json
+from unittest import mock
 
 import pytest
+
+from ckan.plugins import toolkit
 
 from ckan.tests import factories
 from ckan.tests.helpers import call_action
@@ -40,3 +43,15 @@ class TestInitSources:
         assert result.exit_code == 0, result.output
         source = call_action("harvest_source_show", id="municba")
         assert source["owner_org"] == call_action("organization_show", id="municba")["id"]
+
+    def test_a_source_without_its_harvester_is_skipped(self, cli):
+        with mock.patch("ckanext.cordoba_portal.cli.SOURCES", [
+                {"organization": {"name": "otra", "title": "Otra", "source_portal": "municba"},
+                 "source": {"name": "otra", "title": "Otra", "url": "https://otra.example",
+                            "source_type": "no-such-harvester"}}]):
+            result = cli.invoke(cordoba_portal, ["init-sources"])
+
+        assert result.exit_code == 0, result.output
+        assert "skipped: source otra" in result.output
+        with pytest.raises(toolkit.ObjectNotFound):
+            call_action("organization_show", id="otra")
