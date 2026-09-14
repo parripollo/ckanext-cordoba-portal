@@ -177,6 +177,12 @@ class FileCopyMixin:
             if response.status_code != 200:
                 log.warning("Not copying %s: HTTP %s", url, response.status_code)
                 return
+            content_type = (response.headers.get("Content-Type") or "").split(";")[0].strip()
+            if content_type == "text/html" and (resource.get("format") or "").upper() != "HTML":
+                # a login page, an error page, Google Drive asking to
+                # confirm a big download: not the file
+                log.warning("Not copying %s: the answer is an HTML page", url)
+                return
             length = int(response.headers.get("Content-Length") or 0)
             if length > max_bytes:
                 log.warning("Not copying %s: %s bytes", url, length)
@@ -193,7 +199,6 @@ class FileCopyMixin:
                 digest.update(chunk)
                 tmp.write(chunk)
             etag = response.headers.get("ETag") or ""
-            content_type = response.headers.get("Content-Type") or ""
             filename = self._copy_filename(response, url) or resource["id"]
 
         sha256 = digest.hexdigest()
@@ -204,16 +209,20 @@ class FileCopyMixin:
             return
 
         tmp.seek(0)
-        upload = FileStorage(tmp, filename=filename, content_type=content_type.split(";")[0])
-        self._patch(resource, {
+        upload = FileStorage(tmp, filename=filename, content_type=content_type)
+        changes = {
             "upload": upload,
             "url": filename,
             "hash": sha256,
             "size": size,
-            "mimetype": content_type.split(";")[0] or None,
+            "mimetype": content_type or None,
             "source_etag": etag,
             "source_downloaded": now,
-        })
+        }
+        if not resource.get("format") and "." in filename:
+            # the portal only told us the name of the file when we fetched it
+            changes["format"] = filename.rsplit(".", 1)[-1].upper()
+        self._patch(resource, changes)
         tmp.close()
         log.info("Copied %s (%s bytes)", url, size)
 

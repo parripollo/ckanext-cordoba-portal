@@ -1,0 +1,19 @@
+{
+ "pageProps": {
+  "items": [
+   {
+    "title": "Enero 2024",
+    "category": "general",
+    "status": "No Vigente",
+    "url": "https://drive.google.com/file/d/11ejIzv_ZXmz_GCqFNSZvpLW2TOgsnd6t/view?usp=drive_link"
+   },
+   {
+    "title": "Febrero 2024",
+    "category": "general",
+    "status": "No Vigente",
+    "url": "https://drive.google.com/file/d/142i_6Nm3BZQqYzH7WAFWjANxvzg-6aIS/view?usp=drive_link"
+   }
+  ]
+ },
+ "__N_SSG": true
+}

@@ -61,6 +61,13 @@ SOURCE_PORTALS = [
         "url": "https://www.mapascordoba.gob.ar/#/descargas",
         "prefix": "idecor",
     },
+    {
+        "value": "riocuarto",
+        "label": "Transparencia de la Secretaría de Economía (Municipalidad de Río Cuarto)",
+        "short": "Río Cuarto",
+        "url": "https://economiariocuarto.gob.ar/transparencia",
+        "prefix": "riocuarto",
+    },
 ]
 
 

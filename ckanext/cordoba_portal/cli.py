@@ -111,6 +111,28 @@ SOURCES = [
             }),
         },
     },
+    {
+        "organization": {
+            "name": "riocuarto",
+            "title": "Municipalidad de Río Cuarto",
+            "description": ("Documentos publicados por la Secretaría de Economía de la "
+                            "Municipalidad de Río Cuarto en su portal de transparencia."),
+            "source_portal": "riocuarto",
+            "source_url": "https://economiariocuarto.gob.ar/transparencia",
+        },
+        "source": {
+            "name": "riocuarto",
+            "title": "Río Cuarto (transparencia)",
+            "url": "https://economiariocuarto.gob.ar",
+            "source_type": "riocuarto",
+            "frequency": "WEEKLY",
+            "notes": "Portal de transparencia de la Secretaría de Economía de Río Cuarto.",
+            "config": json.dumps({
+                "single_org": "riocuarto", "pause": 1, "copy_pause": 3,
+                "recheck_days": 30, "user_agent": USER_AGENT,
+            }),
+        },
+    },
 ]
 OWN_ORGANIZATION = "cbadatos"
 

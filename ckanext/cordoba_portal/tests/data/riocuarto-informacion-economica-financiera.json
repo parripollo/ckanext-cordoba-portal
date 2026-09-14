@@ -1,0 +1,46 @@
+{
+ "pageProps": {
+  "presupuesto": [
+   {
+    "title": "Nota Elevación Presupuesto 2026",
+    "category": "presupuesto",
+    "status": "Vigente",
+    "url": "https://drive.google.com/file/d/1R3gy9Yqztmdb3KWyPS-mkR_ep-gfXCd3/view?usp=sharing",
+    "Categoria Web": ""
+   },
+   {
+    "title": "Presupuesto 2026",
+    "category": "presupuesto",
+    "status": "Vigente",
+    "url": "https://drive.google.com/file/d/14-hD-VdluVnyBiHczDZCjT-vG2bUpabh/view?usp=sharing",
+    "Categoria Web": ""
+   }
+  ],
+  "recaudacion": [
+   {
+    "title": "2026 Julio - Informe de Recaudación",
+    "category": "recaudacion",
+    "status": "Vigente",
+    "url": "https://drive.google.com/file/d/1SMVwrhZxDF7NtwTT0M54kXknQ1x8SGWw/view?usp=drive_link",
+    "Categoria Web": ""
+   }
+  ],
+  "deudas": [
+   {
+    "title": "Informe de Indicadores de la deuda publica municipal 2026- 2° trimestre",
+    "category": "deuda",
+    "status": "Vigente",
+    "url": "https://drive.google.com/file/d/15GYYcDYxEvDj2qVqlUXdmziHgY_l-sET/view?usp=drive_link",
+    "Categoria Web": ""
+   },
+   {
+    "title": "Informe de Indicadores de la deuda publica municipal 2026- 1° trimestre",
+    "category": "deuda",
+    "status": "No Vigente",
+    "url": "https://drive.google.com/file/d/161H9CvWjtvzLPYZ9H93C_WXqVsrxp1ME/view?usp=sharing",
+    "Categoria Web": ""
+   }
+  ]
+ },
+ "__N_SSG": true
+}

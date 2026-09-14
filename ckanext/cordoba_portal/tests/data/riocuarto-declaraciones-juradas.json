@@ -1,0 +1,27 @@
+{
+ "pageProps": {
+  "intendente": [
+   {
+    "title": "Guillermo Luis De Rivas",
+    "url": "https://prod.ddjj.riocuarto.gob.ar/ddjj_publicas/01M11MF3BK0ZJT2V4EZ1V48XHB.pdf",
+    "status": "vigente",
+    "category": "Intendente Municipal"
+   }
+  ],
+  "secretarios": [
+   {
+    "title": "Roberto Ricardo Koch",
+    "url": "https://prod.ddjj.riocuarto.gob.ar/ddjj_publicas/01KZ3VDDZBJ4MS0SJ5SRYFFRA3.pdf",
+    "status": "vigente",
+    "category": "Secretaría de Gobierno"
+   },
+   {
+    "title": "Karin Ruth Bogni",
+    "url": "https://prod.ddjj.riocuarto.gob.ar/ddjj_publicas/01M1M159NR5RH42SNFCY8TC4CG.pdf",
+    "status": "vigente",
+    "category": "Secretaría de Gestión y Participación Ciudadana"
+   }
+  ]
+ },
+ "__N_SSG": true
+}

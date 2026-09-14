@@ -354,21 +354,24 @@ pisarnos entre sesiones.
       nombre del archivo si el recurso no lo tenia. Sin licencia visible.
       Probado en local contra el portal real.
 
-### Fuentes candidatas (relevadas 2026-09-14, para decidir)
-
-- [ ] **Rio Tercero**: https://datos.riotercero.gob.ar es un CKAN 2.7.6
-      (54 datasets, 7 orgs = secretarias, grupos boletin oficial /
-      cuentas publicas / normativa / datos ambientales / tramites...;
-      formatos PDF 54, CSV 3, XLS 1; sin User-Agent especial). NO hace
-      falta harvester nuevo: fuente `ckan_with_files` con
-      `source_portal: riotercero` (agregar a SOURCE_PORTALS) y orgs con
-      prefijo `riotercero-`. El mas barato de sumar.
+- [ ] **Rio Tercero** (siguiente, andres 2026-09-14):
+      https://datos.riotercero.gob.ar es un CKAN 2.7.6 (54 datasets, 7
+      orgs = secretarias, grupos boletin oficial / cuentas publicas /
+      normativa / datos ambientales / tramites...; formatos PDF 54, CSV 3,
+      XLS 1; sin User-Agent especial). NO hace falta harvester nuevo:
+      fuente `ckan_with_files` con `source_portal: riotercero` (agregar a
+      SOURCE_PORTALS), orgs con prefijo `riotercero-`, grupos remotos
+      creados. Ojo: CKAN 2.7 viejo, revisar que `package_search` y
+      `package_show` del harvester `ckan` le sirvan (deberian).
 - [ ] Villa Allende: https://www.villaallende.gov.ar/transparencia/
       (WordPress: boletines, licitaciones, acceso a la informacion; PDFs
       en wp-content/uploads). Valor medio; receta tipo Legislatura.
+      Despues de Rio Tercero.
 - [ ] Bell Ville: https://bellville.gob.ar/presupuesto/ y
-      /llamados-a-licitacion/ (WordPress, PDFs). Valor bajo-medio.
-- Revisados y descartados por ahora: turismo.cordoba.gob.ar/datos-abiertos
+      /llamados-a-licitacion/ (WordPress, PDFs). Valor bajo-medio, al
+      final.
+
+Revisados el 2026-09-14 y descartados por ahora: turismo.cordoba.gob.ar/datos-abiertos
   (solo enlaza a la categoria Turismo de municba, ya cosechado);
   datos.cordoba.gob.ar (no es datos abiertos: app interna "base unica"
   con login); transparencia.cba.gov.ar y gestionabierta.cba.gov.ar (403

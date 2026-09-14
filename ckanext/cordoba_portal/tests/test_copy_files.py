@@ -164,6 +164,32 @@ class TestCopy:
         same = call_action("resource_show", id=resource["id"])
         assert same["url"] == FILE_URL and not same.get("url_type")
 
+    def test_an_html_answer_is_not_the_file(self, linked):
+        dataset, resource = linked
+        page = FakeResponse(content=b"<html>please sign in</html>",
+                            headers={"Content-Type": "text/html; charset=utf-8"})
+
+        with mock.patch("ckanext.cordoba_portal.harvester.requests.get") as get:
+            get.return_value = page
+            harvester()._copy_files(dataset["id"])
+
+        same = call_action("resource_show", id=resource["id"])
+        assert same["url"] == FILE_URL and not same.get("url_type")
+
+    def test_the_format_comes_from_the_file_name_when_unknown(self, linked):
+        dataset, resource = linked
+        call_action("resource_patch", id=resource["id"], format="")
+        named = FakeResponse(headers={"Content-Type": "application/pdf", "ETag": '"x"',
+                                      "Content-Disposition": 'attachment; filename="Informe 2024.pdf"'})
+
+        with mock.patch("ckanext.cordoba_portal.harvester.requests.get") as get:
+            get.return_value = named
+            harvester()._copy_files(dataset["id"])
+
+        copied = call_action("resource_show", id=resource["id"])
+        assert copied["format"] == "PDF"
+        assert copied["url"].endswith("/download/informe-2024.pdf")
+
     def test_a_link_elsewhere_is_left_alone(self, with_plugins, clean_db):
         dataset = factories.Dataset(source_portal="datosgestionabierta")
         factories.Resource(package_id=dataset["id"], url="https://www.instagram.com/x/", format="ENLACE")

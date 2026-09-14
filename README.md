@@ -65,6 +65,11 @@ so the site is a backup and not a list of links.
   symbology / metadata copied, the WMS / WFS / WCS and the on-demand
   Shapefile and KML as links, the first level of the tree a group. See
   `idecor.py`.
+- `riocuarto`: the transparency portal of the city of Rio Cuarto
+  (https://economiariocuarto.gob.ar/transparencia), a Next.js site whose
+  section data is JSON: one dataset per kind of document, every document
+  a resource, the Google Drive files copied through their download URL,
+  Drive folders as links. See `riocuarto.py`.
 
 All take their options as JSON in the config of the harvest source; the
 module docstrings list them.
