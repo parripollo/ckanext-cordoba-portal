@@ -74,6 +74,11 @@ class CordobaPortalPlugin(plugins.SingletonPlugin):
         toolkit.add_template_directory(config_, "templates")
         toolkit.add_public_directory(config_, "public")
         toolkit.add_resource("assets", "cordoba_portal")
+        # The portal's logo and favicon come with the extension
+        # (public/images); CKAN's defaults are always in the config by now,
+        # so they are set, not defaulted.
+        config_["ckan.site_logo"] = "/images/cba-datos-logo.svg"
+        config_["ckan.favicon"] = "/images/favicon.ico"
 
     # ITemplateHelpers
 

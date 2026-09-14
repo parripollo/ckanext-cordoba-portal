@@ -1,0 +1,17 @@
+{% ckan_extends %}
+
+{# The footer of the theme, with the portal's logo and text instead of
+   CKAN's. The link columns are the theme's own (footer_nav). #}
+{% block footer_content %}
+  <div class="row">
+    <div class="col-md-6">
+      <p class="footer-description col-md-8">
+        <img class="cba-footer-logo" src="/images/cba-datos-logo-white.svg" alt="cba datos" width="70" height="60">
+        {{ g.site_description }}
+      </p>
+    </div>
+    <div class="col-md-6 footer-links row">
+      {{ self.footer_nav() }}
+    </div>
+  </div>
+{% endblock %}

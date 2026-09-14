@@ -91,3 +91,11 @@
   font-size: 14px;
 }
 .cba-source-org a { color: #5c3d00; text-decoration: underline; }
+
+/* Footer: the portal's logo where the theme put CKAN's. */
+.site-footer .cba-footer-logo {
+  display: block;
+  height: 60px;
+  width: auto;
+  margin-bottom: 12px;
+}
