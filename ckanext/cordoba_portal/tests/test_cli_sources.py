@@ -35,6 +35,8 @@ class TestInitSources:
         assert call_action("harvest_source_show", id="riocuarto")["source_type"] == "riocuarto"
         assert call_action("harvest_source_show", id="villaallende")["source_type"] == "villaallende"
         assert call_action("harvest_source_show", id="bellville")["frequency"] == "MONTHLY"
+        unc = call_action("harvest_source_show", id="unc")
+        assert unc["source_type"] == "ckan_with_files" and json.loads(unc["config"])["single_org"] == "unc"
         # a CKAN source has no organization of its own; the site's owns it
         tercero = call_action("harvest_source_show", id="riotercero")
         assert tercero["source_type"] == "ckan_with_files" and tercero["owner_org"] == own["id"]

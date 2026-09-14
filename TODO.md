@@ -395,6 +395,14 @@ pisarnos entre sesiones.
       (Presupuesto, Regimen tarifario e impositivo, Regimen de
       contratacion, Ordenanzas = link al digesto del Concejo), 15 PDF.
       MONTHLY. Los llamados a licitacion son posts, no se cosechan.
+- [x] 2026-09-14: UNC (https://datosabiertos.unc.edu.ar, "UNC Abierta",
+      CKAN con extension unckan, 163 datasets / 170 recursos, CSV 132 y
+      PDF 32, grupos anuarios / docentes / no-docentes / escalas-salariales
+      / estudiantes / transferencias / presupuesto, una sola organizacion,
+      licencia casi siempre vacia, sin User-Agent especial). Sin harvester
+      nuevo: fuente `ckan_with_files` en init-sources con `single_org:
+      unc`, `remote_groups: create`, `force_all`. Probado en local 163/163
+      sin copias. Extras `superset_*` del origen quedan tal cual.
 
 Revisados el 2026-09-14 y descartados por ahora: turismo.cordoba.gob.ar/datos-abiertos
   (solo enlaza a la categoria Turismo de municba, ya cosechado);

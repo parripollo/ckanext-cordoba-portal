@@ -79,8 +79,8 @@ so the site is a backup and not a list of links.
 - `bellville`: the Legislature's harvester pointed at Bell Ville's budget
   page (same shape: a heading, its files). See `bellville.py`.
 
-Rio Tercero is a CKAN portal: a `ckan_with_files` source, nothing of its
-own.
+Rio Tercero and the UNC are CKAN portals: `ckan_with_files` sources,
+nothing of their own.
 
 All take their options as JSON in the config of the harvest source; the
 module docstrings list them.

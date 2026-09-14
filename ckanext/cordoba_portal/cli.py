@@ -178,6 +178,29 @@ SOURCES = [
         },
     },
     {
+        # a CKAN portal with one organization: everything goes to ours
+        "organization": {
+            "name": "unc",
+            "title": "Universidad Nacional de Córdoba",
+            "description": ("Datos publicados por la Universidad Nacional de Córdoba en "
+                            "UNC Abierta, su portal de datos abiertos."),
+            "source_portal": "unc",
+            "source_url": "https://datosabiertos.unc.edu.ar/",
+        },
+        "source": {
+            "name": "unc",
+            "title": "UNC Abierta (datos abiertos)",
+            "url": "https://datosabiertos.unc.edu.ar",
+            "source_type": "ckan_with_files",
+            "frequency": "WEEKLY",
+            "notes": "Portal de datos abiertos de la Universidad Nacional de Córdoba (CKAN).",
+            "config": json.dumps({
+                "source_portal": "unc", "single_org": "unc", "remote_groups": "create",
+                "force_all": True, "copy_pause": 3, "user_agent": USER_AGENT,
+            }),
+        },
+    },
+    {
         # a CKAN portal: the standard harvester with files, one local
         # organization per remote one (riotercero-munirio3, ...)
         "source": {

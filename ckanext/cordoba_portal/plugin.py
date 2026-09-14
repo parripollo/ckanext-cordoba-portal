@@ -89,6 +89,13 @@ SOURCE_PORTALS = [
         "url": "https://bellville.gob.ar/presupuesto/",
         "prefix": "bellville",
     },
+    {
+        "value": "unc",
+        "label": "UNC Abierta - Portal de Datos Abiertos de la Universidad Nacional de Córdoba",
+        "short": "UNC",
+        "url": "https://datosabiertos.unc.edu.ar/",
+        "prefix": "unc",
+    },
 ]
 
 
