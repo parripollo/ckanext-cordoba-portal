@@ -7,15 +7,20 @@ from ckan.tests import factories
 def test_home_shows_the_initiative_and_the_counts(app):
     org = factories.Organization()
     factories.Dataset(owner_org=org["id"], source_portal="cbadatos")
-    factories.Dataset(owner_org=org["id"], source_portal="cbadatos")
+    factories.Dataset(owner_org=org["id"], source_portal="municba")
+    factories.Dataset(owner_org=org["id"], source_portal="municba")
 
     page = app.get("/").body
 
     assert "Todos los datos de Córdoba, en un solo lugar" in page
     assert "iniciativa ciudadana" in page
     assert 'name="q"' in page
-    assert "<strong>2</strong> conjuntos de datos" in page
+    assert "<strong>3</strong> conjuntos de datos" in page
     assert "<strong>1</strong> organizaciones" in page
+    # The portals of origin, with their datasets, most first
+    assert page.index("Muni CBA") < page.index("Producción propia")
+    assert 'href="/dataset/?source_portal=municba"' in page
+    assert 'class="cba-portal-count">2<' in page
     # No "recent datasets": harvested datasets carry a mix of dates.
     assert "Recent Datasets" not in page
     assert "recent-packages" not in page

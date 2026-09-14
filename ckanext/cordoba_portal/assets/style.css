@@ -48,6 +48,41 @@
   margin: 0 12px;
   color: #93a1e9;
 }
+/* Portals of origin, under the counts: name and how many datasets each
+   one gives us, linking to the filtered list */
+.cba-portals {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  list-style: none;
+  max-width: 760px;
+  margin: 24px auto 0;
+  padding: 0;
+}
+.cba-portals a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  text-decoration: none;
+}
+.cba-portals a:hover,
+.cba-portals a:focus {
+  background: rgba(255, 255, 255, 0.22);
+}
+.cba-portal-count {
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #fff;
+  color: #1c2a63;
+  font-size: 14px;
+}
 @media (max-width: 767px) {
   .homepage .cba-hero h1 { font-size: 30px; }
   .cba-search { flex-direction: column; }

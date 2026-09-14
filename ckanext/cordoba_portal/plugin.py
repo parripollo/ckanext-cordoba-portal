@@ -83,11 +83,24 @@ def cordoba_portal_pages():
 
 
 def cordoba_portal_counts():
-    """Numbers shown on the home page."""
+    """Numbers shown on the home page: totals and the datasets per portal
+    of origin (`portals`, most datasets first, as the facet in /dataset)."""
     context = {"ignore_auth": True}
-    datasets = toolkit.get_action("package_search")(context, {"rows": 0})["count"]
+    result = toolkit.get_action("package_search")(context, {
+        "rows": 0, "facet.field": ["source_portal"], "facet.limit": -1})
+    portals = []
+    for value, count in result["facets"].get("source_portal", {}).items():
+        portal = cordoba_portal_source(value)
+        portals.append({
+            "value": value,
+            "name": portal["short"] if portal else value,
+            "count": count,
+            "url": toolkit.url_for("dataset.search", source_portal=value),
+        })
+    portals.sort(key=lambda p: -p["count"])
     organizations = len(toolkit.get_action("organization_list")(context, {}))
-    return {"datasets": datasets, "organizations": organizations}
+    return {"datasets": result["count"], "organizations": organizations,
+            "portals": portals}
 
 
 class CordobaPortalPlugin(plugins.SingletonPlugin):

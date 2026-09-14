@@ -26,6 +26,18 @@
               <span><strong>{{ h.localised_number(counts.datasets) }}</strong> conjuntos de datos</span>
               <span><strong>{{ counts.organizations }}</strong> organizaciones</span>
             </p>
+            {% if counts.portals %}
+              <ul class="cba-portals" aria-label="Portales de origen">
+                {% for portal in counts.portals %}
+                  <li>
+                    <a href="{{ portal.url }}">
+                      <span class="cba-portal-name">{{ portal.name }}</span>
+                      <span class="cba-portal-count">{{ h.localised_number(portal.count) }}</span>
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
           </div>
         </div>
       </div>
