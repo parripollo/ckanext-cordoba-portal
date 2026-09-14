@@ -200,7 +200,20 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
 - [x] 2026-09-13: volumen estimado con HEAD (muestra de 37 archivos, todos
       200): estadistica ~0,24 MB promedio, maximo 4 MB -> ~3 GB en total;
       gestion abierta ~0,66 MB promedio -> ~0,6 GB. Unos 4 GB: entra sin
-      problema. Falta mirar el disco libre del servidor.
+      problema.
+- [x] 2026-09-14: disco del servidor: 444 GB, 197 GB libres con gestion
+      abierta + estadistica completas y municba a medias (storage de
+      cbadatos 4,3 GB). Con la ciudad, Villa Maria, Legislatura e IDECOR
+      (~4,5 GB) se estima menos de 15 GB. Revisar cada tanto con
+      `df -h` y `du -sh ~/ckanito-data/cbadatos/storage`.
+- [ ] Respaldo de las copias (andres, 2026-09-14): hoy los archivos viven
+      en un solo disco local del servidor; si se rompe se pierde el backup
+      que justifica el portal. Ver si conviene un S3 propio (o compatible:
+      Backblaze B2, Hetzner Object Storage, MinIO en otra maquina) y como:
+      (a) storage de CKAN directo en S3 (ckanext-s3filestore o
+      ckanext-cloudstorage, a revisar como extension), o (b) mas simple y
+      sin tocar CKAN, un `rclone sync` nocturno de `storage/` + dump de la
+      base a un bucket. Con menos de 20 GB, (b) alcanza y es barato.
 
 ## 4. Otros origenes
 
