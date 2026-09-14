@@ -43,7 +43,9 @@ so the site is a backup and not a list of links.
 
 - `ckan_with_files`: a CKAN portal, keeping the provenance of every dataset
   (`source_portal`, `source_url`) and one organization per remote
-  organization, prefixed by portal. See `harvester.py`.
+  organization, prefixed by portal; remote license ids are mapped onto
+  the local register (`CC-BY-4.0` is `cc-by`). Used for the provincial
+  portals and for Rio Tercero's CKAN. See `harvester.py`.
 - `municba`: the open data portal of the city of Cordoba
   (https://gobiernoabierto.cordoba.gob.ar), which is not CKAN: its open API
   gives datasets, versions and resources; every resource of every version

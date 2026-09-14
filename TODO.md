@@ -354,15 +354,17 @@ pisarnos entre sesiones.
       nombre del archivo si el recurso no lo tenia. Sin licencia visible.
       Probado en local contra el portal real.
 
-- [ ] **Rio Tercero** (siguiente, andres 2026-09-14):
-      https://datos.riotercero.gob.ar es un CKAN 2.7.6 (54 datasets, 7
-      orgs = secretarias, grupos boletin oficial / cuentas publicas /
-      normativa / datos ambientales / tramites...; formatos PDF 54, CSV 3,
-      XLS 1; sin User-Agent especial). NO hace falta harvester nuevo:
-      fuente `ckan_with_files` con `source_portal: riotercero` (agregar a
-      SOURCE_PORTALS), orgs con prefijo `riotercero-`, grupos remotos
-      creados. Ojo: CKAN 2.7 viejo, revisar que `package_search` y
-      `package_show` del harvester `ckan` le sirvan (deberian).
+- [x] 2026-09-14: **Rio Tercero** (https://datos.riotercero.gob.ar, CKAN
+      2.7.6, 54 datasets / 2.203 recursos, casi todo PDF: boletin oficial,
+      cuentas publicas, normativa, tramites...). Sin harvester nuevo:
+      fuente `ckan_with_files` en `init-sources` (`source_portal:
+      riotercero`, `remote_groups: create`), portal en SOURCE_PORTALS.
+      Orgs `riotercero-<secretaria>` (7), grupos remotos tal cual.
+      Licencia remota `CC-BY-4.0` -> ahora `ckan_with_files` mapea ids
+      remotos al registro local (`cc-by`). init-sources acepta fuentes sin
+      organizacion propia (las CKAN crean las suyas); las salta si no
+      existe la org `cbadatos` que las posea. Probado en local: 54/54 sin
+      copias, copias en curso. Sin User-Agent especial.
 - [ ] Villa Allende: https://www.villaallende.gov.ar/transparencia/
       (WordPress: boletines, licitaciones, acceso a la informacion; PDFs
       en wp-content/uploads). Valor medio; receta tipo Legislatura.

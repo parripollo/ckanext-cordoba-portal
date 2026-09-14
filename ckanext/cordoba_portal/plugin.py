@@ -68,6 +68,13 @@ SOURCE_PORTALS = [
         "url": "https://economiariocuarto.gob.ar/transparencia",
         "prefix": "riocuarto",
     },
+    {
+        "value": "riotercero",
+        "label": "Portal de Datos Abiertos de la Municipalidad de Río Tercero",
+        "short": "Río Tercero",
+        "url": "https://datos.riotercero.gob.ar/",
+        "prefix": "riotercero",
+    },
 ]
 
 

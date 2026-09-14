@@ -33,6 +33,10 @@ class TestInitSources:
         assert call_action("harvest_source_show", id="legislatura")["source_type"] == "legislatura"
         assert call_action("harvest_source_show", id="idecor")["frequency"] == "MONTHLY"
         assert call_action("harvest_source_show", id="riocuarto")["source_type"] == "riocuarto"
+        # a CKAN source has no organization of its own; the site's owns it
+        tercero = call_action("harvest_source_show", id="riotercero")
+        assert tercero["source_type"] == "ckan_with_files" and tercero["owner_org"] == own["id"]
+        assert json.loads(tercero["config"])["source_portal"] == "riotercero"
 
         result = cli.invoke(cordoba_portal, ["init-sources"])
 
@@ -46,6 +50,10 @@ class TestInitSources:
         assert result.exit_code == 0, result.output
         source = call_action("harvest_source_show", id="municba")
         assert source["owner_org"] == call_action("organization_show", id="municba")["id"]
+        # the CKAN source has nobody to own it then
+        assert "skipped: source riotercero" in result.output
+        with pytest.raises(toolkit.ObjectNotFound):
+            call_action("harvest_source_show", id="riotercero")
 
     def test_a_source_without_its_harvester_is_skipped(self, cli):
         with mock.patch("ckanext.cordoba_portal.cli.SOURCES", [

@@ -221,7 +221,7 @@ class FileCopyMixin:
         }
         if not resource.get("format") and "." in filename:
             # the portal only told us the name of the file when we fetched it
-            changes["format"] = filename.rsplit(".", 1)[-1].upper()
+            changes["format"] = filename.rsplit(".", 1)[-1].strip().upper()
         self._patch(resource, changes)
         tmp.close()
         log.info("Copied %s (%s bytes)", url, size)
@@ -322,6 +322,7 @@ class CordobaCKANHarvester(FileCopyMixin, CKANHarvester):
                 remote_org, portal, base_url)
 
         package_dict["extras"] = self._clean_extras(package_dict.get("extras", []))
+        package_dict["license_id"] = self._local_license(package_dict.get("license_id"))
 
         copies = self._existing_copies(package_dict.get("id"))
         for resource in package_dict.get("resources", []):
@@ -437,6 +438,22 @@ class CordobaCKANHarvester(FileCopyMixin, CKANHarvester):
         groups = package_dict.setdefault("groups", [])
         if not any(g.get("id") == group["id"] or g.get("name") == name for g in groups):
             groups.append({"id": group["id"], "name": name})
+
+    # -- licenses ---------------------------------------------------------
+
+    LICENSE_VERSION = re.compile(r"-\d+(\.\d+)?$")
+
+    @staticmethod
+    def _local_license(license_id):
+        """A remote license id as this CKAN knows it: 'CC-BY-4.0' is our
+        'cc-by'. Unknown ones are kept as they come."""
+        if not license_id:
+            return license_id
+        register = model.Package.get_license_register()
+        if license_id in register:
+            return license_id
+        plain = CordobaCKANHarvester.LICENSE_VERSION.sub("", license_id.strip().lower())
+        return plain if plain in register else license_id
 
     # -- extras -----------------------------------------------------------
 

@@ -133,6 +133,26 @@ SOURCES = [
             }),
         },
     },
+    {
+        # a CKAN portal: the standard harvester with files, one local
+        # organization per remote one (riotercero-munirio3, ...)
+        "source": {
+            "name": "riotercero",
+            "title": "Río Tercero (datos abiertos)",
+            "url": "https://datos.riotercero.gob.ar",
+            "source_type": "ckan_with_files",
+            "frequency": "WEEKLY",
+            "notes": "Portal de datos abiertos de la Municipalidad de Río Tercero (CKAN).",
+            "config": json.dumps({
+                "source_portal": "riotercero", "remote_groups": "create",
+                # every dataset every time: the files that could not be
+                # copied get another chance (the incremental gather only
+                # brings what changed remotely)
+                "force_all": True,
+                "copy_pause": 3, "user_agent": USER_AGENT,
+            }),
+        },
+    },
 ]
 OWN_ORGANIZATION = "cbadatos"
 
@@ -174,13 +194,17 @@ def init_sources():
 
     harvesters = {h["name"] for h in toolkit.get_action("harvesters_info_show")(dict(context), {})}
     for entry in SOURCES:
-        org = entry["organization"]
+        # a CKAN source makes its organizations as it goes (one per remote
+        # organization): it has none of its own here
+        org = entry.get("organization")
         if entry["source"]["source_type"] not in harvesters:
             # its harvester plugin is not loaded on this instance
             click.echo("skipped: source %s (no %s harvester here)"
                        % (entry["source"]["name"], entry["source"]["source_type"]))
             continue
-        if exists("organization_show", org["name"]):
+        if not org:
+            pass
+        elif exists("organization_show", org["name"]):
             click.echo("exists: organization %s" % org["name"])
         else:
             toolkit.get_action("organization_create")(dict(context), dict(org))
@@ -191,7 +215,11 @@ def init_sources():
             click.echo("exists: source %s" % source["name"])
             continue
         owner = exists("organization_show", OWN_ORGANIZATION) or \
-            exists("organization_show", org["name"])
+            (org and exists("organization_show", org["name"]))
+        if not owner:
+            click.echo("skipped: source %s (no organization %s to own it)"
+                       % (source["name"], OWN_ORGANIZATION))
+            continue
         toolkit.get_action("harvest_source_create")(
             dict(context), dict(source, owner_org=owner["id"]))
         click.echo("created: source %s" % source["name"])

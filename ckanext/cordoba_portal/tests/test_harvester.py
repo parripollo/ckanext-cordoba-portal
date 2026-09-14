@@ -180,6 +180,22 @@ class TestModifyPackageDict:
 
         assert [e["key"] for e in result["extras"]] == ["Frecuencia de actualización"]
 
+    def test_a_remote_license_id_becomes_ours(self):
+        h = harvester_with({"source_portal": "datosgestionabierta"})
+        obj = fake_harvest_object(REMOTE["id"], {"source_portal": "datosgestionabierta"})
+        dataset = remote_dataset()
+        dataset["license_id"] = "CC-BY-4.0"      # Rio Tercero's CKAN 2.7 says so
+
+        with mock.patch.object(CordobaCKANHarvester, "_get_organization",
+                               return_value=REMOTE_ORG), \
+                mock.patch.object(CordobaCKANHarvester, "_fetch_file", return_value=None):
+            result = h.modify_package_dict(dataset, obj)
+
+        assert result["license_id"] == "cc-by"
+        assert CordobaCKANHarvester._local_license("cc-by-sa") == "cc-by-sa"
+        assert CordobaCKANHarvester._local_license("Propia-2.0") == "Propia-2.0"
+        assert CordobaCKANHarvester._local_license("") == ""
+
     def test_single_org_and_remote_orgs_as_groups(self):
         org = factories.Organization(name="estadistica-dgeyc", source_portal="datosestadistica")
         config = {"source_portal": "datosestadistica", "single_org": "estadistica-dgeyc",
