@@ -61,6 +61,15 @@ class TestProvenanceOnThePages:
         assert "Portal de Datos Abiertos de Gestión" in page
         assert 'href="' + GESTION + '/organization/o-salud"' in page
 
+    def test_organization_list_says_where_each_one_comes_from(self, app, harvested):
+        factories.Organization(name="cbadatos", title="Córdoba Datos", source_portal="cbadatos")
+
+        page = app.get("/organization/").body
+
+        assert page.count("cba-org-badge") == 2
+        assert "Gestión Abierta" in page
+        assert "Producción propia" in page
+
     def test_own_dataset_shows_own_production(self, app, with_plugins, clean_db):
         dataset = factories.Dataset(source_portal="cbadatos")
 

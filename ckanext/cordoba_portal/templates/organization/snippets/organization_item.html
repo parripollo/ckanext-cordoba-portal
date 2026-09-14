@@ -1,0 +1,10 @@
+{% ckan_extends %}
+
+{# The card says where the organization comes from, next to its image #}
+{% block image %}
+  {{ super() }}
+  {% set portal = h.cordoba_portal_source(organization.source_portal) %}
+  {% if portal %}
+    <span class="cba-org-badge" title="{{ portal.label }}"><i class="fa fa-location-arrow"></i> {{ portal.short }}</span>
+  {% endif %}
+{% endblock %}

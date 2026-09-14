@@ -118,3 +118,16 @@ footer .site-footer {
 .cba-about-menu .dropdown-menu { min-width: 260px; }
 .cba-about-menu .dropdown-toggle i { font-size: 12px; margin-left: 2px; }
 .cba-about-menu .dropdown-toggle::after { display: none; }
+
+/* Organization cards: where the organization comes from */
+.cba-org-badge {
+  display: inline-block;
+  background: #fff7e6;
+  border: 1px solid #f3d9a4;
+  color: #5c3d00;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 12px;
+  margin: 6px 0 4px;
+}
+.cba-org-badge i { margin-right: 3px; }
