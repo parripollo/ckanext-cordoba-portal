@@ -1,17 +1,15 @@
-{% ckan_extends %}
-
-{# The footer of the theme, with the portal's logo and text instead of
-   CKAN's. The link columns are the theme's own (footer_nav). #}
-{% block footer_content %}
-  <div class="row">
-    <div class="col-md-6">
-      <p class="footer-description col-md-8">
-        <img class="cba-footer-logo" src="/images/cba-datos-logo-white.svg" alt="cba datos" width="70" height="60">
-        {{ g.site_description }}
-      </p>
-    </div>
-    <div class="col-md-6 footer-links row">
-      {{ self.footer_nav() }}
+{# The footer of cbadatos.com.ar: one line, the logo and the description
+   of the site. No link columns, no "Powered by CKAN" bar, no language
+   selector (the site is in Spanish only). Replaces the theme's footer. #}
+<footer>
+  <div class="site-footer">
+    <div class="container">
+      <div class="cba-footer">
+        <a class="cba-footer-brand" href="{{ h.url_for('home.index') }}">
+          <img class="cba-footer-logo" src="/images/cba-datos-logo-white.svg" alt="cba datos" width="47" height="40">
+        </a>
+        <p class="cba-footer-text">{{ g.site_description }}</p>
+      </div>
     </div>
   </div>
-{% endblock %}
+</footer>

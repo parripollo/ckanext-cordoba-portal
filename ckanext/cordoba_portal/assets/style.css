@@ -92,12 +92,26 @@
 }
 .cba-source-org a { color: #5c3d00; text-decoration: underline; }
 
-/* Footer: the portal's logo where the theme put CKAN's. */
-.site-footer .cba-footer-logo {
-  display: block;
-  height: 60px;
+/* Footer: one line, the logo and the description of the site. */
+footer .site-footer {
+  padding: 1rem 0;
+}
+.cba-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.cba-footer-brand {
+  flex: none;
+  line-height: 0;
+}
+.cba-footer-logo {
+  height: 40px;
   width: auto;
-  margin-bottom: 12px;
+}
+.cba-footer-text {
+  margin: 0;
+  color: #dfe5ff;
 }
 
 /* "Acerca de" menu in the header: the pages hang from it */
