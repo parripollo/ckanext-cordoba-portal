@@ -1,10 +1,14 @@
 {% ckan_extends %}
 
-{# The card says where the organization comes from, next to its image #}
+{# The card says where the organization comes from, to the right of its image #}
 {% block image %}
-  {{ super() }}
   {% set portal = h.cordoba_portal_source(organization.source_portal) %}
-  {% if portal %}
-    <span class="cba-org-badge" title="{{ portal.label }}"><i class="fa fa-location-arrow"></i> {{ portal.short }}</span>
-  {% endif %}
+  <div class="cba-org-head">
+    <div class="module-image">
+      <img src="{{ organization.image_display_url or h.url_for_static('/base/images/placeholder-organization.svg') }}" alt="{{ organization.name }}" class="img-fluid">
+    </div>
+    {% if portal %}
+      <span class="cba-org-badge" title="{{ portal.label }}"><i class="fa fa-location-arrow"></i> {{ portal.short }}</span>
+    {% endif %}
+  </div>
 {% endblock %}

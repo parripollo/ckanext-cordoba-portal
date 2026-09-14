@@ -119,7 +119,14 @@ footer .site-footer {
 .cba-about-menu .dropdown-toggle i { font-size: 12px; margin-left: 2px; }
 .cba-about-menu .dropdown-toggle::after { display: none; }
 
-/* Organization cards: where the organization comes from */
+/* Organization cards: where the organization comes from, next to the image */
+.cba-org-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.cba-org-head .module-image { flex: 0 0 auto; }
 .cba-org-badge {
   display: inline-block;
   background: #fff7e6;
@@ -128,8 +135,7 @@ footer .site-footer {
   border-radius: 6px;
   padding: 2px 8px;
   font-size: 12px;
-  margin: 6px 0 4px;
+  margin: 0;
   width: fit-content;
-  align-self: flex-start;
 }
 .cba-org-badge i { margin-right: 3px; }
