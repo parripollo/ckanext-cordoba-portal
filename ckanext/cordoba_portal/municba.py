@@ -59,7 +59,7 @@ FILE_TYPE = "Archivo"
 # descriptions the portal uses as "none"
 EMPTY_NOTES = {None, "", "."}
 # the portal's icon names that are not a file extension
-ICON_FORMATS = {"web": "HTML", "googlesheet": "Google Sheets", "map": "KML"}
+ICON_FORMATS = {"web": "HTML", "googlesheet": "Google Sheets", "drive": "Google Sheets", "map": "KML"}
 KNOWN_EXTENSIONS = {
     "csv", "xls", "xlsx", "ods", "pdf", "kml", "kmz", "shp", "zip", "rar",
     "json", "geojson", "txt", "doc", "docx", "odt", "xml",

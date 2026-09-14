@@ -332,6 +332,7 @@ class TestPieces:
         assert f({"url": "https://x/datos/linea-ferrea.rar", "icono": "map"}) == "RAR"
         assert f({"url": "https://docs.google.com/spreadsheets/d/1/edit", "icono": "web"}) == "HTML"
         assert f({"url": "https://docs.google.com/x", "icono": "googlesheet"}) == "Google Sheets"
+        assert f({"url": "https://docs.google.com/spreadsheets/d/1", "icono": "drive"}) == "Google Sheets"
         assert f({"url": "https://x/mapa", "icono": "map"}) == "KML"
         assert f({"url": None, "icono": None}) == ""
 
