@@ -1,4 +1,5 @@
 """ckan cordoba-portal: the portal's own commands."""
+import json
 import os
 
 import click
@@ -14,6 +15,38 @@ HERE = os.path.dirname(__file__)
 PAGES = [
     ("sobre-este-ckan", "Sobre este CKAN y este experimento", "1"),
 ]
+
+# The harvest sources this portal ships with, each with the organization
+# its datasets go to. init-sources creates what is missing and leaves the
+# existing ones alone (they are edited on the site). The source is owned by
+# the site's own organization, `cbadatos`, when it exists.
+USER_AGENT = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
+              "Chrome/128.0 Safari/537.36 cbadatos.com.ar")
+SOURCES = [
+    {
+        "organization": {
+            "name": "municba",
+            "title": "Municipalidad de Córdoba",
+            "description": ("Datos publicados por la Municipalidad de Córdoba en su "
+                            "portal de Gobierno Abierto."),
+            "source_portal": "municba",
+            "source_url": "https://gobiernoabierto.cordoba.gob.ar/data/datos-abiertos",
+        },
+        "source": {
+            "name": "municba",
+            "title": "Muni CBA (Gobierno Abierto)",
+            "url": "https://gobiernoabierto.cordoba.gob.ar",
+            "source_type": "municba",
+            "frequency": "WEEKLY",
+            "notes": "Portal de datos abiertos de la Municipalidad de Córdoba.",
+            "config": json.dumps({
+                "single_org": "municba", "pause": 1, "copy_pause": 3,
+                "copy_max_mb": 1024, "recheck_days": 30, "user_agent": USER_AGENT,
+            }),
+        },
+    },
+]
+OWN_ORGANIZATION = "cbadatos"
 
 
 @click.group("cordoba-portal", short_help="cbadatos.com.ar commands")
@@ -37,6 +70,37 @@ def init_pages():
             "order": order, "private": False, "page_type": "page",
         })
         click.echo("created: %s" % name)
+
+
+@cordoba_portal.command("init-sources",
+                        short_help="Create the harvest sources (and their organizations) that are missing")
+def init_sources():
+    site_user = toolkit.get_action("get_site_user")({"ignore_auth": True}, {})
+    context = {"user": site_user["name"], "ignore_auth": True}
+
+    def exists(action, name):
+        try:
+            return toolkit.get_action(action)(dict(context), {"id": name})
+        except toolkit.ObjectNotFound:
+            return None
+
+    for entry in SOURCES:
+        org = entry["organization"]
+        if exists("organization_show", org["name"]):
+            click.echo("exists: organization %s" % org["name"])
+        else:
+            toolkit.get_action("organization_create")(dict(context), dict(org))
+            click.echo("created: organization %s" % org["name"])
+
+        source = entry["source"]
+        if exists("harvest_source_show", source["name"]):
+            click.echo("exists: source %s" % source["name"])
+            continue
+        owner = exists("organization_show", OWN_ORGANIZATION) or \
+            exists("organization_show", org["name"])
+        toolkit.get_action("harvest_source_create")(
+            dict(context), dict(source, owner_org=owner["id"]))
+        click.echo("created: source %s" % source["name"])
 
 
 def get_commands():

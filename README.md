@@ -53,6 +53,10 @@ so the site is a backup and not a list of links.
 Both take their options as JSON in the config of the harvest source; the
 module docstrings list them.
 
+`ckan cordoba-portal init-sources` creates the harvest sources the portal
+ships with (and their organizations) when they are missing; the deploy runs
+it. `init-pages` does the same for the pages.
+
 ## Developer installation
 
     pip install -e .
