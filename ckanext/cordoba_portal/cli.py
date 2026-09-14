@@ -89,6 +89,28 @@ SOURCES = [
             }),
         },
     },
+    {
+        "organization": {
+            "name": "idecor",
+            "title": "IDECOR - Infraestructura de Datos Espaciales de Córdoba",
+            "description": ("Capas publicadas por IDECOR en Mapas Córdoba, el geoportal "
+                            "de la Provincia de Córdoba."),
+            "source_portal": "idecor",
+            "source_url": "https://www.mapascordoba.gob.ar/",
+        },
+        "source": {
+            "name": "idecor",
+            "title": "IDECOR (Mapas Córdoba)",
+            "url": "https://www.mapascordoba.gob.ar",
+            "source_type": "idecor",
+            "frequency": "MONTHLY",
+            "notes": "Geoportal de la Infraestructura de Datos Espaciales de Córdoba.",
+            "config": json.dumps({
+                "single_org": "idecor", "pause": 1, "copy_pause": 3,
+                "copy_max_mb": 200, "recheck_days": 30, "user_agent": USER_AGENT,
+            }),
+        },
+    },
 ]
 OWN_ORGANIZATION = "cbadatos"
 

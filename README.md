@@ -59,6 +59,12 @@ so the site is a backup and not a list of links.
   WordPress pages read through the REST API: every heading of a section
   page is a dataset, its files (CSV, XLSX, zipped XML, JSON, a metadata
   text) the resources, the section a group. See `legislatura.py`.
+- `idecor`: the geoportal of the province (https://www.mapascordoba.gob.ar,
+  IDECOR), whose two static JSON catalogs (downloads and geoservices) are
+  joined by layer name: one dataset per layer, the GeoJSON / GeoTIFF /
+  symbology / metadata copied, the WMS / WFS / WCS and the on-demand
+  Shapefile and KML as links, the first level of the tree a group. See
+  `idecor.py`.
 
 All take their options as JSON in the config of the harvest source; the
 module docstrings list them.

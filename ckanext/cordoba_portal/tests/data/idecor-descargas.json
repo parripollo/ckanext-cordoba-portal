@@ -1,0 +1,102 @@
+[
+ {
+  "category": "agropecuario",
+  "title": "Información Agropecuaria",
+  "description": "Capas Temáticas del Sector Agropecuario.",
+  "type": "super-group",
+  "image": "d_agro.jpg",
+  "childs": [
+   {
+    "category": "cultivos_estimaciones",
+    "title": "Cultivos y Estimaciones",
+    "description": "Distribución de cultivos.",
+    "type": "group",
+    "image": "biota.jpg",
+    "childs": [
+     {
+      "title": "Lotes con cultivo de maní - Campañas 2016/17 a 2023/24",
+      "shp": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=idecor:cultivos_mani_historico&outputFormat=SHAPE-ZIP",
+      "kml": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=idecor:cultivos_mani_historico&outputFormat=KML",
+      "json": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=idecor:cultivos_mani_historico&outputFormat=json",
+      "porpedania": true,
+      "qml": "/simbologia/biota_land_cover/sty_cultivos_mani_historico.qml",
+      "dd": "/dicdatos/biota_land_cover/dic_cultivos_mani_historico.pdf",
+      "metadatos": "/metadatos/biota_land_cover/metadatos_cultivos_mani_historico.pdf",
+      "category": "no_raster"
+     },
+     {
+      "title": "Coberturas Agrícolas Estivales 2024/2025",
+      "tiff": "/download_raster/rendimiento/coberturas_estivales_2425.tif",
+      "qml": "/simbologia/biota_land_cover/sty_coberturas_estivales_2425.qml",
+      "metadatos": "/metadatos/biota_land_cover/metadatos_coberturas_agricolas_2425.pdf",
+      "category": "raster"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "category": "hidrologia",
+  "title": "Hidrografía",
+  "description": "Elementos de agua superficial, tales como cursos de agua, lagunas y embalses.",
+  "type": "group",
+  "image": "hidrologia.jpg",
+  "childs": [
+   {
+    "title": "Hidrografía",
+    "organismo": "Administración Provincial de Recursos Hídricos",
+    "externa": true,
+    "link": "https://experience.arcgis.com/experience/d65770925de54b43a43816809a51c6a3/page/P%C3%A1gina/?draft=true&views=Hidrograf%C3%Ada",
+    "category": "no_raster"
+   }
+  ]
+ },
+ {
+  "category": "catastro",
+  "title": "Catastro",
+  "description": "Registro gráfico parcelario provincial y valor de la tierra urbana y rural.",
+  "type": "group",
+  "image": "catastro.jpg",
+  "childs": [
+   {
+    "title": "Parcelas",
+    "shp": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=idecor:parcelas&outputFormat=SHAPE-ZIP",
+    "kml": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=idecor:parcelas&outputFormat=KML",
+    "json": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=idecor:parcelas&outputFormat=json",
+    "porpedania": true,
+    "qml": "/simbologia/catastro/estilo_parcelas.qml",
+    "dd": "/dicdatos/catastro/dic_parcelas.pdf",
+    "metadatos": "/metadatos/metadatos_parcelas.pdf",
+    "category": "no_raster"
+   }
+  ]
+ },
+ {
+  "category": "ciudades",
+  "title": "Ciudades",
+  "description": "Capas Temáticas de Ciudades.",
+  "type": "super-group",
+  "image": "g_ciudades.jpg",
+  "childs": [
+   {
+    "category": "chilibroste",
+    "title": "Chilibroste",
+    "description": "Capas temáticas de la localidad de Chilibroste.",
+    "type": "subgroup",
+    "image": "ciudades/chilibroste.webp",
+    "childs": [
+     {
+      "title": "Parcelas",
+      "shp": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=idecor:chili_parcelas&outputFormat=SHAPE-ZIP",
+      "kml": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=idecor:chili_parcelas&outputFormat=KML",
+      "json": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=idecor:chili_parcelas&outputFormat=json",
+      "qml": "/descargas/chilibroste/sty_chili_parcelas.qml",
+      "dd": "/descargas/chilibroste/dic_chili_parcelas.pdf",
+      "metadatos": "/descargas/chilibroste/metadatos_chili_parcelas.pdf",
+      "category": "no_raster"
+     }
+    ]
+   }
+  ]
+ }
+]

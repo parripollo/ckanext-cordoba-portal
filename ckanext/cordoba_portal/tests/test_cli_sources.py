@@ -31,6 +31,7 @@ class TestInitSources:
         assert source["owner_org"] == own["id"]
         assert json.loads(source["config"])["single_org"] == "municba"
         assert call_action("harvest_source_show", id="legislatura")["source_type"] == "legislatura"
+        assert call_action("harvest_source_show", id="idecor")["frequency"] == "MONTHLY"
 
         result = cli.invoke(cordoba_portal, ["init-sources"])
 

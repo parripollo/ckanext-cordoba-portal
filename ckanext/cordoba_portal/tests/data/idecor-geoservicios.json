@@ -1,0 +1,142 @@
+[
+ {
+  "label": "Generales",
+  "children": [
+   {
+    "label": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/wms",
+    "href": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/wms?request=GetCapabilities",
+    "children": []
+   },
+   {
+    "label": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/wfs",
+    "href": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/wfs?request=GetCapabilities",
+    "children": []
+   },
+   {
+    "label": "https://idecor-wcs.mapascordoba.gob.ar/geoserver/idecor/wcs",
+    "href": "https://idecor-wcs.mapascordoba.gob.ar/geoserver/idecor/wcs?request=GetCapabilities",
+    "children": []
+   },
+   {
+    "label": "https://idecor-tiles.mapascordoba.gob.ar/geoserver/gwc/service/wmts",
+    "href": "https://idecor-tiles.mapascordoba.gob.ar/geoserver/gwc/service/wmts?request=GetCapabilities",
+    "children": []
+   }
+  ]
+ },
+ {
+  "label": "Por Temas",
+  "children": [
+   {
+    "label": "Geografía Social",
+    "children": [
+     {
+      "label": "Asentamiento",
+      "children": [
+       {
+        "label": "Localidades (puntos)",
+        "children": [
+         {
+          "label": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/localidad_punto/wms",
+          "href": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/localidad_punto/wms?request=GetCapabilities",
+          "children": []
+         },
+         {
+          "label": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/localidad_punto/wfs",
+          "href": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/localidad_punto/wfs?request=GetCapabilities",
+          "children": []
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "label": "Biota",
+    "children": [
+     {
+      "label": "Coberturas Agrícolas Estivales 2024-2025",
+      "children": [
+       {
+        "label": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/coberturas_estivales_2425/wms",
+        "href": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/coberturas_estivales_2425/wms?request=GetCapabilities",
+        "children": []
+       },
+       {
+        "label": "https://idecor-wcs.mapascordoba.gob.ar/geoserver/idecor/coberturas_estivales_2425/wcs",
+        "href": "https://idecor-wcs.mapascordoba.gob.ar/geoserver/idecor/coberturas_estivales_2425/wcs?request=GetCapabilities",
+        "children": []
+       }
+      ]
+     },
+     {
+      "label": "Lotes con cultivo de maní - Campañas 2016/17 a 2023/24",
+      "children": [
+       {
+        "label": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/cultivos_mani_historico/wms",
+        "href": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/cultivos_mani_historico/wms?request=GetCapabilities",
+        "children": []
+       },
+       {
+        "label": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/cultivos_mani_historico/wfs",
+        "href": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/cultivos_mani_historico/wfs?request=GetCapabilities",
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "label": "Catastro",
+    "children": [
+     {
+      "label": "Parcelario",
+      "children": [
+       {
+        "label": "Parcelas",
+        "children": [
+         {
+          "label": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/parcelas/wms",
+          "href": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/parcelas/wms?request=GetCapabilities",
+          "children": []
+         },
+         {
+          "label": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/parcelas/wfs",
+          "href": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/parcelas/wfs?request=GetCapabilities",
+          "children": []
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Ciudades",
+  "children": [
+   {
+    "label": "Chilibroste",
+    "children": [
+     {
+      "label": "Parcelas",
+      "children": [
+       {
+        "label": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/chili_parcelas/wms",
+        "href": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/chili_parcelas/wms?request=GetCapabilities",
+        "children": []
+       },
+       {
+        "label": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/chili_parcelas/wfs",
+        "href": "https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/chili_parcelas/wfs?request=GetCapabilities",
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

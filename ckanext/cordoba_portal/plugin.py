@@ -54,6 +54,13 @@ SOURCE_PORTALS = [
         "url": "https://legislaturacba.gob.ar/portal-de-datos-abiertos/",
         "prefix": "legislatura",
     },
+    {
+        "value": "idecor",
+        "label": "IDECOR - Mapas Córdoba (Infraestructura de Datos Espaciales de Córdoba)",
+        "short": "IDECOR",
+        "url": "https://www.mapascordoba.gob.ar/#/descargas",
+        "prefix": "idecor",
+    },
 ]
 
 

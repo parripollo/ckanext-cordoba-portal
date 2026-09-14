@@ -260,94 +260,49 @@ pisarnos entre sesiones.
       entran). La biblioteca de medios (`/wp-json/wp/v2/media`, 2.587
       CSV) tiene versiones viejas (RUTA_144..148) que el portal no
       enlaza: no se cosechan.
-- [ ] IDECOR (Infraestructura de Datos Espaciales de Cordoba), portal de
-      mapas: https://www.mapascordoba.gob.ar/#/descargas
-      Relevado 2026-09-14: SPA Quasar/Vue, pero el catalogo de descargas
-      es UN json estatico y publico:
-      `https://www.mapascordoba.gob.ar/datos/descargas.json` (467 KB):
-      15 super-grupos > 58 grupos > 554 capas. Cada capa: `title`,
-      `category` (no_raster 519 / raster 35) y URLs por formato: `shp`,
-      `kml`, `json` (485 capas; son WFS GetFeature del GeoServer
-      `idecor-ws.mapascordoba.gob.ar/geoserver/idecor/ows` con
-      outputFormat SHAPE-ZIP / KML / json, responden al toque, ~1.5 MB el
-      shp de prueba), `tiff` (59 rasters, GRANDES: 221 MB el de prueba),
-      `qml`/`lyr` (simbologia), `dd` (diccionario de datos PDF),
-      `metadatos` (PDF), y 10 capas externas (`externa`, `link` a
-      experience.arcgis.com, `organismo`). Las rutas relativas
-      (`/metadatos/...`, `/dicdatos/...`, `/simbologia/...`,
-      `/download_raster/...`) cuelgan del bucket
-      `https://obs-idecor-lib.obs.sa-argentina-1.myhuaweicloud.com`
-      (Huawei OBS, da Last-Modified y Content-Length; en el dominio
-      principal dan 404). Propuesta: un dataset por capa (554), grupo por
-      super-grupo/grupo, recursos = shp + kml + geojson + qml + dd +
-      metadatos copiados, tiff copiado solo si entra en `copy_max_mb`
-      (si no queda como link), externas como link; org unica `idecor`.
-      Sin fecha por capa en el json: usar Last-Modified del bucket para
-      no rebajar; el WFS no da fecha (hash del contenido). Licencia: ver
-      /acercade. Tambien sirve el WFS GetCapabilities para los nombres de
-      capa. Va despues de la Legislatura.
-
-      Volumen medido 2026-09-14 (para decidir que copiar):
-      - 59 GeoTIFF: 9,3 GB en total, el mayor 2 GB, 12 pasan los 200 MB.
-      - 485 shp (WFS SHAPE-ZIP): muestra de 12 promedia 5 MB (de 0,03 a
-        39 MB; `rendimiento_maiz` 21 MB tarda 38 s) -> ~2,4 GB estimados;
-        kml y geojson de las mismas capas serian otros ~2 x eso, no vale
-        copiarlos (mismo dato: copiar UNO, el geojson, que geoview
-        previsualiza; shp y kml como links al WFS).
-      - 1.300 PDF/QML (metadatos, diccionarios, simbologia): ~170 MB.
-      - Ojo: `descargas.json` tiene ~14 nombres de capa corruptos
-        ("bolsa_alfalfa_historicbolsa_maiz_historicoo"): esos links dan
-        error en el origen, quedan como link roto (o se corrigen por
-        GetCapabilities si el nombre bueno esta).
-
-      **Geoservicios** (https://www.mapascordoba.gob.ar/#/geoservicios),
-      relevado 2026-09-14: otro json estatico,
-      `https://www.mapascordoba.gob.ar/datos/geoservicios.json` (421 KB),
-      arbol label/href/children: 9 grupos ("Generales", "Por Temas",
-      "Energias Renovables", "OMI", "Ciudades", "Mapas de Riesgo",
-      "Imagenes y Vuelos"...) > 1.118 hojas = URLs GetCapabilities por
-      CAPA (`/geoserver/idecor/<capa>/wms|wfs|wcs`): 563 capas, 497 con
-      WMS+WFS, 47 rasters con WMS+WCS, 10 solo WMS, 8 solo WCS; mas los
-      4 servicios generales (WMS, WFS, WCS, WMTS del GeoServer, 504
-      feature types en el WFS general) y 2 de CONAE. 476 de esas capas son
-      las mismas de descargas; 87 solo estan como geoservicio (sin entrada
-      de descarga) y 14 solo en descargas.
-
-      Estrategia propuesta para IDECOR (un solo harvester `idecor`):
-      1. La unidad es la CAPA (union de descargas.json y geoservicios.json
-         por nombre de capa): un dataset por capa, ~570. Grupos por
-         tema (super-grupo/grupo de descargas; el arbol de geoservicios
-         como segundo criterio para las 87 que faltan). Org unica
-         `idecor`.
-      2. Recursos por capa:
-         - COPIADOS (esto es lo que nos hace backup): un vector por capa
-           en GeoJSON via WFS GetFeature (o el shp si se prefiere; no los
-           tres), los PDF de metadatos y diccionario, la simbologia
-           (qml/lyr). ~2,5 GB en total; el WFS se genera al vuelo, ir a
-           1 request cada 3 s y con `timeout` largo (300 s).
-         - GeoTIFF: copiar solo los que entran en `copy_max_mb` (tope
-           200 MB deja afuera 12 de 59, ~7 GB); los grandes quedan como
-           link al bucket, que da Last-Modified/Content-Length para
-           revisar cambios sin bajar. Decidir con andres si vale un
-           tope mayor para estos (9,3 GB en disco).
-         - LINKS (no se copian, son servicios, no archivos): WMS, WFS y
-           WCS por capa con formato "WMS"/"WFS"/"WCS" y la URL
-           GetCapabilities de la capa; ckanext-geoview (ya activo) los
-           previsualiza en el mapa. Un servicio no se "descarga": lo que
-           un WFS devuelve ya lo copiamos como GeoJSON, y un WCS/WMS
-           completo son los GeoTIFF/tiles (los rasters ya estan
-           cubiertos por el punto anterior; WMTS/tiles no se copia).
-           Los 4 endpoints generales van en un dataset "Geoservicios
-           IDECOR" aparte, solo links.
-         - Para las 87 capas que solo tienen geoservicio se arma la URL
-           WFS GetFeature (mismo GeoServer, mismo patron) y se copia el
-           GeoJSON igual.
-      3. Cambios: el json no trae fechas. Bucket: Last-Modified. WFS:
-         hash del contenido (ya lo hace FileCopyMixin), pero eso implica
-         rebajar 2,5 GB por corrida -> frecuencia MENSUAL para IDECOR, o
-         mirar antes el `WFS GetCapabilities` / `DescribeFeatureType`
-         (no dan fecha) o el numero de features (`resultType=hits`,
-         barato) como senal de cambio. Empezar mensual con hits.
+- [x] 2026-09-14: IDECOR (Infraestructura de Datos Espaciales de Cordoba),
+      portal de mapas https://www.mapascordoba.gob.ar/#/descargas y
+      /#/geoservicios: harvester `idecor` (idecor.py), procedencia
+      "IDECOR", org unica `idecor`, fuente MENSUAL. SPA Quasar; los dos
+      catalogos son JSON estaticos: `datos/descargas.json` (15 grupos >
+      58 subgrupos > 554 capas: shp/kml/json = WFS GetFeature del
+      GeoServer idecor-ws, tiff, qml/lyr, dd y metadatos PDF, 10 externas
+      a experience.arcgis.com; rutas relativas en el bucket Huawei OBS
+      obs-idecor-lib...myhuaweicloud.com, que da ETag y Last-Modified) y
+      `datos/geoservicios.json` (1.118 hojas = GetCapabilities por capa
+      `/geoserver/idecor/<capa>/wms|wfs|wcs`, 563 capas; + 4 endpoints
+      generales que no se cosechan). Se unen por nombre de capa (los
+      rasters por el nombre del tiff): 621 capas, 67 solo geoservicio
+      (a esas se les arma la URL WFS GetFeature json). Un dataset por
+      capa; titulo con el grupo cuando se repite ("Parcelas - Villa
+      Carlos Paz"); grupo `idecor-<categoria de primer nivel>`; extras
+      tema / tipo (Vectorial, Raster, Enlace externo) / capa / organismo;
+      notas = tema + descripcion del subgrupo. Recursos: COPIADOS GeoJSON
+      (WFS), GeoTIFF (si entra en copy_max_mb, 12 de 59 no), simbologia,
+      diccionario, metadatos; LINKS shp y kml (WFS a demanda, mismo dato),
+      WMS/WFS/WCS por capa, visor externo. Sin fechas en el catalogo:
+      `recheck_days` (30) y ETag (el bucket contesta 304; el WFS se rebaja
+      y compara por hash). Config `categories` para cosechar de a partes.
+      Volumen medido: 59 tiff = 9,3 GB (max 2 GB); 485 shp ~5 MB promedio
+      (~2,4 GB de GeoJSON estimados); PDF/QML ~170 MB; ~14 nombres de
+      capa corruptos en descargas.json quedan como links rotos.
+      Probado en local con `categories: transporte, omi, riesgo` (21 capas,
+      139 recursos, 69 copias). El GeoJSON se pide con `srsName=EPSG:4326`
+      (el WFS lo da en POSGAR 2007 y los visores no conocen esa
+      proyeccion).
+      Vistas (2026-09-14, probado en local): geoview muestra el WMS/WFS/KML
+      con OpenLayers (`geo_view`) y el GeoJSON copiado con Leaflet
+      (`geojson_view`) sobre OSM. Para eso hace falta: (1) fix en el fork
+      de geoview (commit local 991bbcc, ol_preview.js: `info.tooltip` no
+      existe en CKAN 2.10+ y el mapa nunca dibujaba); (2) config
+      `ckanext.spatial.common_map.type = custom` + `custom.url` de OSM +
+      `attribution` (las vistas Leaflet no traen mapa base por defecto);
+      (3) `ckan views create geo_view geojson_view pdf_view` (o agregarlos a
+      `ckan.views.default_views`) - en prod todavia falta. Pendiente en el
+      fork: el titulo de la vista dice "Map viewer" sin traducir.
+      Pendiente: decidir con andres si vale un tope > 200 MB para los 12
+      rasters grandes (~7 GB) o quedan como link; licencia (el portal dice
+      "datos libres", sin licencia formal -> notspecified).
 - [ ] Rio Cuarto, portal de transparencia de la Secretaria de Economia:
       https://economiariocuarto.gob.ar/transparencia
       Relevado 2026-09-14: Next.js en Vercel, sin API propia, pero cada
