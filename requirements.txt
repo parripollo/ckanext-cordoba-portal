@@ -2,3 +2,4 @@
 # PostgreSQL-only CKAN)
 ckanext-scheming @ git+https://github.com/parripollo/ckanext-scheming.git@master
 ckanext-harvest @ git+https://github.com/parripollo/ckanext-harvest.git@master
+ckanext-pages @ git+https://github.com/parripollo/ckanext-pages.git@master

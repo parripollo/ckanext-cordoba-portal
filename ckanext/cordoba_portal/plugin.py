@@ -1,6 +1,9 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 
+from ckanext.cordoba_portal import views
+from ckanext.cordoba_portal.cli import get_commands
+
 
 # Where the data comes from. "cbadatos" is this site (own data); the rest
 # are the portals we harvest. One place feeds the `source_portal` choices
@@ -54,6 +57,17 @@ def cordoba_portal_source(value):
     return None
 
 
+def cordoba_portal_pages():
+    """The public pages of ckanext-pages (for the About menu), in their
+    order; [] when the plugin is not there."""
+    if not plugins.plugin_loaded("pages"):
+        return []
+    pages = toolkit.get_action("ckanext_pages_list")(
+        {"ignore_auth": True}, {"private": False, "page_type": "page"})
+    return sorted(pages, key=lambda p: (int(p["order"]) if str(p.get("order") or "").isdigit()
+                                        else 999, p["title"]))
+
+
 def cordoba_portal_counts():
     """Numbers shown on the home page."""
     context = {"ignore_auth": True}
@@ -67,6 +81,8 @@ class CordobaPortalPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IFacets, inherit=True)
     plugins.implements(plugins.IPackageController, inherit=True)
+    plugins.implements(plugins.IBlueprint)
+    plugins.implements(plugins.IClick)
 
     # IConfigurer
 
@@ -88,7 +104,18 @@ class CordobaPortalPlugin(plugins.SingletonPlugin):
             "cordoba_portal_sources": cordoba_portal_sources,
             "cordoba_portal_source_choices": cordoba_portal_source_choices,
             "cordoba_portal_source": cordoba_portal_source,
+            "cordoba_portal_pages": cordoba_portal_pages,
         }
+
+    # IBlueprint
+
+    def get_blueprint(self):
+        return [views.blueprint]
+
+    # IClick
+
+    def get_commands(self):
+        return get_commands()
 
     # IFacets: the portal of origin, first
 

@@ -1,0 +1,5 @@
+{% ckan_extends %}
+
+{% block additional_user_agents -%}
+Sitemap: {{ h.url_for('cordoba_portal.sitemap', _external=True) }}
+{%- endblock %}

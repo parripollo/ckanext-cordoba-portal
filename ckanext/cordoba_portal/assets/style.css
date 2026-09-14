@@ -99,3 +99,8 @@
   width: auto;
   margin-bottom: 12px;
 }
+
+/* "Acerca de" menu in the header: the pages hang from it */
+.cba-about-menu .dropdown-menu { min-width: 260px; }
+.cba-about-menu .dropdown-toggle i { font-size: 12px; margin-left: 2px; }
+.cba-about-menu .dropdown-toggle::after { display: none; }

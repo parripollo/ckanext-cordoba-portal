@@ -1,0 +1,23 @@
+{% ckan_extends %}
+
+{# The tabs: datasets, organizations, groups, and one "Acerca de" menu that
+   holds the about page and every public page of ckanext-pages, so the
+   pages never take a tab each. #}
+{% block header_site_navigation_tabs %}
+  {% set org_type = h.default_group_type('organization') %}
+  {% set group_type = h.default_group_type('group') %}
+  {{ nav.link(h.url_for(dataset_type ~ '.search'), h.humanize_entity_type('package', dataset_type, 'main nav') or _('Datasets'), active_blueprints=[dataset_type, dataset_type + '_resource']) }}
+  {{ nav.link(h.url_for(org_type ~ '.index'), h.humanize_entity_type('organization', org_type, 'main nav') or _('Organizations'), active_blueprints=[org_type]) }}
+  {{ nav.link(h.url_for(group_type ~ '.index'), h.humanize_entity_type('group', group_type, 'main nav') or _('Groups'), active_blueprints=[group_type]) }}
+  {% set pages = h.cordoba_portal_pages() %}
+  {% set about_active = h.page_is_active(h.url_for('home.about')) or request.blueprint == 'pages' %}
+  <li class="dropdown cba-about-menu {% if about_active %}active{% endif %}">
+    <a href="{{ h.url_for('home.about') }}" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">{{ _('About') }} <i class="fa fa-caret-down"></i></a>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="{{ h.url_for('home.about') }}">{{ _('About') }}</a></li>
+      {% for page in pages %}
+        <li><a class="dropdown-item" href="{{ h.url_for('pages.show', page=page.name) }}">{{ page.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </li>
+{% endblock %}
