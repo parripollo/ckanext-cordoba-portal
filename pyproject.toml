@@ -26,6 +26,7 @@ cordoba_portal = "ckanext.cordoba_portal.plugin:CordobaPortalPlugin"
 ckan_with_files = "ckanext.cordoba_portal.harvester:CordobaCKANHarvester"
 municba = "ckanext.cordoba_portal.municba:MuniCBAHarvester"
 villamaria = "ckanext.cordoba_portal.villamaria:VillaMariaHarvester"
+legislatura = "ckanext.cordoba_portal.legislatura:LegislaturaHarvester"
 
 
 [build-system]

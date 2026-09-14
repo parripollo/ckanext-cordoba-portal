@@ -1,0 +1,12 @@
+﻿Diarios de Sesiónes
+1. Tema: Sesiones.
+2. Frecuencia de actualización: semanal.
+3. Fuente de datos:  Secretaría Legislativa de la Legislatura de la Provincia de Córdoba.
+4. Campos o variables:
+periodo_legislativo: refiere al período legislativo al que corresponde cada diario de sesión. Aclaración: El período legislativo es el tiempo durante el cual la Legislatura se reúne en sesiones que corre entre el 1 de febrero (fecha de inicio de las sesiones ordinarias de la Legislatura de Córdoba) y el 30 de diciembre.
+año: registra el año al que corresponde cada periodo legislativo.
+numero_reunion: registra el número de reunión al que corresponde a cada diario de sesión.
+numero_sesion: registra el número de sesión al que corresponde cada diario de sesión.
+tipo_sesion: registra el tipo de sesión al que corresponde cada diario de sesión, pudiendo adoptar las siguientes categorías:
+Especial: Son sesiones especiales las que se realizan fuera de los días de tablas o del lugar de asiento de la Legislatura durante el período ordinario. Tendrán lugar a petición del Poder Ejecutivo, por resolución del plenario o por pedido de una quinta parte de sus miembros. 
+Extraordinaria: Son sesiones extraordinarias las que se realizan durante el receso de la Legislatura. Tienen lugar por convocatoria efectuada por el Poder Ejecutivo o por el Presidente de la Legislatura a solicitud escrita de una cuarta parte de sus miembros, la que deberá expresar el objeto de la convocatoria. En las sesiones extraordinarias la Legislatura sólo puede ocuparse de los temas objeto de la convocatoria.

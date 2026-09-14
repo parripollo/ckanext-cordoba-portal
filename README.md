@@ -54,6 +54,11 @@ so the site is a backup and not a list of links.
   sitemap lists the datasets and each HTML page gives the metadata and the
   resources (loaded six at a time); the category becomes a group. See
   `villamaria.py`.
+- `legislatura`: the open data portal of the provincial Legislature
+  (https://legislaturacba.gob.ar/portal-de-datos-abiertos/), a few
+  WordPress pages read through the REST API: every heading of a section
+  page is a dataset, its files (CSV, XLSX, zipped XML, JSON, a metadata
+  text) the resources, the section a group. See `legislatura.py`.
 
 All take their options as JSON in the config of the harvest source; the
 module docstrings list them.

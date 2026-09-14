@@ -243,18 +243,23 @@ links), una opcion mas en `SOURCE_PORTALS`, entry point en pyproject, plugin
 en test.ini, fuente en `cli.py` (`init-sources`). De a uno por vez para no
 pisarnos entre sesiones.
 
-- [ ] Legislatura de Cordoba: https://legislaturacba.gob.ar/portal-de-datos-abiertos/
-      Relevado 2026-09-14: WordPress 5.4 (no es un portal de datos, son
-      paginas). Cinco secciones (composicion-de-la-camara, administracion,
-      comisiones-2, sesiones, participacion-ciudadana) con archivos en
-      `wp-content/uploads/` (pares CSV + JSON del mismo dato, PDFs) y
-      carpetas de Google Drive. El REST de WordPress esta abierto:
-      `/wp-json/wp/v2/pages?slug=...` (contenido de cada seccion) y
-      `/wp-json/wp/v2/media?mime_type=text/csv` (los adjuntos con fecha,
-      `modified` y URL). Hace falta User-Agent de navegador. Propuesta: un
-      dataset por seccion o por titulo de tabla, cada CSV/JSON/PDF un
-      recurso copiado; Drive queda como link. Empezar cuando Villa Maria
-      este en produccion.
+- [x] 2026-09-14: Legislatura de Cordoba
+      (https://legislaturacba.gob.ar/portal-de-datos-abiertos/): harvester
+      `legislatura` (legislatura.py), procedencia "Legislatura". WordPress
+      5.4: cinco paginas de seccion (composicion-de-la-camara,
+      administracion, comisiones-2, sesiones, participacion-ciudadana)
+      leidas por `/wp-json/wp/v2/pages?slug=...`; cada h2 es un dataset
+      (36) con descripcion, "Ultima actualizacion: d/m/yyyy" y los mismos
+      datos en CSV + XLSX + XML (zip) + JSON + metadato.txt (tema,
+      frecuencia, fuente -> extras). Id = slug de la pagina propia del
+      dataset (el titulo cambia de anio); titulos en MAYUSCULAS pasados a
+      oracion; seccion como grupo `legislatura-<seccion>`; links a Drive
+      u otros sitios quedan como links (2). Sin licencia (`notspecified`).
+      No hace falta User-Agent. Probado en local: 36 datasets, 173
+      recursos, 169 copiados (2 JSON pasan los 10 MB del local; en prod
+      entran). La biblioteca de medios (`/wp-json/wp/v2/media`, 2.587
+      CSV) tiene versiones viejas (RUTA_144..148) que el portal no
+      enlaza: no se cosechan.
 - [ ] IDECOR (Infraestructura de Datos Espaciales de Cordoba), portal de
       mapas: https://www.mapascordoba.gob.ar/#/descargas
       Relevado 2026-09-14: SPA Quasar/Vue, pero el catalogo de descargas

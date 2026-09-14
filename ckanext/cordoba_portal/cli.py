@@ -67,6 +67,28 @@ SOURCES = [
             }),
         },
     },
+    {
+        "organization": {
+            "name": "legislatura",
+            "title": "Legislatura de la Provincia de Córdoba",
+            "description": ("Datos publicados por la Legislatura de la Provincia de Córdoba "
+                            "en su Portal de Datos Abiertos."),
+            "source_portal": "legislatura",
+            "source_url": "https://legislaturacba.gob.ar/portal-de-datos-abiertos/",
+        },
+        "source": {
+            "name": "legislatura",
+            "title": "Legislatura de Córdoba (datos abiertos)",
+            "url": "https://legislaturacba.gob.ar",
+            "source_type": "legislatura",
+            "frequency": "WEEKLY",
+            "notes": "Portal de Datos Abiertos de la Legislatura de la Provincia de Córdoba.",
+            "config": json.dumps({
+                "single_org": "legislatura", "pause": 1, "copy_pause": 3,
+                "user_agent": USER_AGENT,
+            }),
+        },
+    },
 ]
 OWN_ORGANIZATION = "cbadatos"
 

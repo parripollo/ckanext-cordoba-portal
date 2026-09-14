@@ -47,6 +47,13 @@ SOURCE_PORTALS = [
         "url": "https://datos.villamaria.gob.ar/",
         "prefix": "villamaria",
     },
+    {
+        "value": "legislatura",
+        "label": "Portal de Datos Abiertos de la Legislatura de Córdoba",
+        "short": "Legislatura",
+        "url": "https://legislaturacba.gob.ar/portal-de-datos-abiertos/",
+        "prefix": "legislatura",
+    },
 ]
 
 
