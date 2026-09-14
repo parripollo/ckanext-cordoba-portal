@@ -7,7 +7,7 @@
 
 scheming_version: 2
 dataset_type: dataset
-about: Esquema de datasets de cbadatos.com.ar
+about: Scheming de datasets de cbadatos.com.ar
 about_url: https://github.com/parripollo/ckanext-cordoba-portal
 
 dataset_fields:

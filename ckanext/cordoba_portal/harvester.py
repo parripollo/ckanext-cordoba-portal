@@ -78,7 +78,7 @@ class CordobaCKANHarvester(CKANHarvester):
             "name": "ckan_with_files",
             "title": "CKAN (con procedencia)",
             "description": (
-                "Cosecha un portal CKAN guardando de qué portal viene cada "
+                "Harvest de un portal CKAN guardando de qué portal viene cada "
                 "dato, con organizaciones propias por portal."
             ),
             "form_config_interface": "Text",

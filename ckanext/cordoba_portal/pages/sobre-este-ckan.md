@@ -13,15 +13,15 @@ aplicación web sencilla.
 La propuesta está documentada en
 [ckanito.cluster311.com](https://ckanito.cluster311.com/) y su código es
 público: [parripollo/ckanito](https://github.com/parripollo/ckanito). Las
-extensiones de CKAN que usamos (esquemas, cosecha, carga al datastore,
-vistas de mapas y PDF, entre otras) también fueron probadas contra esa
-versión y sus cambios están publicados.
+extensiones de CKAN que usamos (scheming, harvest, xloader, vistas de
+mapas y PDF, entre otras) también fueron probadas contra esa versión y sus
+cambios están publicados.
 
 ## Cómo es este experimento
 
-- **Cosechamos los portales oficiales de la provincia** una vez por semana
-  con el mecanismo estándar de CKAN para eso (ckanext-harvest), extendido
-  por nosotros para que cada dato conserve su procedencia.
+- **Hacemos harvest de los portales oficiales de la provincia** una vez por
+  semana con el mecanismo estándar de CKAN para eso (ckanext-harvest),
+  extendido por nosotros para que cada dato conserve su procedencia.
 - **Copiamos los archivos**, no solo los enlaces. Cada archivo se descarga
   una vez, de a uno y con pausas para no molestar al portal de origen, y
   se vuelve a bajar solo si cambió. Así este sitio sirve también como
