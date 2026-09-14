@@ -282,4 +282,5 @@ class TestFullHarvest:
         # the facet and the pages see them
         found = call_action("package_search", fq="source_portal:datosgestionabierta")
         assert found["count"] == 2
-        assert toolkit.h.cordoba_portal_counts() == {"datasets": 2, "organizations": 1}
+        counts = toolkit.h.cordoba_portal_counts()
+        assert (counts["datasets"], counts["organizations"]) == (2, 1)
