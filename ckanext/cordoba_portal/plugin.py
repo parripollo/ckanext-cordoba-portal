@@ -75,6 +75,20 @@ SOURCE_PORTALS = [
         "url": "https://datos.riotercero.gob.ar/",
         "prefix": "riotercero",
     },
+    {
+        "value": "villaallende",
+        "label": "Transparencia de la Municipalidad de Villa Allende",
+        "short": "Villa Allende",
+        "url": "https://www.villaallende.gov.ar/transparencia/",
+        "prefix": "villaallende",
+    },
+    {
+        "value": "bellville",
+        "label": "Presupuesto de la Municipalidad de Bell Ville",
+        "short": "Bell Ville",
+        "url": "https://bellville.gob.ar/presupuesto/",
+        "prefix": "bellville",
+    },
 ]
 
 

@@ -72,6 +72,15 @@ so the site is a backup and not a list of links.
   section data is JSON: one dataset per kind of document, every document
   a resource, the Google Drive files copied through their download URL,
   Drive folders as links. See `riocuarto.py`.
+- `villaallende`: the transparency section of Villa Allende's WordPress
+  site, whose bulletins, tenders and purchase calls are custom post types
+  with their fields in the REST API: one dataset per post type, one
+  resource per document. See `villaallende.py`.
+- `bellville`: the Legislature's harvester pointed at Bell Ville's budget
+  page (same shape: a heading, its files). See `bellville.py`.
+
+Rio Tercero is a CKAN portal: a `ckan_with_files` source, nothing of its
+own.
 
 All take their options as JSON in the config of the harvest source; the
 module docstrings list them.

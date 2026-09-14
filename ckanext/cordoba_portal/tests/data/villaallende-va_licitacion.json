@@ -1,0 +1,52 @@
+[
+ {
+  "id": 7646,
+  "date": "2026-08-19T10:21:33",
+  "modified": "2026-08-24T20:22:06",
+  "slug": "bacheo-superficial-de-carpeta-de-rodamiento-con-mezcla-asfaltica-en-caliente-2",
+  "link": "https://www.villaallende.gov.ar/va_licitacion/bacheo-superficial-de-carpeta-de-rodamiento-con-mezcla-asfaltica-en-caliente-2/",
+  "title": {
+   "rendered": "Bacheo superficial de carpeta de rodamiento con mezcla asfáltica en caliente"
+  },
+  "acf": {
+   "va_lic_codigo": "11893/2026",
+   "va_lic_tipo": "compulsa",
+   "va_lic_estado": "call",
+   "va_lic_monto": 75000000,
+   "va_lic_fecha": "20260827",
+   "va_lic_documentos": [
+    {
+     "label": "Compulsa Abreviada",
+     "url": 7647
+    },
+    {
+     "label": "Nota Aclaratoria",
+     "url": 7666
+    }
+   ]
+  }
+ },
+ {
+  "id": 7638,
+  "date": "2026-08-06T14:02:56",
+  "modified": "2026-08-18T10:59:19",
+  "slug": "la-obra-pavimento-de-calle-pablo-cabrera-de-la-ciudad-de-villa-allende",
+  "link": "https://www.villaallende.gov.ar/va_licitacion/la-obra-pavimento-de-calle-pablo-cabrera-de-la-ciudad-de-villa-allende/",
+  "title": {
+   "rendered": "La Obra Pavimento de Calle Pablo cabrera de la Ciudad de Villa Allende"
+  },
+  "acf": {
+   "va_lic_codigo": "EXPTE-11847/2026",
+   "va_lic_tipo": "licitacion",
+   "va_lic_estado": "open",
+   "va_lic_monto": 111685806,
+   "va_lic_fecha": "20260820",
+   "va_lic_documentos": [
+    {
+     "label": "Licitación Pública",
+     "url": 7639
+    }
+   ]
+  }
+ }
+]

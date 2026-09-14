@@ -384,6 +384,11 @@ class TestPieces:
         assert n("T", {"url": PORTAL + "/wp-content/uploads/a.zip", "label": ".xml"}) == "T - XML"
         assert n("T", {"url": PORTAL + "/wp-content/uploads/a.json", "label": ".st0{fill:#320EE2;}"}) == "T - JSON"
         assert n("T", {"url": PORTAL + "/wp-content/uploads/META.docx", "label": "metadato.txt"}) == "T - Metadatos"
+        # a label that names the file (Bell Ville's budget page)
+        assert n("Presupuesto", {"url": PORTAL + "/wp-content/uploads/2784_2025.pdf",
+                                 "label": "Ordenanza Presupuestaria 2026"}) == \
+            "Presupuesto - Ordenanza Presupuestaria 2026"
+        assert n("T", {"url": PORTAL + "/wp-content/uploads/a.pdf", "label": ""}) == "T - PDF"
 
     def test_the_pages_api_is_asked_by_slug(self):
         portal = FakePortal()

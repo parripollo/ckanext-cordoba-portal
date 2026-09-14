@@ -37,7 +37,7 @@ import logging
 import re
 import time
 import uuid
-from urllib.parse import unquote, urlparse
+from urllib.parse import unquote, urljoin, urlparse
 
 import lxml.html
 import requests
@@ -53,16 +53,15 @@ from ckanext.cordoba_portal.plugin import cordoba_portal_source
 
 log = logging.getLogger(__name__)
 
-PORTAL = "legislatura"
 PAGES_API = "/wp-json/wp/v2/pages"
 PAGE_FIELDS = "id,slug,modified,title,link,content"
-# the section pages of the portal
-DEFAULT_PAGES = ["composicion-de-la-camara", "administracion", "comisiones-2",
-                 "sesiones", "participacion-ciudadana"]
 UPLOADS = "/wp-content/uploads/"
 DATE = re.compile(r"(\d{1,2})/(\d{1,2})/(\d{2,4})")
 UPDATED = re.compile(r"ltima actualizaci")
 LABEL = re.compile(r"^\.?(\w+)$")
+# a label that names the file ("Ordenanza Presupuestaria 2026"), as
+# opposed to an extension or the CSS of an icon the theme leaked
+NAME_LABEL = re.compile(r"^[^.{}<>;][^{}<>;]{1,79}$")
 # lines of the metadata file: "2. Frecuencia de actualización: mensual."
 META_FIELDS = (("tema", "tema"), ("frecuencia", "frecuencia"), ("fuente", "fuente"))
 META_LINE = re.compile(r"^\s*\d+\.\s*([^:]+):\s*(.*)$")
@@ -80,7 +79,7 @@ def parse_page(page):
     for el in doc.iter():
         if el.tag == "h2":
             link = el.find(".//a")
-            href = link.get("href") if link is not None else ""
+            href = urljoin(page.get("link", ""), link.get("href")) if link is not None else ""
             title = " ".join(el.text_content().split())
             current = {
                 "title": title,
@@ -118,7 +117,8 @@ def _slug(href, host):
 
 
 def _add_link(dataset, el):
-    href = el.get("href").strip()
+    # some sites link their files by path
+    href = urljoin(dataset["url"], el.get("href").strip())
     if UPLOADS in href:
         if href not in [f["url"] for f in dataset["files"]]:
             label = " ".join(el.text_content().split())
@@ -170,8 +170,15 @@ def file_format(url):
 
 
 class LegislaturaHarvester(FileCopyMixin, HarvesterBase):
+    """Also the base of the harvesters of other WordPress sites that list
+    their documents the same way (a heading, its files): a subclass names
+    its portal and its pages."""
 
     config = {}
+    portal = "legislatura"
+    # the section pages of the portal
+    default_pages = ["composicion-de-la-camara", "administracion", "comisiones-2",
+                     "sesiones", "participacion-ciudadana"]
 
     def info(self):
         return {
@@ -227,7 +234,7 @@ class LegislaturaHarvester(FileCopyMixin, HarvesterBase):
         self._set_config(harvest_job.source.config)
         base = harvest_job.source.url.rstrip("/")
         object_ids = []
-        for slug in self.config.get("pages", DEFAULT_PAGES):
+        for slug in self.config.get("pages", self.default_pages):
             try:
                 page = self._page(base, slug)
             except (requests.RequestException, ValueError) as e:
@@ -324,8 +331,12 @@ class LegislaturaHarvester(FileCopyMixin, HarvesterBase):
         dataset = content["dataset"]
         section = content["section"]
         metadata = content.get("metadata") or {}
-        portal = cordoba_portal_source(PORTAL)
-        package_id = str(uuid.uuid5(uuid.NAMESPACE_URL, dataset["url"]))
+        portal = cordoba_portal_source(self.portal)
+        # a dataset with a page of its own is that page; the ones that
+        # share the section page are told apart by their heading
+        own = dataset["url"] if dataset["url"] != section["url"] else \
+            "%s#%s" % (section["url"], dataset["slug"])
+        package_id = str(uuid.uuid5(uuid.NAMESPACE_URL, own))
         title = sentence_case(dataset["title"])
         extras = [{"key": "seccion", "value": section["title"]}]
         extras += [{"key": key, "value": metadata[key]}
@@ -389,14 +400,17 @@ class LegislaturaHarvester(FileCopyMixin, HarvesterBase):
 
     @staticmethod
     def _file_name(title, f):
-        """'Diarios de sesión - CSV'; the metadata file is 'Metadatos'. The
-        label says what the file holds (".xml" for a zipped XML), the URL
-        what it is."""
-        label = f["label"].lower()
-        if label.startswith("metadato"):
+        """'Diarios de sesión - CSV'; the metadata file is 'Metadatos'. A
+        label that is just an extension says what the file holds (".xml"
+        for a zipped XML), the URL what it is; a label that is a name
+        ('Ordenanza Presupuestaria 2026') is the name."""
+        label = " ".join(f["label"].split())
+        if label.lower().startswith("metadato"):
             return "%s - Metadatos" % title
         what = file_format(f["url"])
-        match = LABEL.match(label)
-        if match and what in ("ZIP", "RAR"):
+        match = LABEL.match(label.lower())
+        if not match and NAME_LABEL.match(label):
+            what = label
+        elif match and what in ("ZIP", "RAR"):
             what = match.group(1).upper()
         return "%s - %s" % (title, what) if what else title

@@ -134,6 +134,50 @@ SOURCES = [
         },
     },
     {
+        "organization": {
+            "name": "villaallende",
+            "title": "Municipalidad de Villa Allende",
+            "description": ("Documentos publicados por la Municipalidad de Villa Allende en la "
+                            "sección de transparencia de su sitio."),
+            "source_portal": "villaallende",
+            "source_url": "https://www.villaallende.gov.ar/transparencia/",
+        },
+        "source": {
+            "name": "villaallende",
+            "title": "Villa Allende (transparencia)",
+            "url": "https://www.villaallende.gov.ar",
+            "source_type": "villaallende",
+            "frequency": "WEEKLY",
+            "notes": "Transparencia de la Municipalidad de Villa Allende: boletines, licitaciones, compras.",
+            "config": json.dumps({
+                "single_org": "villaallende", "pause": 1, "copy_pause": 3,
+                "user_agent": USER_AGENT,
+            }),
+        },
+    },
+    {
+        "organization": {
+            "name": "bellville",
+            "title": "Municipalidad de Bell Ville",
+            "description": ("Documentos de presupuesto publicados por la Municipalidad de "
+                            "Bell Ville en su sitio."),
+            "source_portal": "bellville",
+            "source_url": "https://bellville.gob.ar/presupuesto/",
+        },
+        "source": {
+            "name": "bellville",
+            "title": "Bell Ville (presupuesto)",
+            "url": "https://bellville.gob.ar",
+            "source_type": "bellville",
+            "frequency": "MONTHLY",
+            "notes": "Presupuesto, régimen tarifario y de contratación de Bell Ville.",
+            "config": json.dumps({
+                "single_org": "bellville", "pause": 1, "copy_pause": 3,
+                "user_agent": USER_AGENT,
+            }),
+        },
+    },
+    {
         # a CKAN portal: the standard harvester with files, one local
         # organization per remote one (riotercero-munirio3, ...)
         "source": {

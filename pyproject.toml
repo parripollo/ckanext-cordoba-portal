@@ -29,6 +29,8 @@ villamaria = "ckanext.cordoba_portal.villamaria:VillaMariaHarvester"
 legislatura = "ckanext.cordoba_portal.legislatura:LegislaturaHarvester"
 idecor = "ckanext.cordoba_portal.idecor:IdecorHarvester"
 riocuarto = "ckanext.cordoba_portal.riocuarto:RioCuartoHarvester"
+villaallende = "ckanext.cordoba_portal.villaallende:VillaAllendeHarvester"
+bellville = "ckanext.cordoba_portal.bellville:BellVilleHarvester"
 
 
 [build-system]

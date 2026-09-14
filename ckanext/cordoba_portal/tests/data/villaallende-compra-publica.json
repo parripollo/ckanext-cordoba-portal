@@ -1,0 +1,48 @@
+[
+ {
+  "id": 7085,
+  "date": "2026-05-20T14:03:05",
+  "modified": "2026-05-20T14:03:05",
+  "slug": "obra-de-bacheo-2",
+  "link": "https://www.villaallende.gov.ar/compra-publica/obra-de-bacheo-2/",
+  "title": {
+   "rendered": "Obra de Bacheo"
+  },
+  "acf": {
+   "compra_titulo": "Compulsa abreviada: Obra de Bacheo",
+   "descripcion_compra": "La Municipalidad llama a Compulsa Abreviada para la ejecución de Obra de Bacheo Superficial de Carpeta de Rodamiento con mezcla asfáltica en caliente. \r\nMonto: $75.000.000 \r\nFecha de apertura: 1 de junio de 2026 a las 11 hs. en el edificio municipal, ubicado en Av. Goycoechea 586.",
+   "compra_anadir_imagen": 6776,
+   "compra_fecha": "2026-05-20 00:00:00",
+   "compra_color": "",
+   "compras_categoria": 66,
+   "icono_novedad": {
+    "type": "",
+    "value": ""
+   },
+   "url_licitaciones": "https://www.villaallende.gov.ar/wp-content/uploads/2026/05/Compulsa-Abreviada-Bacheo-sup-de-carpeta-asfaltica-a-distintos-punto-de-la-Ciudad.pdf"
+  }
+ },
+ {
+  "id": 6309,
+  "date": "2026-05-20T14:03:05",
+  "modified": "2026-06-18T15:15:07",
+  "slug": "licitacion-publica-obra-pavimento-y-cordon-cuneta-calle-la-macarena",
+  "link": "https://www.villaallende.gov.ar/compra-publica/licitacion-publica-obra-pavimento-y-cordon-cuneta-calle-la-macarena/",
+  "title": {
+   "rendered": "Licitación pública obra pavimento y cordón cuneta calle la macarena"
+  },
+  "acf": {
+   "compra_titulo": "Licitacón pública obra pavimento y cordón cuneta",
+   "descripcion_compra": "Licitación Pública para la obra de pavimento y cordón cuneta calle la Macarena de la Ciudad de Villa Allende\r\nFecha de Apertura de sobres: el día 23 de Junio de 2026, a las 11 hs. en la Municipalidad de Villa Allende (Av. Goycoechea 586). ",
+   "compra_anadir_imagen": 7087,
+   "compra_fecha": "2026-06-09 00:00:00",
+   "compra_color": "",
+   "compras_categoria": 68,
+   "icono_novedad": {
+    "type": "",
+    "value": ""
+   },
+   "url_licitaciones": "https://www.villaallende.gov.ar/wp-content/uploads/2026/06/Licitacion-Publica-para-la-Obra-Pavimento-y-Cordon-Cuneta-Calle-la-Macarena-de-la-Ciudad-de-Villa-Allende.pdf"
+  }
+ }
+]

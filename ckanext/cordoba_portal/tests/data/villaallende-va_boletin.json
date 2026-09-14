@@ -1,0 +1,34 @@
+[
+ {
+  "id": 7813,
+  "date": "2026-09-08T22:00:54",
+  "modified": "2026-09-14T00:55:31",
+  "slug": "boletin-n-607",
+  "link": "https://www.villaallende.gov.ar/va_boletin/boletin-n-607/",
+  "title": {
+   "rendered": "Boletín N° 607"
+  },
+  "acf": {
+   "va_boletin_numero": "607",
+   "va_boletin_periodo": "08/09 al 11/09/2026",
+   "va_boletin_pdf": 7814,
+   "va_boletin_fecha": "20260908"
+  }
+ },
+ {
+  "id": 7768,
+  "date": "2026-09-08T22:00:54",
+  "modified": "2026-09-08T22:07:15",
+  "slug": "boletin-n-606",
+  "link": "https://www.villaallende.gov.ar/va_boletin/boletin-n-606/",
+  "title": {
+   "rendered": "Boletín N° 606"
+  },
+  "acf": {
+   "va_boletin_numero": "606",
+   "va_boletin_periodo": "01/09 al 08/09/2026",
+   "va_boletin_pdf": 7769,
+   "va_boletin_fecha": "20260908"
+  }
+ }
+]

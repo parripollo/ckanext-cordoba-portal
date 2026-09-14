@@ -365,13 +365,36 @@ pisarnos entre sesiones.
       organizacion propia (las CKAN crean las suyas); las salta si no
       existe la org `cbadatos` que las posea. Probado en local: 54/54 sin
       copias, copias en curso. Sin User-Agent especial.
-- [ ] Villa Allende: https://www.villaallende.gov.ar/transparencia/
-      (WordPress: boletines, licitaciones, acceso a la informacion; PDFs
-      en wp-content/uploads). Valor medio; receta tipo Legislatura.
-      Despues de Rio Tercero.
-- [ ] Bell Ville: https://bellville.gob.ar/presupuesto/ y
-      /llamados-a-licitacion/ (WordPress, PDFs). Valor bajo-medio, al
-      final.
+- [x] 2026-09-14: Villa Allende
+      (https://www.villaallende.gov.ar/transparencia/): harvester
+      `villaallende` (villaallende.py), procedencia "Villa Allende", org
+      `villaallende`, WEEKLY. WordPress con custom post types y campos ACF
+      abiertos en el REST: `wp-json/wp/v2/va_boletin` (39: numero,
+      periodo, pdf = id de media, fecha), `va_licitacion` (21: codigo,
+      tipo compulsa/licitacion/concesion, estado call/open/closed/
+      finished/voided, monto, fecha, documentos [{label, url = id de
+      media}]), `compra-publica` (24: titulo, descripcion, fecha,
+      url_licitaciones = URL directa). Media por
+      `wp-json/wp/v2/media?include=...` (source_url, modified). Un dataset
+      por tipo (3), un recurso por documento (97), descripcion con
+      expediente/tipo/estado/monto/fecha; 17 compras apuntan a una pagina
+      del sitio, no a un archivo: links. Fecha `modified` del media ->
+      `source_last_modified` (sin recheck_days). Probado en local: 75
+      copias (4 PDF > 10 MB local). Sin licencia (`notspecified`).
+      Nota general de los harvesters propios: el "unchanged" compara el
+      contenido cosechado, asi que un cambio en el mapeo (codigo) no se
+      reaplica a los datasets existentes hasta que cambie el origen; en
+      prod no importa (corrida nueva), en local se ve.
+- [x] 2026-09-14: Bell Ville (https://bellville.gob.ar/presupuesto/):
+      harvester `bellville` (bellville.py), que es el de la Legislatura
+      apuntado a otra pagina: `LegislaturaHarvester` ahora es subclasable
+      (`portal`, `default_pages`), absolutiza links relativos, distingue
+      por el h2 los datasets que comparten la pagina de seccion, y usa
+      como nombre del recurso la etiqueta del link cuando es un nombre
+      ("Presupuesto - Ejecutado 2024") y no una extension. 4 datasets
+      (Presupuesto, Regimen tarifario e impositivo, Regimen de
+      contratacion, Ordenanzas = link al digesto del Concejo), 15 PDF.
+      MONTHLY. Los llamados a licitacion son posts, no se cosechan.
 
 Revisados el 2026-09-14 y descartados por ahora: turismo.cordoba.gob.ar/datos-abiertos
   (solo enlaza a la categoria Turismo de municba, ya cosechado);
