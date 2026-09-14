@@ -404,49 +404,22 @@ pisarnos entre sesiones.
       unc`, `remote_groups: create`, `force_all`. Probado en local 163/163
       sin copias. Extras `superset_*` del origen quedan tal cual.
 
-- [ ] **Mendiolaza** (pedido de andres 2026-09-14): https://www.mendiolaza.gob.ar
-      WordPress, menu "Gobierno Abierto" con todo en PDF en
-      wp-content/uploads: /presupuesto-y-tarifas/ (Presupuesto 2022-2026 y
-      Ordenanza Tarifaria 2022-2026, 10 PDF; el de 2026 pesa 3,4 MB),
-      /balances/ (ejecucion mensual: Ingresos y Egresos por mes desde
-      2019, a veces una Nota al Tribunal de Cuentas; 203 PDF; la pagina
-      es acordeon anio > mes > links), /compras-y-licitaciones/ (por anio,
-      pliegos; 17 PDF), /boletines-oficiales/ (125 PDF/DOCX mensuales
-      desde 2022), /plan-de-obras/ (tabla HTML, sin archivos),
-      /tribunal-de-cuentas/ (sin archivos). Ordenanzas: digesto del HCD
-      en Pais Digital (men-cor-hcd.paisdigital.modernizacion.gob.ar, SPA;
-      link). Deuda: sistema externo municipalidad.com (link). Sin
-      Legislatura-like (no hay h2 por dataset): harvester propio
-      `mendiolaza.py` que recorra los acordeones (anio > mes/item >
-      links con etiqueta) -> datasets Presupuesto y tarifas, Balances
-      (ejecucion mensual), Compras y licitaciones, Boletin Oficial;
-      recurso "2025 Marzo - Ingresos". Sin fechas: Last-Modified de
-      WordPress + recheck.
-- [ ] **Poder Judicial (CGEE)**: https://cgee.justiciacordoba.gob.ar,
-      Centro de Gestion Estrategica y Estadisticas (WordPress 7.1,
-      wp-json abierto: 331 posts, 1.837 adjuntos = 1.089 PDF + 152 XLSX +
-      152 XLS + 7 CSV). Categorias utiles: `ape-2013..2021` (Analisis de
-      la actividad judicial, 87 posts), `informes-por-fuero` (20),
-      `publicaciones` (86), `recursos-humanos` (7), `presupuesto-del-
-      poder-judicial` (2), `mapas` (23). La categoria `datos-abiertos-cat`
-      (26 posts 2019-2021: causas ingresadas/resueltas, actos procesales,
-      delitos, RRHH) hoy tiene los posts VACIOS (contenido borrado). Lo
-      actual, "Justicia en Datos 2024" (30 posts: ingresos y resoluciones
-      por fuero, multifuero, via recursiva, defensa publica), son 52
-      tableros de Tableau Public (perfil `cgee.cgee`, listado por
-      `https://public.tableau.com/public/apis/workbooks?profileName=cgee.cgee`);
-      cada workbook se baja entero por
-      `https://public.tableau.com/workbooks/<repoUrl>.twb` (es un zip
-      .twbx con los DATOS adentro en formato Hyper, ~1,7 MB c/u). Valioso
-      SI. Propuesta en dos partes: (1) harvester WordPress por posts con
-      adjuntos (informes APE, publicaciones, RRHH, presupuesto: un
-      dataset por post con archivos, PDF/XLSX copiados) y (2) dataset
-      "Tableros Justicia en Datos" con los 52 .twbx copiados (formato
-      TWBX, backup real) + link al tablero; convertir Hyper -> CSV queda
-      para despues (necesita `tableauhyperapi`, decidir con andres). Sin
-      User-Agent especial.
+Revisados el 2026-09-14 y descartados por malos (decision de andres): no
+se hacen.
 
-Revisados el 2026-09-14 y descartados por ahora: turismo.cordoba.gob.ar/datos-abiertos
+- Mendiolaza (https://www.mendiolaza.gob.ar, menu "Gobierno Abierto"):
+  todo PDF sueltos en WordPress: presupuesto y tarifaria 2022-2026 (10),
+  balances mensuales de ingresos/egresos desde 2019 (203), compras (17),
+  boletines (125). Sin datos estructurados, sin fechas, paginas de
+  acordeones; el presupuesto que "estaba abierto" es solo el PDF.
+- Poder Judicial, CGEE (https://cgee.justiciacordoba.gob.ar): WordPress
+  con 1.837 adjuntos (PDF casi todo, 152 XLSX viejos); la categoria
+  "datos abiertos" (2017-2020) tiene los posts vaciados; lo actual
+  ("Justicia en Datos 2024") son 52 tableros de Tableau Public cuyos
+  datos solo se bajan como .twbx (Hyper binario). No es una fuente de
+  datos abiertos.
+
+Revisados el 2026-09-14 y descartados por ahora (sin datos o ya cubiertos): turismo.cordoba.gob.ar/datos-abiertos
   (solo enlaza a la categoria Turismo de municba, ya cosechado);
   datos.cordoba.gob.ar (no es datos abiertos: app interna "base unica"
   con login); transparencia.cba.gov.ar y gestionabierta.cba.gov.ar (403
