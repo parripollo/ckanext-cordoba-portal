@@ -255,6 +255,32 @@ pisarnos entre sesiones.
       dataset por seccion o por titulo de tabla, cada CSV/JSON/PDF un
       recurso copiado; Drive queda como link. Empezar cuando Villa Maria
       este en produccion.
+- [ ] IDECOR (Infraestructura de Datos Espaciales de Cordoba), portal de
+      mapas: https://www.mapascordoba.gob.ar/#/descargas
+      Relevado 2026-09-14: SPA Quasar/Vue, pero el catalogo de descargas
+      es UN json estatico y publico:
+      `https://www.mapascordoba.gob.ar/datos/descargas.json` (467 KB):
+      15 super-grupos > 58 grupos > 554 capas. Cada capa: `title`,
+      `category` (no_raster 519 / raster 35) y URLs por formato: `shp`,
+      `kml`, `json` (485 capas; son WFS GetFeature del GeoServer
+      `idecor-ws.mapascordoba.gob.ar/geoserver/idecor/ows` con
+      outputFormat SHAPE-ZIP / KML / json, responden al toque, ~1.5 MB el
+      shp de prueba), `tiff` (59 rasters, GRANDES: 221 MB el de prueba),
+      `qml`/`lyr` (simbologia), `dd` (diccionario de datos PDF),
+      `metadatos` (PDF), y 10 capas externas (`externa`, `link` a
+      experience.arcgis.com, `organismo`). Las rutas relativas
+      (`/metadatos/...`, `/dicdatos/...`, `/simbologia/...`,
+      `/download_raster/...`) cuelgan del bucket
+      `https://obs-idecor-lib.obs.sa-argentina-1.myhuaweicloud.com`
+      (Huawei OBS, da Last-Modified y Content-Length; en el dominio
+      principal dan 404). Propuesta: un dataset por capa (554), grupo por
+      super-grupo/grupo, recursos = shp + kml + geojson + qml + dd +
+      metadatos copiados, tiff copiado solo si entra en `copy_max_mb`
+      (si no queda como link), externas como link; org unica `idecor`.
+      Sin fecha por capa en el json: usar Last-Modified del bucket para
+      no rebajar; el WFS no da fecha (hash del contenido). Licencia: ver
+      /acercade. Tambien sirve el WFS GetCapabilities para los nombres de
+      capa. Va despues de la Legislatura.
 - [ ] Produccion propia: organizaciones propias, usuarios editores,
       `source_portal = cbadatos`, formulario con `producer` obligatorio.
 
