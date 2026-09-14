@@ -281,6 +281,92 @@ pisarnos entre sesiones.
       no rebajar; el WFS no da fecha (hash del contenido). Licencia: ver
       /acercade. Tambien sirve el WFS GetCapabilities para los nombres de
       capa. Va despues de la Legislatura.
+
+      Volumen medido 2026-09-14 (para decidir que copiar):
+      - 59 GeoTIFF: 9,3 GB en total, el mayor 2 GB, 12 pasan los 200 MB.
+      - 485 shp (WFS SHAPE-ZIP): muestra de 12 promedia 5 MB (de 0,03 a
+        39 MB; `rendimiento_maiz` 21 MB tarda 38 s) -> ~2,4 GB estimados;
+        kml y geojson de las mismas capas serian otros ~2 x eso, no vale
+        copiarlos (mismo dato: copiar UNO, el geojson, que geoview
+        previsualiza; shp y kml como links al WFS).
+      - 1.300 PDF/QML (metadatos, diccionarios, simbologia): ~170 MB.
+      - Ojo: `descargas.json` tiene ~14 nombres de capa corruptos
+        ("bolsa_alfalfa_historicbolsa_maiz_historicoo"): esos links dan
+        error en el origen, quedan como link roto (o se corrigen por
+        GetCapabilities si el nombre bueno esta).
+
+      **Geoservicios** (https://www.mapascordoba.gob.ar/#/geoservicios),
+      relevado 2026-09-14: otro json estatico,
+      `https://www.mapascordoba.gob.ar/datos/geoservicios.json` (421 KB),
+      arbol label/href/children: 9 grupos ("Generales", "Por Temas",
+      "Energias Renovables", "OMI", "Ciudades", "Mapas de Riesgo",
+      "Imagenes y Vuelos"...) > 1.118 hojas = URLs GetCapabilities por
+      CAPA (`/geoserver/idecor/<capa>/wms|wfs|wcs`): 563 capas, 497 con
+      WMS+WFS, 47 rasters con WMS+WCS, 10 solo WMS, 8 solo WCS; mas los
+      4 servicios generales (WMS, WFS, WCS, WMTS del GeoServer, 504
+      feature types en el WFS general) y 2 de CONAE. 476 de esas capas son
+      las mismas de descargas; 87 solo estan como geoservicio (sin entrada
+      de descarga) y 14 solo en descargas.
+
+      Estrategia propuesta para IDECOR (un solo harvester `idecor`):
+      1. La unidad es la CAPA (union de descargas.json y geoservicios.json
+         por nombre de capa): un dataset por capa, ~570. Grupos por
+         tema (super-grupo/grupo de descargas; el arbol de geoservicios
+         como segundo criterio para las 87 que faltan). Org unica
+         `idecor`.
+      2. Recursos por capa:
+         - COPIADOS (esto es lo que nos hace backup): un vector por capa
+           en GeoJSON via WFS GetFeature (o el shp si se prefiere; no los
+           tres), los PDF de metadatos y diccionario, la simbologia
+           (qml/lyr). ~2,5 GB en total; el WFS se genera al vuelo, ir a
+           1 request cada 3 s y con `timeout` largo (300 s).
+         - GeoTIFF: copiar solo los que entran en `copy_max_mb` (tope
+           200 MB deja afuera 12 de 59, ~7 GB); los grandes quedan como
+           link al bucket, que da Last-Modified/Content-Length para
+           revisar cambios sin bajar. Decidir con andres si vale un
+           tope mayor para estos (9,3 GB en disco).
+         - LINKS (no se copian, son servicios, no archivos): WMS, WFS y
+           WCS por capa con formato "WMS"/"WFS"/"WCS" y la URL
+           GetCapabilities de la capa; ckanext-geoview (ya activo) los
+           previsualiza en el mapa. Un servicio no se "descarga": lo que
+           un WFS devuelve ya lo copiamos como GeoJSON, y un WCS/WMS
+           completo son los GeoTIFF/tiles (los rasters ya estan
+           cubiertos por el punto anterior; WMTS/tiles no se copia).
+           Los 4 endpoints generales van en un dataset "Geoservicios
+           IDECOR" aparte, solo links.
+         - Para las 87 capas que solo tienen geoservicio se arma la URL
+           WFS GetFeature (mismo GeoServer, mismo patron) y se copia el
+           GeoJSON igual.
+      3. Cambios: el json no trae fechas. Bucket: Last-Modified. WFS:
+         hash del contenido (ya lo hace FileCopyMixin), pero eso implica
+         rebajar 2,5 GB por corrida -> frecuencia MENSUAL para IDECOR, o
+         mirar antes el `WFS GetCapabilities` / `DescribeFeatureType`
+         (no dan fecha) o el numero de features (`resultType=hits`,
+         barato) como senal de cambio. Empezar mensual con hits.
+- [ ] Rio Cuarto, portal de transparencia de la Secretaria de Economia:
+      https://economiariocuarto.gob.ar/transparencia
+      Relevado 2026-09-14: Next.js en Vercel, sin API propia, pero cada
+      seccion tiene su JSON de pagina en
+      `/_next/data/<buildId>/transparencia/<seccion>.json` (el buildId
+      sale del `__NEXT_DATA__` de cualquier pagina; cambia con cada
+      deploy). Secciones: `informacion-economica-financiera` (186 items
+      en listas ejercicios/ejecuciones/presupuesto/recaudacion/informes/
+      deudas/realidad, cada item {title, category, status Vigente/No
+      Vigente, url}), `escala-salarial` (32), `boletin-oficial` (33, casi
+      todo carpetas de Drive), `declaraciones-juradas` (por cargo: 20 PDF
+      en `prod.ddjj.riocuarto.gob.ar/ddjj_publicas/<ulid>.pdf` + Drive).
+      Los archivos son casi todos Google Drive publicos
+      (`drive.google.com/file/d/<id>/view`): se bajan con
+      `https://drive.usercontent.google.com/download?id=<id>&export=download`
+      (303 desde `drive.google.com/uc?export=download&id=`), devuelve
+      Content-Disposition con el nombre real, Last-Modified y
+      Content-Length; PDFs de ~1 MB. Las carpetas de Drive (35) no se
+      pueden listar sin API key de Google: quedan como link (o se pide
+      una key gratuita y se listan; decidir). Propuesta: un dataset por
+      categoria (presupuesto, ejecucion, recaudacion, deuda, informes,
+      realidad, escala salarial, boletin oficial, DDJJ), cada item un
+      recurso copiado; `status` como extra; sin fechas en el JSON (usar
+      Last-Modified de Drive para no rebajar). Sin licencia visible.
 - [ ] Produccion propia: organizaciones propias, usuarios editores,
       `source_portal = cbadatos`, formulario con `producer` obligatorio.
 
