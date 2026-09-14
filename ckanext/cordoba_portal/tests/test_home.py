@@ -16,6 +16,9 @@ def test_home_shows_the_initiative_and_the_counts(app):
     assert 'name="q"' in page
     assert "<strong>2</strong> conjuntos de datos" in page
     assert "<strong>1</strong> organizaciones" in page
+    # No "recent datasets": harvested datasets carry a mix of dates.
+    assert "Recent Datasets" not in page
+    assert "recent-packages" not in page
 
 
 @pytest.mark.usefixtures("with_plugins")

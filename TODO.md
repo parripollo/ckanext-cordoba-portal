@@ -28,9 +28,9 @@ vive en el repo de deploy, no aca.
 - [x] 2026-09-13: `home/index.html`: iniciativa ciudadana, buscador grande,
       contadores (datasets, organizaciones), datasets recientes. Test.
 - [ ] Contador y accesos por portal de origen cuando exista `source_portal`.
-- [ ] "Recent Datasets" / "View all datasets" salen en ingles: al tema
-      Midnight Blue del core le faltan esas cadenas en el .po espanol.
-      Arreglo en el core (traducciones), no en la extension.
+- [x] 2026-09-13: seccion "Recent Datasets" quitada de la home (andres):
+      ordenaba por `metadata_modified`, que en lo cosechado mezcla la fecha
+      remota con la de la copia de archivos. Sin valor.
 - [ ] Pie de pagina: sacar la marca CKAN, poner el texto de la iniciativa
       y el link a "Acerca de" / "Fuentes". Logo propio (decidir).
 - [ ] Textos en espanol, sin logos ni nombres oficiales del gobierno (no
