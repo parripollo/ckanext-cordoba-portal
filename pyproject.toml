@@ -25,6 +25,7 @@ Homepage = "https://github.com/parripollo/ckanext-cordoba-portal"
 cordoba_portal = "ckanext.cordoba_portal.plugin:CordobaPortalPlugin"
 ckan_with_files = "ckanext.cordoba_portal.harvester:CordobaCKANHarvester"
 municba = "ckanext.cordoba_portal.municba:MuniCBAHarvester"
+villamaria = "ckanext.cordoba_portal.villamaria:VillaMariaHarvester"
 
 
 [build-system]

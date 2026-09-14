@@ -36,6 +36,7 @@ import io
 import json
 import logging
 import os
+import re
 import tempfile
 import time
 from datetime import datetime
@@ -182,6 +183,7 @@ class FileCopyMixin:
                 tmp.write(chunk)
             etag = response.headers.get("ETag") or ""
             content_type = response.headers.get("Content-Type") or ""
+            filename = self._copy_filename(response, url) or resource["id"]
 
         sha256 = digest.hexdigest()
         if resource.get("url_type") == "upload" and resource.get("hash") == sha256:
@@ -191,7 +193,6 @@ class FileCopyMixin:
             return
 
         tmp.seek(0)
-        filename = os.path.basename(urlparse(url).path) or resource["id"]
         upload = FileStorage(tmp, filename=filename, content_type=content_type.split(";")[0])
         self._patch(resource, {
             "upload": upload,
@@ -204,6 +205,16 @@ class FileCopyMixin:
         })
         tmp.close()
         log.info("Copied %s (%s bytes)", url, size)
+
+    @staticmethod
+    def _copy_filename(response, url):
+        """The name the portal gives the file (Content-Disposition), else
+        the last part of the URL; '' when neither says."""
+        disposition = response.headers.get("Content-Disposition") or ""
+        match = re.search(r'filename="?([^";]+)"?', disposition)
+        if match:
+            return os.path.basename(match.group(1).strip())
+        return os.path.basename(urlparse(url).path)
 
     def _request_headers(self):
         headers = {}

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conjunto de datos: Parcelas - Municipalidad de Villa María</title>
+    <meta name="description" content="Parcelas de la ciudad de Villa María con coordenadas geográficas.">  
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:title" content="Parcelas" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://datos.villamaria.gob.ar/datasets/parcelas" />
+    <meta property="og:description" content="Parcelas de la ciudad de Villa María con coordenadas geográficas." /> 
+<link rel="icon" type="image/png" href="/static/images/favicon/favicon-48x48.a050392ba4e8.png" sizes="48x48" />
+<link rel="icon" type="image/svg+xml" href="/static/images/favicon/favicon.559cc1d37e72.svg" />
+<link rel="shortcut icon" href="/static/images/favicon/favicon.dbf7116c2f54.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/static/images/favicon/apple-touch-icon.ba41f283744d.png" />
+<meta name="apple-mobile-web-app-title" content="Datos Abiertos" />
+<link rel="manifest" href="/static/images/favicon/site.57d8cc9c70b8.webmanifest" /> 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/www/build/output.min.e770c58225d9.css" />
+</head>
+<body class="bg-gray-200 flex flex-col min-h-screen justify-start min-w-[390px] text-gray-700 leading-[1.5]" hx-headers='{"X-CSRFToken": "73qV5lCCv4QzBWnIso7yJ3QjoCrab6nrulsCjjzr2thEv5PJLNFur8FiPWLyC2OD"}'>    
+<header class="w-full bg-gradient-to-b from-primary to-tertiary-1">
+    <div class="max-w-screen-xl mx-auto px-5 h-20 flex justify-between items-center relative">
+        <a href="/" class="focus:outline-none flex justify-end items-center gap-2">
+            <img src="/static/www/images/logo.92f64765ca39.svg" alt="logo" class="h-8 md:h-12 w-auto">
+            <span class="text-white font-bold uppercase text-xs md:text-sm">Datos Abiertos</span>
+        </a>
+        <nav x-data="{ open: false }">
+            <button class="md:hidden w-10 h-10 relative focus:outline-none bg-transparent z-40" @click="open = !open">
+                <span class="sr-only">Menú</span>
+                <div class="block w-5 absolute left-1/2 top-1/2 transform  -translate-x-1/2 -translate-y-1/2">
+                    <span aria-hidden="true" class="block absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out" :class="{'rotate-45': open,' -translate-y-1.5': !open }"></span>
+                    <span aria-hidden="true" class="block absolute  h-0.5 w-5 bg-white transform transition duration-300 ease-in-out" :class="{'opacity-0': open } "></span>
+                    <span aria-hidden="true" class="block absolute  h-0.5 w-5 bg-white transform  transition duration-300 ease-in-out" :class="{'-rotate-45': open, ' translate-y-1.5': !open}"></span>
+                </div>
+            </button>
+            <div class="absolute flex md:relative left-0 mx-5 mt-5 md:m-0 w-[calc(100%-theme(spacing.10))] md:w-auto z-50 bg-white border border-gray-200 md:border-none md:bg-transparent rounded-xl md:rounded-none shadow-2xl md:shadow-none transition-opacity duration-300 md:transition-none" :class="open ? 'opacity-100 visible' : 'opacity-0 invisible md:opacity-100 md:visible'" x-cloak>
+                <ul class="list-none p-5 md:p-0 flex flex-col md:flex-row justify-start items-stretch md:items-center gap-5 md:gap-7">
+                    <li><a href="/" class="hover:text-secondary-light md:text-sm text-primary md:text-white transition-colors font-semibold uppercase focus:text-secondary-light focus:outline-none">Inicio</a></li>
+                    <li><a href="/datasets" class="hover:text-secondary-light md:text-sm text-primary md:text-white transition-colors font-semibold uppercase focus:text-secondary-light focus:outline-none">Conjuntos de datos</a></li>
+                    <li><a href="/acerca" class="hover:text-secondary-light md:text-sm text-primary md:text-white transition-colors font-semibold uppercase focus:text-secondary-light focus:outline-none">Sobre el portal</a></li>                    
+                </ul>
+            </div>
+        </nav>        
+    </div>    
+</header>   
+<section class="bg-white w-full shadow-md mb-5">
+    <div class="max-w-screen-xl mx-auto p-5">
+        <span class="font-black text-primary uppercase">Conjuntos de datos</span>
+    </div>
+</section>
+<section>
+    <div class="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-5 px-5 mb-10">
+        <div class="p-5 md:p-8 bg-white rounded-xl lg:col-span-3 shadow-md">
+            <div class="mb-3 flex justify-between items-center text-xs text-neutral-500">                
+                <div class="flex items-center gap-1">
+                    <span class="size-4"></span>
+                    <span class="uppercase">Desarrollo Urbano</span>
+                </div>
+            </div>
+            <h1 class="font-bold text-primary text-lg mb-3">Parcelas</h1>
+            <p class="mb-5">Parcelas de la ciudad de Villa María con coordenadas geográficas.</p>
+            <div class="flex justify-start items-center gap-5 flex-wrap text-xs text-neutral-500 mb-5">                    
+                <div class="flex items-center gap-1">
+                    <span>26/02/2026</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="uppercase">Anual</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="uppercase">Secretaría de Infraestructura y Desarrollo Sostenible</span>
+                </div>
+            </div>
+            <div class="flex justify-between flex-wrap items-center mb-5 gap-5 border-t border-b-gray-300 pt-5 mt-5">
+                <h3 class="font-semibold">Recursos de datos</h3>
+                <div class="border border-neutral-300 bg-white rounded-md flex justify-start items-center focus-within:ring-2 focus-within:ring-primary-light-3 w-48" x-data="{ searchText: '' }">
+                    <input class="bg-white rounded-md px-2 py-1 focus:outline-none w-full text-sm" autocomplete="off" type="text" x-model="searchText"
+                        name="search" placeholder="Buscar..."
+                        hx-post="/datasets/parcelas"
+                        hx-trigger="input changed delay:500ms, keyup[key=='Enter']"
+                        hx-target="#resource_list"
+                        hx-indicator=".spinner">
+                    <div class="px-2">
+                        <span x-show="searchText === ''" x-cloak>
+                        </span> 
+                        <button x-show="searchText !== ''" x-cloak class="flex justify-center items-center" @click="searchText = ''" hx-post="/datasets/parcelas" hx-vals='{"search": ""}' hx-target="#resource_list" hx-indicator=".spinner">
+                        </button>                       
+                    </div>
+                </div>
+            </div>
+            <div id="resource_list">
+    <div class="bg-primary-light-2 rounded-md border border-primary-light-3 px-4 py-3 flex justify-between items-center gap-5 flex-wrap mb-3">
+        <div>
+            <div class="text-xs text-neutral-500 line-clamp-1 mb-1">Parcelas</div>
+            <div class="font-semibold text-sm">2026</div>
+        </div>
+        <div class="flex justify-end items-center gap-5 flex-1">
+            <div class="flex items-center text-[10px] text-neutral-500 gap-1">
+                <span>26/02/2026</span>
+            </div>
+            <a href="https://mapascordoba.gob.ar/viewer/mapa/328" target="_blank" class="bg-primary hover:bg-primary-light text-white flex justify-center items-center gap-1 rounded-md px-2 py-1 text-sm">
+                <span>Ver</span>
+            </a>
+        </div>
+    </div>
+    <div class="bg-primary-light-2 rounded-md border border-primary-light-3 px-4 py-3 flex justify-between items-center gap-5 flex-wrap mb-3">
+        <div>
+            <div class="text-xs text-neutral-500 line-clamp-1 mb-1">Parcelas</div>
+            <div class="font-semibold text-sm">2021 (Shapefile)</div>
+        </div>
+        <div class="flex justify-end items-center gap-5 flex-1">
+            <div class="flex items-center text-[10px] text-neutral-500 gap-1">
+                <span>17/06/2021</span>
+            </div>
+            <div class="flex items-center text-[10px] text-neutral-500 gap-1">
+                <span class="uppercase">zip</span>
+            </div>
+            <a href="/recurso/32a3e19c-07cd-4491-a947-99873b506f33/descargar" class="bg-primary hover:bg-primary-light text-white flex justify-center items-center gap-1 rounded-md px-2 py-1 text-sm">
+                <span>Descargar</span>
+            </a>
+        </div>
+    </div>
+</div>
+        </div>
+        <div>
+            <div class="bg-white rounded-xl p-5 md:p-8 shadow-md">
+                <div class="font-semibold text-primary border-b border-b-gray-200 pb-3 mb-5">Últimas actualizaciones</div>
+                <a href="/datasets/vacunaciones-por-grupo-de-edad" class="font-semibold text-secondary block mb-3 hover:text-secondary-light transition-colors">
+                    Vacunaciones por grupo de edad
+                </a>
+                <a href="/datasets/vacunaciones-por-vacuna" class="font-semibold text-secondary block mb-3 hover:text-secondary-light transition-colors">
+                    Vacunaciones por vacuna
+                </a>
+                <a href="/datasets/vacunaciones-por-caps" class="font-semibold text-secondary block mb-3 hover:text-secondary-light transition-colors">
+                    Vacunaciones por CAPS
+                </a>
+                <a href="/datasets/atenciones-por-diagnostico" class="font-semibold text-secondary block mb-3 hover:text-secondary-light transition-colors">
+                    Atenciones por diagnóstico
+                </a>
+                <a href="/datasets/atenciones-por-caps" class="font-semibold text-secondary block mb-3 hover:text-secondary-light transition-colors">
+                    Atenciones por CAPS
+                </a>
+                <a href="/datasets/intervenciones-del-centro-de-monitoreo" class="font-semibold text-secondary block mb-3 hover:text-secondary-light transition-colors">
+                    Intervenciones del centro de monitoreo
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="w-full bg-gradient-to-t from-primary to-transparent mt-auto">
+    <div class="max-w-screen-xl mx-auto px-5">
+        <div class="border-t-2 border-t-primary pt-10">
+            <div class="flex flex-col sm:flex-row justify-center sm:justify-between gap-10 items-center mb-20">
+                <img src="/static/www/images/logo_azul.3a376116bb04.svg" alt="logo" class="h-12 w-auto sm:mb-0">                
+                <div class="text-primary-dark text-sm flex flex-col sm:flex-row justify-center items-center gap-5">
+                    <a href="/" class="text-primary-dark hover:text-primary-light font-semibold transition-colors focus:outline-none focus:text-primary-light">Inicio</a>
+                    <a href="/datasets" class="text-primary-dark hover:text-primary-light font-semibold transition-colors focus:outline-none focus:text-primary-light">Conjuntos de datos</a>
+                    <a href="/acerca" class="text-primary-dark hover:text-primary-light font-semibold transition-colors focus:outline-none focus:text-primary-light">Sobre el portal</a>                
+                </div>
+            </div>
+            <div class="text-center pb-40 text-xs text-primary-dark">
+                © 2026 <a href="https://villamaria.gob.ar">Municipalidad de Villa María</a>
+            </div>
+        </div>
+    </div>        
+</footer>  
+<script src="/static/www/build/output.min.7541db749b8a.js"></script>
+</body>
+</html>

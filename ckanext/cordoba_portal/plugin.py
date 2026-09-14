@@ -40,6 +40,13 @@ SOURCE_PORTALS = [
         "url": "https://gobiernoabierto.cordoba.gob.ar/",
         "prefix": "municba",
     },
+    {
+        "value": "villamaria",
+        "label": "Datos Abiertos de la Municipalidad de Villa María",
+        "short": "Villa María",
+        "url": "https://datos.villamaria.gob.ar/",
+        "prefix": "villamaria",
+    },
 ]
 
 

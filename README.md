@@ -37,7 +37,7 @@ feeds the `source_portal` field, the about page and the harvest sources.
 
 ## Harvesters
 
-Both need ckanext-harvest (`harvest ckan_harvester` in `ckan.plugins`) and
+All need ckanext-harvest (`harvest ckan_harvester` in `ckan.plugins`) and
 copy the files of the portal of origin here, one at a time with a pause,
 so the site is a backup and not a list of links.
 
@@ -49,8 +49,13 @@ so the site is a backup and not a list of links.
   gives datasets, versions and resources; every resource of every version
   becomes a resource here and the categories become groups. See
   `municba.py`.
+- `villamaria`: the open data portal of Villa Maria
+  (https://datos.villamaria.gob.ar), a site of its own without an API: the
+  sitemap lists the datasets and each HTML page gives the metadata and the
+  resources (loaded six at a time); the category becomes a group. See
+  `villamaria.py`.
 
-Both take their options as JSON in the config of the harvest source; the
+All take their options as JSON in the config of the harvest source; the
 module docstrings list them.
 
 `ckan cordoba-portal init-sources` creates the harvest sources the portal

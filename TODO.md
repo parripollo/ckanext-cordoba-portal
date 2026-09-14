@@ -220,8 +220,41 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
       si cambio la version o cada `recheck_days` (30). La API vieja
       (`/api/datos-abiertos/`) NO sirve: mezcla no publicados y da 500 en
       la mitad de las paginas. Una sola organizacion `municba`.
+- [x] 2026-09-14: portal de Villa Maria (datos.villamaria.gob.ar, Django
+      propio, sin API): harvester `villamaria` (villamaria.py), procedencia
+      "Villa Maria". Lee el sitemap (53 datasets con lastmod), la pagina
+      HTML de cada dataset (titulo, descripcion, categoria, fecha,
+      frecuencia, area) y sus recursos de a 6 por POST htmx con cookie
+      CSRF. Recurso = "titulo - periodo", formato del portal; descargas
+      `/recurso/<uuid>/descargar` estables (nombre por
+      Content-Disposition), links externos ("Ver", visor de mapas) quedan
+      como links. Categoria a grupo `villamaria-<slug>`. Sin licencia en el
+      portal (`notspecified`). Una sola organizacion `villamaria`. Probado
+      en local contra el portal real.
 - [ ] Portales no CKAN (ArcGIS Hub, Socrata, listas de archivos): un
       harvester por tipo, mas adelante.
+
+### Portales pendientes
+
+Siempre la misma receta: un harvester nuevo si hace falta, en su propio
+archivo (`<portal>.py` + `tests/test_<portal>.py` + fixtures reales
+recortadas en `tests/data/`), `FileCopyMixin` para COPIAR los archivos (no
+links), una opcion mas en `SOURCE_PORTALS`, entry point en pyproject, plugin
+en test.ini, fuente en `cli.py` (`init-sources`). De a uno por vez para no
+pisarnos entre sesiones.
+
+- [ ] Legislatura de Cordoba: https://legislaturacba.gob.ar/portal-de-datos-abiertos/
+      Relevado 2026-09-14: WordPress 5.4 (no es un portal de datos, son
+      paginas). Cinco secciones (composicion-de-la-camara, administracion,
+      comisiones-2, sesiones, participacion-ciudadana) con archivos en
+      `wp-content/uploads/` (pares CSV + JSON del mismo dato, PDFs) y
+      carpetas de Google Drive. El REST de WordPress esta abierto:
+      `/wp-json/wp/v2/pages?slug=...` (contenido de cada seccion) y
+      `/wp-json/wp/v2/media?mime_type=text/csv` (los adjuntos con fecha,
+      `modified` y URL). Hace falta User-Agent de navegador. Propuesta: un
+      dataset por seccion o por titulo de tabla, cada CSV/JSON/PDF un
+      recurso copiado; Drive queda como link. Empezar cuando Villa Maria
+      este en produccion.
 - [ ] Produccion propia: organizaciones propias, usuarios editores,
       `source_portal = cbadatos`, formulario con `producer` obligatorio.
 
