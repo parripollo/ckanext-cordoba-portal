@@ -33,6 +33,13 @@ SOURCE_PORTALS = [
         "url": "https://datosestadistica.cba.gov.ar/",
         "prefix": "estadistica",
     },
+    {
+        "value": "municba",
+        "label": "Muni CBA (Gobierno Abierto, Municipalidad de Córdoba)",
+        "short": "Muni CBA",
+        "url": "https://gobiernoabierto.cordoba.gob.ar/",
+        "prefix": "municba",
+    },
 ]
 
 

@@ -1,0 +1,370 @@
+{
+ "categorias": [
+  {
+   "id": 23,
+   "nombre": "Geografía y mapas",
+   "slug": "geografia-y-mapas",
+   "oculto": false,
+   "categoria_superior": {
+    "id": 110,
+    "nombre": "Urbanismo y Territorio",
+    "slug": "urbanismo-y-territorio",
+    "oculto": false,
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/110",
+     "datos_categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato?categoria=110",
+     "recursos_categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/110/recursos",
+     "sub_categorias": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/110/subcategorias"
+    }
+   },
+   "links": {
+    "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23",
+    "datos_categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato?categoria=23",
+    "recursos_categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23/recursos",
+    "sub_categorias": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23/subcategorias",
+    "categoria_superior": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/110"
+   }
+  },
+  {
+   "id": 110,
+   "nombre": "Urbanismo y Territorio",
+   "slug": "urbanismo-y-territorio",
+   "oculto": false,
+   "links": {
+    "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/110",
+    "datos_categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato?categoria=110",
+    "recursos_categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/110/recursos",
+    "sub_categorias": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/110/subcategorias"
+   }
+  },
+  {
+   "id": 25,
+   "nombre": "Administración Pública",
+   "slug": "administracion-publica",
+   "oculto": false,
+   "categoria_superior": null,
+   "links": {
+    "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/25",
+    "datos_categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato?categoria=25",
+    "recursos_categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/25/recursos",
+    "sub_categorias": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/25/subcategorias"
+   }
+  }
+ ],
+ "datos": [
+  {
+   "id": 118,
+   "titulo": "Barrios de la ciudad",
+   "slug": "barrios-de-la-ciudad",
+   "estado": "Publicado",
+   "descripcion": "Polígonos de barrios de la ciudad de Córdoba clasificados por TipoBarrio 1-oficial 2-no oficial",
+   "tags": [],
+   "creado": "2016-11-02T19:00:18-03:00",
+   "fuente": {
+    "id": "49",
+    "nombre": "Dirección de Catastro"
+   },
+   "periodicidad": "A demanda",
+   "url": "https://gobiernoabierto.cordoba.gob.ar/data/datos-abiertos/categoria/geografia-y-mapas/barrios-de-la-ciudad/118",
+   "links": {
+    "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+    "categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23",
+    "versiones": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato",
+    "datos_categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato?categoria=23"
+   }
+  },
+  {
+   "id": 3486,
+   "titulo": "Inversión pública en niñez y adolescencia (MUNA UNICEF)",
+   "slug": "inversion-publica-en-ninez-y-adolescencia-muna-unicef",
+   "estado": "Publicado",
+   "descripcion": ".",
+   "tags": [
+    "niñez",
+    "presupuesto"
+   ],
+   "creado": "2026-06-23T13:44:58-03:00",
+   "fuente": null,
+   "periodicidad": "Anual",
+   "url": "https://gobiernoabierto.cordoba.gob.ar/data/datos-abiertos/categoria/ejecucion-presupuestaria/inversion-publica-en-ninez-y-adolescencia-muna-unicef/3486",
+   "links": {
+    "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/3486",
+    "categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/25",
+    "versiones": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/3486/version-dato",
+    "datos_categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato?categoria=25"
+   }
+  },
+  {
+   "id": 999,
+   "titulo": "Borrador",
+   "slug": "borrador",
+   "estado": "No Publicado",
+   "descripcion": "Informe anual.",
+   "tags": [
+    "niñez",
+    "presupuesto"
+   ],
+   "creado": "2026-06-23T13:44:58-03:00",
+   "fuente": null,
+   "periodicidad": "Anual",
+   "url": "https://gobiernoabierto.cordoba.gob.ar/data/datos-abiertos/categoria/ejecucion-presupuestaria/inversion-publica-en-ninez-y-adolescencia-muna-unicef/3486",
+   "links": {
+    "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/999",
+    "categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/25",
+    "versiones": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/999/version-dato",
+    "datos_categoria": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato?categoria=25"
+   }
+  }
+ ],
+ "versiones": {
+  "118": [
+   {
+    "id": "6155",
+    "titulo": "Mapa de barrios de la ciudad - 2023",
+    "novedades": null,
+    "creado": "2023-04-27T14:34:29.279506-03:00",
+    "ultima_modificacion": "2023-04-27T14:34:29.279518-03:00",
+    "fuentes": [],
+    "html": "",
+    "formatos_disponibles": [
+     "web",
+     "kmz"
+    ],
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/6155",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+     "recursos": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/6155/recurso"
+    }
+   },
+   {
+    "id": "5751",
+    "titulo": "Mapa de barrios de la ciudad - 2022",
+    "novedades": null,
+    "creado": "2022-05-04T10:54:27.891839-03:00",
+    "ultima_modificacion": "2022-05-04T10:54:27.891853-03:00",
+    "fuentes": [
+     {
+      "id": "49",
+      "nombre": "Dirección de Catastro"
+     }
+    ],
+    "html": "",
+    "formatos_disponibles": [
+     "kml",
+     "kmz"
+    ],
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/5751",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+     "recursos": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/5751/recurso"
+    }
+   },
+   {
+    "id": "220",
+    "titulo": "Mapa de barrios de la ciudad - 2016",
+    "novedades": null,
+    "creado": "2016-11-02T19:27:26-03:00",
+    "ultima_modificacion": "2020-11-27T14:59:34.213763-03:00",
+    "fuentes": [
+     {
+      "id": "49",
+      "nombre": "Dirección de Catastro"
+     }
+    ],
+    "html": "",
+    "formatos_disponibles": [
+     "csv",
+     "kml",
+     "xls",
+     "shp",
+     "web"
+    ],
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+     "recursos": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220/recurso"
+    }
+   }
+  ],
+  "3486": [
+   {
+    "id": "6659",
+    "titulo": "Rendición Anual 2024",
+    "novedades": null,
+    "creado": "2026-06-23T13:44:58.928446-03:00",
+    "ultima_modificacion": "2026-06-23T13:52:55.010943-03:00",
+    "fuentes": [],
+    "html": "",
+    "formatos_disponibles": [
+     "pdf"
+    ],
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/3486/version-dato/6659",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/3486",
+     "recursos": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/3486/version-dato/6659/recurso"
+    }
+   }
+  ]
+ },
+ "recursos": {
+  "220": [
+   {
+    "id": "647",
+    "titulo": "Excel",
+    "url": "https://prod-gobiernoabierto-media-20211201181351763900000001.s3.amazonaws.com/datos/barrios-simple.xls?X-Amz-Signature=TEST",
+    "icono": "xls",
+    "tipo": "Archivo",
+    "licencia": {
+     "licencia": "CC-BY-SA-AR (CBA)",
+     "licencia_libre": true
+    },
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220/recurso/647",
+     "version": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+     "categoria_dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23"
+    }
+   },
+   {
+    "id": "645",
+    "titulo": "CSV con WKT",
+    "url": "https://prod-gobiernoabierto-media-20211201181351763900000001.s3.amazonaws.com/datos/barrios-wkt.csv?X-Amz-Signature=TEST",
+    "icono": "csv",
+    "tipo": "Archivo",
+    "licencia": {
+     "licencia": "CC-BY-SA-AR (CBA)",
+     "licencia_libre": true
+    },
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220/recurso/645",
+     "version": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+     "categoria_dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23"
+    }
+   },
+   {
+    "id": "646",
+    "titulo": "CSV simple",
+    "url": "https://prod-gobiernoabierto-media-20211201181351763900000001.s3.amazonaws.com/datos/barrios-simple.csv?X-Amz-Signature=TEST",
+    "icono": "csv",
+    "tipo": "Archivo",
+    "licencia": {
+     "licencia": "CC-BY-SA-AR (CBA)",
+     "licencia_libre": true
+    },
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220/recurso/646",
+     "version": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+     "categoria_dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23"
+    }
+   },
+   {
+    "id": "475",
+    "titulo": "KML Barrios de Córdoba",
+    "url": "https://prod-gobiernoabierto-media-20211201181351763900000001.s3.amazonaws.com/datos/barrios2.kml?X-Amz-Signature=TEST",
+    "icono": "map",
+    "tipo": "Archivo",
+    "licencia": {
+     "licencia": "CC-BY-SA-AR (CBA)",
+     "licencia_libre": true
+    },
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220/recurso/475",
+     "version": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+     "categoria_dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23"
+    }
+   },
+   {
+    "id": "341",
+    "titulo": "SHP Barrios",
+    "url": "https://prod-gobiernoabierto-media-20211201181351763900000001.s3.amazonaws.com/datos/barrio.rar?X-Amz-Signature=TEST",
+    "icono": "map",
+    "tipo": "Archivo",
+    "licencia": {
+     "licencia": "CC-BY-SA-AR (CBA)",
+     "licencia_libre": true
+    },
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220/recurso/341",
+     "version": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+     "categoria_dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23"
+    }
+   },
+   {
+    "id": "875",
+    "titulo": "Mapa online",
+    "url": "https://www.google.com/maps/d/viewer?mid=1wgxElKx8Osr6uPyEBBCce7cx3wU",
+    "icono": "web",
+    "tipo": "Referencia Externa (Link)",
+    "licencia": {
+     "licencia": "CC-BY-SA-AR (CBA)",
+     "licencia_libre": true
+    },
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220/recurso/875",
+     "version": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/220",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+     "categoria_dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23"
+    }
+   }
+  ],
+  "6155": [
+   {
+    "id": "18854",
+    "titulo": "Mapa de barrios de la ciudad - 2023",
+    "url": "https://prod-gobiernoabierto-media-20211201181351763900000001.s3.amazonaws.com/datos/Barrio_1.kmz?X-Amz-Signature=TEST",
+    "icono": "kmz",
+    "tipo": "Archivo",
+    "licencia": {
+     "licencia": "CC-BY-SA-AR (CBA)",
+     "licencia_libre": true
+    },
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/6155/recurso/18854",
+     "version": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/6155",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+     "categoria_dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23"
+    }
+   },
+   {
+    "id": "18879",
+    "titulo": "Barrios online",
+    "url": "https://comunidadinteligente.cordoba.gob.ar/catastro/",
+    "icono": "web",
+    "tipo": "Referencia Externa (Link)",
+    "licencia": {
+     "licencia": "CC-BY-SA-AR (CBA)",
+     "licencia_libre": true
+    },
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/6155/recurso/18879",
+     "version": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118/version-dato/6155",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/118",
+     "categoria_dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/23"
+    }
+   }
+  ],
+  "6659": [
+   {
+    "id": "19001",
+    "titulo": "Rendición Anual 2024",
+    "url": "https://prod-gobiernoabierto-media-20211201181351763900000001.s3.amazonaws.com/datos/Rendicion_2024.pdf?X-Amz-Signature=TEST",
+    "icono": "pdf",
+    "tipo": "Archivo",
+    "licencia": {
+     "licencia": "CC-BY-SA-AR (CBA)",
+     "licencia_libre": true
+    },
+    "links": {
+     "Self": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/3486/version-dato/6659/recurso/19001",
+     "version": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/3486/version-dato/6659",
+     "dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/dato/3486",
+     "categoria_dato": "https://gobiernoabierto.cordoba.gob.ar/api/datos-abiertos/categoria/25"
+    }
+   }
+  ]
+ }
+}

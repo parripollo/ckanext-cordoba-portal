@@ -35,6 +35,24 @@ Only the scheming ones above. The portals the site gathers data from are
 listed in `ckanext/cordoba_portal/plugin.py` (`SOURCE_PORTALS`): that list
 feeds the `source_portal` field, the about page and the harvest sources.
 
+## Harvesters
+
+Both need ckanext-harvest (`harvest ckan_harvester` in `ckan.plugins`) and
+copy the files of the portal of origin here, one at a time with a pause,
+so the site is a backup and not a list of links.
+
+- `ckan_with_files`: a CKAN portal, keeping the provenance of every dataset
+  (`source_portal`, `source_url`) and one organization per remote
+  organization, prefixed by portal. See `harvester.py`.
+- `municba`: the open data portal of the city of Cordoba
+  (https://gobiernoabierto.cordoba.gob.ar), which is not CKAN: its open API
+  gives datasets, versions and resources; every resource of every version
+  becomes a resource here and the categories become groups. See
+  `municba.py`.
+
+Both take their options as JSON in the config of the harvest source; the
+module docstrings list them.
+
 ## Developer installation
 
     pip install -e .

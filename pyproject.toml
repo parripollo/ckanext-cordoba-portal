@@ -24,6 +24,7 @@ Homepage = "https://github.com/parripollo/ckanext-cordoba-portal"
 [project.entry-points."ckan.plugins"]
 cordoba_portal = "ckanext.cordoba_portal.plugin:CordobaPortalPlugin"
 ckan_with_files = "ckanext.cordoba_portal.harvester:CordobaCKANHarvester"
+municba = "ckanext.cordoba_portal.municba:MuniCBAHarvester"
 
 
 [build-system]

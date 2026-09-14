@@ -186,3 +186,16 @@ class TestUpdatesKeepTheCopy:
         assert res["source_downloaded"] == ours["source_downloaded"]
         assert res["source_url"] == FILE_URL
         assert res["source_last_modified"] == "2099-01-01T00:00:00"
+
+    def test_one_failed_copy_does_not_stop_the_others(self, linked):
+        dataset, resource = linked
+        other = factories.Resource(package_id=dataset["id"], name="otro.csv", format="CSV",
+                                   url=FILE_URL + "2", source_url=FILE_URL + "2")
+        with mock.patch("ckanext.cordoba_portal.harvester.requests.get") as get:
+            get.return_value = FakeResponse()
+            with mock.patch.object(CordobaCKANHarvester, "_patch",
+                                   side_effect=[Exception("File upload too large"), None]) as patch:
+                harvester()._copy_files(dataset["id"])
+
+        assert patch.call_count == 2
+        assert patch.call_args_list[1][0][0]["id"] == other["id"]

@@ -206,6 +206,20 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
 
 - [ ] Otros portales CKAN: misma receta, una fuente por portal con su
       `source_portal` en la config y una opcion mas en el esquema.
+- [x] 2026-09-14: portal de la ciudad (gobiernoabierto.cordoba.gob.ar, no
+      es CKAN): harvester `municba` (municba.py), procedencia "Muni CBA".
+      Usa la API abierta nueva del sitio (`/api/datos-abiertos/dato`,
+      `.../version-dato`, `.../recurso`, `/categoria`): 183 datasets
+      publicados, ~3 versiones por dataset, cada recurso de cada version
+      es un recurso aca (nombre "version (recurso)"), categorias y
+      categoria padre a grupos `municba-<slug>`, periodicidad / categoria
+      / fuente como extras, licencia CC BY-SA. Los archivos estan en S3
+      con URL firmada que vence en 1 hora: se pide una fresca justo antes
+      de bajar (lista de recursos de la version; el endpoint de un recurso
+      solo da 500) y `source_api` guarda de donde. Copia rechequeada solo
+      si cambio la version o cada `recheck_days` (30). La API vieja
+      (`/api/datos-abiertos/`) NO sirve: mezcla no publicados y da 500 en
+      la mitad de las paginas. Una sola organizacion `municba`.
 - [ ] Portales no CKAN (ArcGIS Hub, Socrata, listas de archivos): un
       harvester por tipo, mas adelante.
 - [ ] Produccion propia: organizaciones propias, usuarios editores,

@@ -129,3 +129,9 @@ resource_fields:
   validators: ignore_missing unicode_safe
   form_snippet: null
   display_snippet: null
+
+- field_name: source_api
+  label: Recurso en la API de origen
+  validators: ignore_missing unicode_safe
+  form_snippet: null
+  display_snippet: null

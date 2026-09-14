@@ -71,7 +71,169 @@ CORE_FIELDS = {
 }
 
 
-class CordobaCKANHarvester(CKANHarvester):
+class FileCopyMixin:
+    """Copies the files of a harvested dataset here, one at a time.
+
+    A resource is copied when it has a ``source_url`` (the CKAN harvester
+    below) or whatever ``_copyable`` says; the file is fetched from
+    ``_download_url`` (by default ``source_url`` itself), and only when
+    ``_needs_copy`` says the copy is missing or stale. The content is
+    hashed; the same content is not uploaded again. After the copy the
+    resource is an upload of ours and keeps its provenance fields.
+
+    Config keys read: ``copy_files`` (default true), ``copy_pause``
+    (seconds between two downloads, 3), ``copy_max_mb`` (200),
+    ``user_agent``.
+    """
+
+    # -- hooks --------------------------------------------------------------
+
+    def _copyable(self, resource):
+        """Whether this resource is a file of the portal of origin."""
+        return bool(resource.get("source_url"))
+
+    def _download_url(self, resource):
+        """Where to fetch the file from, right now; None when unknown."""
+        return resource.get("source_url")
+
+    @staticmethod
+    def _needs_copy(resource):
+        """A file is fetched when we have no copy, or when the portal says
+        it changed after we copied it."""
+        if resource.get("url_type") != "upload" or not resource.get("source_downloaded"):
+            return True
+        remote = resource.get("source_last_modified")
+        return bool(remote and remote > resource["source_downloaded"])
+
+    # -- the files ----------------------------------------------------------
+
+    def _existing_copies(self, package_id):
+        """{resource id: the copy fields} of the resources of the local
+        dataset that are already copies of ours, or {}."""
+        if not package_id:
+            return {}
+        try:
+            existing = toolkit.get_action("package_show")(
+                dict(self._context(), use_cache=False), {"id": package_id})
+        except toolkit.ObjectNotFound:
+            return {}
+        return {
+            r["id"]: {k: r[k] for k in COPY_FIELDS if r.get(k) is not None}
+            for r in existing.get("resources", [])
+            if r.get("url_type") == "upload" and self._copyable(r)
+        }
+
+    def _copy_files(self, package_id):
+        """Copy the files of a dataset that changed since our copy."""
+        package = toolkit.get_action("package_show")(
+            dict(self._context(), use_cache=False), {"id": package_id})
+        pause = float(self.config.get("copy_pause", 3))
+        for resource in package.get("resources", []):
+            if not self._copyable(resource):
+                continue
+            if not self._needs_copy(resource):
+                continue
+            try:
+                self._copy_file(resource)
+            except Exception as e:
+                # one file (too big for the uploader, say) does not stop
+                # the others; it is tried again next time
+                log.exception("Copy of resource %s failed: %s", resource.get("id"), e)
+            time.sleep(pause)
+
+    def _copy_file(self, resource):
+        max_bytes = int(float(self.config.get("copy_max_mb", 200)) * 1024 * 1024)
+        headers = self._request_headers()
+        if resource.get("source_etag") and resource.get("url_type") == "upload":
+            headers["If-None-Match"] = resource["source_etag"]
+        url = self._download_url(resource)
+        if not url:
+            log.warning("No download URL for resource %s, not copied", resource.get("id"))
+            return
+        now = datetime.utcnow().replace(microsecond=0).isoformat()
+
+        try:
+            response = self._get_with_retry(url, headers)
+        except requests.RequestException as e:
+            log.warning("Could not fetch %s: %s", url, e)
+            return
+        with response:
+            if response.status_code == 304:
+                log.info("Unchanged (304): %s", url)
+                self._patch(resource, {"source_downloaded": now})
+                return
+            if response.status_code != 200:
+                log.warning("Not copying %s: HTTP %s", url, response.status_code)
+                return
+            length = int(response.headers.get("Content-Length") or 0)
+            if length > max_bytes:
+                log.warning("Not copying %s: %s bytes", url, length)
+                return
+            digest = hashlib.sha256()
+            size = 0
+            tmp = tempfile.TemporaryFile()
+            for chunk in response.iter_content(chunk_size=1024 * 64):
+                size += len(chunk)
+                if size > max_bytes:
+                    log.warning("Not copying %s: more than %s bytes", url, max_bytes)
+                    tmp.close()
+                    return
+                digest.update(chunk)
+                tmp.write(chunk)
+            etag = response.headers.get("ETag") or ""
+            content_type = response.headers.get("Content-Type") or ""
+
+        sha256 = digest.hexdigest()
+        if resource.get("url_type") == "upload" and resource.get("hash") == sha256:
+            log.info("Same content, not replaced: %s", url)
+            tmp.close()
+            self._patch(resource, {"source_downloaded": now, "source_etag": etag})
+            return
+
+        tmp.seek(0)
+        filename = os.path.basename(urlparse(url).path) or resource["id"]
+        upload = FileStorage(tmp, filename=filename, content_type=content_type.split(";")[0])
+        self._patch(resource, {
+            "upload": upload,
+            "url": filename,
+            "hash": sha256,
+            "size": size,
+            "mimetype": content_type.split(";")[0] or None,
+            "source_etag": etag,
+            "source_downloaded": now,
+        })
+        tmp.close()
+        log.info("Copied %s (%s bytes)", url, size)
+
+    def _request_headers(self):
+        headers = {}
+        if self.config.get("user_agent"):
+            headers["User-Agent"] = str(self.config["user_agent"])
+        return headers
+
+    def _get_with_retry(self, url, headers, attempts=2):
+        """GET, streaming; a slow origin gets a long read timeout and one
+        more try (the file is re-read from the start)."""
+        for attempt in range(1, attempts + 1):
+            try:
+                return requests.get(url, headers=headers, timeout=(30, 300), stream=True)
+            except requests.RequestException as e:
+                if attempt == attempts:
+                    raise
+                log.warning("Retrying %s after: %s", url, e)
+                time.sleep(5)
+
+    def _patch(self, resource, changes):
+        data = dict(changes, id=resource["id"])
+        toolkit.get_action("resource_patch")(self._context(), data)
+
+    def _context(self):
+        """A fresh context for one action call, as the harvest user."""
+        return {"model": model, "session": model.Session,
+                "user": self._get_user_name()}
+
+
+class CordobaCKANHarvester(FileCopyMixin, CKANHarvester):
 
     def info(self):
         return {
@@ -159,131 +321,7 @@ class CordobaCKANHarvester(CKANHarvester):
                 log.exception("Copying the files of %s failed: %s", package_id, e)
         return result
 
-    # -- the files ----------------------------------------------------------
-
-    def _existing_copies(self, package_id):
-        """{resource id: the copy fields} of the resources of the local
-        dataset that are already copies of ours, or {}."""
-        if not package_id:
-            return {}
-        try:
-            existing = toolkit.get_action("package_show")(
-                dict(self._context(), use_cache=False), {"id": package_id})
-        except toolkit.ObjectNotFound:
-            return {}
-        return {
-            r["id"]: {k: r[k] for k in COPY_FIELDS if r.get(k) is not None}
-            for r in existing.get("resources", [])
-            if r.get("url_type") == "upload" and r.get("source_url")
-        }
-
-    def _copy_files(self, package_id):
-        """Copy the files of a dataset that changed since our copy."""
-        package = toolkit.get_action("package_show")(
-            dict(self._context(), use_cache=False), {"id": package_id})
-        pause = float(self.config.get("copy_pause", 3))
-        for resource in package.get("resources", []):
-            if not resource.get("source_url"):
-                continue
-            if not self._needs_copy(resource):
-                continue
-            self._copy_file(resource)
-            time.sleep(pause)
-
-    @staticmethod
-    def _needs_copy(resource):
-        """A file is fetched when we have no copy, or when the portal says
-        it changed after we copied it."""
-        if resource.get("url_type") != "upload" or not resource.get("source_downloaded"):
-            return True
-        remote = resource.get("source_last_modified")
-        return bool(remote and remote > resource["source_downloaded"])
-
-    def _copy_file(self, resource):
-        max_bytes = int(float(self.config.get("copy_max_mb", 200)) * 1024 * 1024)
-        headers = {}
-        if self.config.get("user_agent"):
-            headers["User-Agent"] = str(self.config["user_agent"])
-        if resource.get("source_etag") and resource.get("url_type") == "upload":
-            headers["If-None-Match"] = resource["source_etag"]
-        url = resource["source_url"]
-        now = datetime.utcnow().replace(microsecond=0).isoformat()
-
-        try:
-            response = self._get_with_retry(url, headers)
-        except requests.RequestException as e:
-            log.warning("Could not fetch %s: %s", url, e)
-            return
-        with response:
-            if response.status_code == 304:
-                log.info("Unchanged (304): %s", url)
-                self._patch(resource, {"source_downloaded": now})
-                return
-            if response.status_code != 200:
-                log.warning("Not copying %s: HTTP %s", url, response.status_code)
-                return
-            length = int(response.headers.get("Content-Length") or 0)
-            if length > max_bytes:
-                log.warning("Not copying %s: %s bytes", url, length)
-                return
-            digest = hashlib.sha256()
-            size = 0
-            tmp = tempfile.TemporaryFile()
-            for chunk in response.iter_content(chunk_size=1024 * 64):
-                size += len(chunk)
-                if size > max_bytes:
-                    log.warning("Not copying %s: more than %s bytes", url, max_bytes)
-                    tmp.close()
-                    return
-                digest.update(chunk)
-                tmp.write(chunk)
-            etag = response.headers.get("ETag") or ""
-            content_type = response.headers.get("Content-Type") or ""
-
-        sha256 = digest.hexdigest()
-        if resource.get("url_type") == "upload" and resource.get("hash") == sha256:
-            log.info("Same content, not replaced: %s", url)
-            tmp.close()
-            self._patch(resource, {"source_downloaded": now, "source_etag": etag})
-            return
-
-        tmp.seek(0)
-        filename = os.path.basename(urlparse(url).path) or resource["id"]
-        upload = FileStorage(tmp, filename=filename, content_type=content_type.split(";")[0])
-        self._patch(resource, {
-            "upload": upload,
-            "url": filename,
-            "hash": sha256,
-            "size": size,
-            "mimetype": content_type.split(";")[0] or None,
-            "source_etag": etag,
-            "source_downloaded": now,
-        })
-        tmp.close()
-        log.info("Copied %s (%s bytes)", url, size)
-
-    def _get_with_retry(self, url, headers, attempts=2):
-        """GET, streaming; a slow origin gets a long read timeout and one
-        more try (the file is re-read from the start)."""
-        for attempt in range(1, attempts + 1):
-            try:
-                return requests.get(url, headers=headers, timeout=(30, 300), stream=True)
-            except requests.RequestException as e:
-                if attempt == attempts:
-                    raise
-                log.warning("Retrying %s after: %s", url, e)
-                time.sleep(5)
-
-    def _patch(self, resource, changes):
-        data = dict(changes, id=resource["id"])
-        toolkit.get_action("resource_patch")(self._context(), data)
-
     # -- organizations and groups -----------------------------------------
-
-    def _context(self):
-        """A fresh context for one action call, as the harvest user."""
-        return {"model": model, "session": model.Session,
-                "user": self._get_user_name()}
 
     def _local_organization(self, remote_org, portal, base_url):
         """The id of the local organization for a remote one: same title,
@@ -339,9 +377,7 @@ class CordobaCKANHarvester(CKANHarvester):
     def _fetch_file(self, url, max_bytes=MAX_LOGO_BYTES):
         """The file at url as an upload for CKAN, or None if it cannot be
         fetched. Same User-Agent as the API calls (the portals need it)."""
-        headers = {}
-        if self.config.get("user_agent"):
-            headers["User-Agent"] = str(self.config["user_agent"])
+        headers = self._request_headers()
         try:
             response = requests.get(url, headers=headers, timeout=60)
             response.raise_for_status()
