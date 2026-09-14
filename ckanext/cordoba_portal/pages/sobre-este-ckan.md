@@ -11,7 +11,7 @@ pueda instalarse y mantenerse con una sola base de datos, como cualquier
 aplicación web sencilla.
 
 La propuesta está documentada en
-[ckanito.cluster311.com](https://ckanito.cluster311.com/) y su código es
+[ckan.cbadatos.com.ar](https://ckan.cbadatos.com.ar/) y su código es
 público: [parripollo/ckanito](https://github.com/parripollo/ckanito). Las
 extensiones de CKAN que usamos (scheming, harvest, xloader, vistas de
 mapas y PDF, entre otras) también fueron probadas contra esa versión y sus
