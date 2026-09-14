@@ -129,5 +129,7 @@ footer .site-footer {
   padding: 2px 8px;
   font-size: 12px;
   margin: 6px 0 4px;
+  width: fit-content;
+  align-self: flex-start;
 }
 .cba-org-badge i { margin-right: 3px; }
