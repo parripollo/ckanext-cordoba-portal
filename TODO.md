@@ -231,6 +231,15 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
       consumers (`RESTART_HARVEST=1 deploy.sh cbadatos` o systemctl).
 - [ ] deploy.sh ya no reinicia los consumers de harvest si hay un job
       corriendo (RESTART_HARVEST=1 fuerza).
+- [ ] Imagenes de grupos: el harvester estandar (`remote_groups: create`)
+      crea el grupo con el dict remoto y `image_url` es un nombre de
+      archivo del portal remoto -> imagen rota (mismo bug que harvest PR #2
+      arreglo para orgs). 2026-09-14: arreglado a mano en prod (13 grupos,
+      imagen bajada y subida por API). Falta que el harvester lo haga solo
+      (copiar la imagen como con los logos de orgs), cuando termine la
+      cosecha en curso.
+- [ ] Cloudflare devuelve 403 a los POST a la API con User-Agent
+      `Python-urllib`; usar curl o requests con otro UA.
 
 ## 6. Orden sugerido
 
