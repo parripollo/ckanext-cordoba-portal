@@ -211,12 +211,26 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
 - [ ] Produccion propia: organizaciones propias, usuarios editores,
       `source_portal = cbadatos`, formulario con `producer` obligatorio.
 
-## 5. Extensiones a activar (ya revisadas en el demo)
+## 5. Extensiones
 
-- [ ] scheming (esquema propio en la extension), harvest (+ consumers y
-      timer del deploy), xloader, geoview, pages (acerca de / fuentes),
-      push_errors (Slack), api_tracking, dbquery. hierarchy solo si se
-      elige la alternativa B. dcat para exponer todo como DCAT/JSON-LD.
+- [x] 2026-09-13/14 activas en cbadatos: scheming, harvest (+ consumers y
+      timer), xloader, push_errors, pdfview (fork nuevo, PR #1), geoview
+      (geojson_view + geo_view WMS/WFS/KML/GML/ArcGIS), dcat
+      (catalog.jsonld, JSON-LD schema.org en cada dataset), pages (menu
+      "Acerca de" desplegable propio + lista al pie de Acerca de; pagina
+      "Sobre este CKAN y este experimento" creada por `ckan cordoba-portal
+      init-pages`, idempotente, corre en cada deploy), tracking +
+      api_tracking (timer horario; dashboard solo admins).
+- [x] Sitemap propio en la extension (/sitemap.xml + robots.txt), sin
+      ckanext-sitemap.
+- [ ] Decidido NO por ahora (andres): spatial, showcase, dbquery.
+      Tampoco: hierarchy, archiver/qa, googleanalytics, fluent, superset.
+- [ ] Al terminar la primera cosecha: `ckan views create pdf_view
+      geojson_view geo_view` (los consumers viejos no crean esas vistas),
+      poner `mimetype` a las copias sin el (por extension), reiniciar los
+      consumers (`RESTART_HARVEST=1 deploy.sh cbadatos` o systemctl).
+- [ ] deploy.sh ya no reinicia los consumers de harvest si hay un job
+      corriendo (RESTART_HARVEST=1 fuerza).
 
 ## 6. Orden sugerido
 
