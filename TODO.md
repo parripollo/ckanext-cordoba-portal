@@ -238,6 +238,10 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
       imagen bajada y subida por API). Falta que el harvester lo haga solo
       (copiar la imagen como con los logos de orgs), cuando termine la
       cosecha en curso.
+- [ ] Harvester: si la copia de un archivo falla (p. ej. "File upload too
+      large"), seguir con el siguiente en vez de cortar el dataset
+      (2026-09-14: 3 datasets afectados por el tope de 10 MB; ya subido a
+      200 MB en la instancia). Los 404 del origen quedan como link.
 - [ ] Cloudflare devuelve 403 a los POST a la API con User-Agent
       `Python-urllib`; usar curl o requests con otro UA.
 
