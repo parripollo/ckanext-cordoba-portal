@@ -122,6 +122,13 @@ def parse_resources(html, base_url):
     return resources, next_page
 
 
+def resource_id(dataset_url, resource_url):
+    """A stable id for a resource of a dataset. The dataset is part of it:
+    several datasets link the same map viewer, and a resource id is unique
+    across the site."""
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, "%s#%s" % (dataset_url, resource_url)))
+
+
 def iso_date(text):
     """'10/09/2026' -> '2026-09-10'; anything else as it came."""
     match = DATE.match(text.strip())
@@ -310,7 +317,7 @@ class VillaMariaHarvester(FileCopyMixin, HarvesterBase):
             "extras": extras,
             "groups": self._groups(dataset["category"], portal)
             if self.config.get("groups", True) else [],
-            "resources": self._resources(dataset, package_id),
+            "resources": self._resources(dataset, package_id, content["url"]),
         }
 
     def _owner_org(self, harvest_object):
@@ -333,14 +340,13 @@ class VillaMariaHarvester(FileCopyMixin, HarvesterBase):
             log.info("Group %s created from a category of the portal", name)
         return [{"id": group["id"], "name": group["name"]}]
 
-    def _resources(self, dataset, package_id):
+    def _resources(self, dataset, package_id, dataset_url):
         copies = self._existing_copies(package_id)
         resources = []
         for remote in dataset["resources"]:
-            resource_id = str(uuid.uuid5(uuid.NAMESPACE_URL, remote["url"]))
             name = " - ".join(t for t in (remote["title"] or dataset["title"], remote["period"]) if t)
             resource = {
-                "id": resource_id,
+                "id": resource_id(dataset_url, remote["url"]),
                 "name": name[:100],
                 "format": remote["format"] or ("" if remote["file"] else "HTML"),
                 "url": remote["url"],
@@ -348,7 +354,7 @@ class VillaMariaHarvester(FileCopyMixin, HarvesterBase):
             if remote["file"]:
                 resource["source_url"] = remote["url"]
                 resource["source_last_modified"] = remote["date"]
-            copy = copies.get(resource_id)
+            copy = copies.get(resource["id"])
             if copy:
                 resource.update(copy)
             resources.append(resource)

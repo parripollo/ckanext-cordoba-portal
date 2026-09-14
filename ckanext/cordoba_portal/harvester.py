@@ -46,6 +46,7 @@ import requests
 from werkzeug.datastructures import FileStorage
 
 from ckan import model
+from ckan.lib import uploader
 from ckan.plugins import toolkit
 from ckanext.harvest.harvesters.ckanharvester import CKANHarvester, RemoteResourceError
 
@@ -137,13 +138,23 @@ class FileCopyMixin:
             try:
                 self._copy_file(resource)
             except Exception as e:
-                # one file (too big for the uploader, say) does not stop
-                # the others; it is tried again next time
+                # one file does not stop the others; it is tried again next
+                # time. Whatever the failed action left in the session must
+                # not be committed by the next one (an upload that fails
+                # half way leaves the resource pointing at a file that is
+                # not there)
                 log.exception("Copy of resource %s failed: %s", resource.get("id"), e)
+                model.Session.rollback()
             time.sleep(pause)
 
+    def _max_copy_bytes(self):
+        """``copy_max_mb``, but never more than what this CKAN accepts as
+        an upload (``ckan.max_resource_size``)."""
+        max_mb = min(float(self.config.get("copy_max_mb", 200)), uploader.get_max_resource_size())
+        return int(max_mb * 1024 * 1024)
+
     def _copy_file(self, resource):
-        max_bytes = int(float(self.config.get("copy_max_mb", 200)) * 1024 * 1024)
+        max_bytes = self._max_copy_bytes()
         headers = self._request_headers()
         if resource.get("source_etag") and resource.get("url_type") == "upload":
             headers["If-None-Match"] = resource["source_etag"]

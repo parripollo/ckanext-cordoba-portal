@@ -152,6 +152,18 @@ class TestCopy:
         same = call_action("resource_show", id=resource["id"])
         assert same["url"] == FILE_URL and not same.get("url_type")
 
+    @pytest.mark.ckan_config("ckan.max_resource_size", 1)
+    def test_bigger_than_this_ckan_accepts_stays_a_link(self, linked):
+        dataset, resource = linked
+        big = FakeResponse(content=b"x" * (1024 * 1024 + 1))
+
+        with mock.patch("ckanext.cordoba_portal.harvester.requests.get") as get:
+            get.return_value = big
+            harvester()._copy_files(dataset["id"])   # copy_max_mb is 200 here
+
+        same = call_action("resource_show", id=resource["id"])
+        assert same["url"] == FILE_URL and not same.get("url_type")
+
     def test_a_link_elsewhere_is_left_alone(self, with_plugins, clean_db):
         dataset = factories.Dataset(source_portal="datosgestionabierta")
         factories.Resource(package_id=dataset["id"], url="https://www.instagram.com/x/", format="ENLACE")

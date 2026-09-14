@@ -375,6 +375,14 @@ class TestPieces:
         assert next_page is None and len(resources) == 2
         assert villamaria.parse_resources("<div>nothing</div>", PORTAL) == ([], None)
 
+    def test_resource_ids_are_per_dataset(self):
+        # barrios, parcelas and manzanas all link the same map viewer
+        viewer = "https://mapascordoba.gob.ar/viewer/mapa/328"
+        a = villamaria.resource_id(PORTAL + "/datasets/parcelas", viewer)
+        b = villamaria.resource_id(PORTAL + "/datasets/manzanas", viewer)
+        assert a != b
+        assert a == villamaria.resource_id(PORTAL + "/datasets/parcelas", viewer)
+
     def test_iso_date(self):
         assert villamaria.iso_date("10/09/2026") == "2026-09-10"
         assert villamaria.iso_date("1/2/2026") == "1/2/2026"
