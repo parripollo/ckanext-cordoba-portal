@@ -191,9 +191,23 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
       cambio. Alternativa si molesta que un job dure horas: encolar la
       descarga como job de CKAN por dataset con un solo worker.
 - [ ] Frecuencia: primera pasada completa, luego semanal por fuente.
-- [ ] Backup de verdad: cuando un dataset desaparece del origen, NO
-      borrarlo (el harvester `ckan` lo borra por defecto): marcarlo
-      ("ya no esta en el portal de origen", fecha) y dejarlo visible.
+- [ ] PRIORITARIO (andres, 2026-09-14) Backup de verdad: lo que se borra
+      en el origen se conserva aca, marcado. Hoy (verificado): ningun
+      harvester borra datasets (ni el `ckan` de ckanext-harvest: solo el
+      de DCAT tiene borrado), asi que un dataset borrado queda intacto
+      pero SIN aviso; en cambio un RECURSO que desaparece de un dataset
+      que sigue existiendo SI se pierde de la vista: package_update
+      reemplaza la lista de recursos y CKAN lo marca deleted (el archivo
+      queda en el disco). Plan: campo `source_deleted` (fecha) en dataset
+      y recurso, facet "Estado en el origen" (vigente / borrado en el
+      origen), banner en ficha y recurso; datasets: al final del gather
+      comparar la lista completa del origen con los nuestros de esa
+      fuente y marcar los que faltan (al harvester `ckan` le cuesta una
+      consulta mas), desmarcar si reaparece; recursos: al importar,
+      conservar los que tienen copia y ya no vienen, marcados (partir de
+      `_existing_copies`). Salvaguarda: marcar solo con listado completo
+      sin errores y a la segunda pasada consecutiva. Comando para
+      reactivar recursos ya borrados que tengan copia en disco.
 - [ ] Datastore: xloader carga los CSV/XLS copiados (como en el demo);
       los GeoJSON van con geoview. ZIP y RAR (4.500 en estadistica) solo
       se guardan; ver despues si vale la pena abrirlos.
@@ -316,30 +330,57 @@ pisarnos entre sesiones.
       Pendiente: decidir con andres si vale un tope > 200 MB para los 12
       rasters grandes (~7 GB) o quedan como link; licencia (el portal dice
       "datos libres", sin licencia formal -> notspecified).
-- [ ] Rio Cuarto, portal de transparencia de la Secretaria de Economia:
-      https://economiariocuarto.gob.ar/transparencia
-      Relevado 2026-09-14: Next.js en Vercel, sin API propia, pero cada
-      seccion tiene su JSON de pagina en
-      `/_next/data/<buildId>/transparencia/<seccion>.json` (el buildId
-      sale del `__NEXT_DATA__` de cualquier pagina; cambia con cada
-      deploy). Secciones: `informacion-economica-financiera` (186 items
-      en listas ejercicios/ejecuciones/presupuesto/recaudacion/informes/
-      deudas/realidad, cada item {title, category, status Vigente/No
-      Vigente, url}), `escala-salarial` (32), `boletin-oficial` (33, casi
-      todo carpetas de Drive), `declaraciones-juradas` (por cargo: 20 PDF
-      en `prod.ddjj.riocuarto.gob.ar/ddjj_publicas/<ulid>.pdf` + Drive).
-      Los archivos son casi todos Google Drive publicos
-      (`drive.google.com/file/d/<id>/view`): se bajan con
-      `https://drive.usercontent.google.com/download?id=<id>&export=download`
-      (303 desde `drive.google.com/uc?export=download&id=`), devuelve
-      Content-Disposition con el nombre real, Last-Modified y
-      Content-Length; PDFs de ~1 MB. Las carpetas de Drive (35) no se
-      pueden listar sin API key de Google: quedan como link (o se pide
-      una key gratuita y se listan; decidir). Propuesta: un dataset por
-      categoria (presupuesto, ejecucion, recaudacion, deuda, informes,
-      realidad, escala salarial, boletin oficial, DDJJ), cada item un
-      recurso copiado; `status` como extra; sin fechas en el JSON (usar
-      Last-Modified de Drive para no rebajar). Sin licencia visible.
+- [x] 2026-09-14: Rio Cuarto, portal de transparencia de la Secretaria de
+      Economia (https://economiariocuarto.gob.ar/transparencia): harvester
+      `riocuarto` (riocuarto.py), procedencia "Rio Cuarto", org
+      `riocuarto`, fuente WEEKLY. Next.js en Vercel: el buildId sale del
+      `__NEXT_DATA__` de /transparencia y cada seccion tiene su JSON en
+      `/_next/data/<buildId>/transparencia/<seccion>.json`. Un dataset por
+      tipo de documento (SECTIONS en el modulo: presupuesto, ejecucion,
+      cuenta general, recaudacion, deuda, calificacion de riesgo, realidad
+      economica, escala salarial, boletin oficial, DDJJ = 10), seccion
+      como grupo, extras seccion / documentos_vigentes; cada item un
+      recurso, "Vigente"/"No vigente" en la descripcion. Archivos: los de
+      Google Drive se copian por `drive.google.com/uc?export=download&id=`
+      (Drive da Content-Disposition con el nombre real y Last-Modified,
+      sin ETag; el formato sale del nombre del archivo al copiar), los PDF
+      de DDJJ directo (`prod.ddjj.riocuarto.gob.ar`, con ETag); las
+      carpetas de Drive (boletin oficial, 35) quedan como links (sin API
+      key de Google no se listan). Id de recurso por id de Drive (el
+      `?usp=` cambia); el mismo archivo listado dos veces son dos
+      recursos. Sin fechas: `recheck_days` (30) y hash. FileCopyMixin:
+      ahora no guarda como copia una respuesta text/html (la pagina de
+      "confirmar descarga" de Drive, un login) y toma el formato del
+      nombre del archivo si el recurso no lo tenia. Sin licencia visible.
+      Probado en local contra el portal real.
+
+### Fuentes candidatas (relevadas 2026-09-14, para decidir)
+
+- [ ] **Rio Tercero**: https://datos.riotercero.gob.ar es un CKAN 2.7.6
+      (54 datasets, 7 orgs = secretarias, grupos boletin oficial /
+      cuentas publicas / normativa / datos ambientales / tramites...;
+      formatos PDF 54, CSV 3, XLS 1; sin User-Agent especial). NO hace
+      falta harvester nuevo: fuente `ckan_with_files` con
+      `source_portal: riotercero` (agregar a SOURCE_PORTALS) y orgs con
+      prefijo `riotercero-`. El mas barato de sumar.
+- [ ] Villa Allende: https://www.villaallende.gov.ar/transparencia/
+      (WordPress: boletines, licitaciones, acceso a la informacion; PDFs
+      en wp-content/uploads). Valor medio; receta tipo Legislatura.
+- [ ] Bell Ville: https://bellville.gob.ar/presupuesto/ y
+      /llamados-a-licitacion/ (WordPress, PDFs). Valor bajo-medio.
+- Revisados y descartados por ahora: turismo.cordoba.gob.ar/datos-abiertos
+  (solo enlaza a la categoria Turismo de municba, ya cosechado);
+  datos.cordoba.gob.ar (no es datos abiertos: app interna "base unica"
+  con login); transparencia.cba.gov.ar y gestionabierta.cba.gov.ar (403
+  a curl, Cloudflare; el segundo es la portada de datosgestionabierta, ya
+  cosechado); compraspublicas.cba.gov.ar (403); cdcordoba.gob.ar (Concejo
+  Deliberante, WordPress sin seccion de datos); justiciacordoba.gob.ar
+  (ASP.NET, sin seccion de datos visible en la portada; las estadisticas
+  judiciales serian valiosas, mirar mejor a mano); Villa Carlos Paz, San
+  Francisco, Alta Gracia, Jesus Maria, Cosquin, Marcos Juarez: sus sitios
+  no tienen seccion de datos ni transparencia enlazada desde la portada
+  (sus datos geograficos ya vienen por IDECOR Ciudades).
+
 - [ ] Produccion propia: organizaciones propias, usuarios editores,
       `source_portal = cbadatos`, formulario con `producer` obligatorio.
 
