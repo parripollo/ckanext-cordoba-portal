@@ -6,6 +6,28 @@ vive en el repo de deploy, no aca.
 
 ## 0. Estado
 
+**2026-09-15, cierre de la primera etapa.** Las 11 fuentes de la agenda
+estan en cbadatos.com.ar, cosechadas completas y con cero errores de
+objeto: estadistica 645 datasets, idecor 618, municba 183, unc 163,
+gestion abierta 156, riotercero 54, villamaria 52, legislatura 36,
+riocuarto 10, bellville 4, villaallende 3. Total 1.924 datasets y 16 GB de
+copias; disco 182 GB libres. Todas semanales (idecor mensual). Cada
+harvester nuevo se activa con: commit en este repo, plugin en
+`instances/cbadatos.env` del deploy, `deploy.sh cbadatos` (crea la fuente
+via `init-sources`), `ckan harvester job <fuente>` + `harvester run`.
+
+**Siguiente paso sugerido (en este orden):**
+
+1. Conservar lo borrado en el origen, marcado (seccion 3, PRIORITARIO).
+2. `force_all: true` en las fuentes gestion-abierta y estadistica (hoy
+   una copia fallida no se reintenta hasta que el dataset cambie en el
+   origen); vistas y mimetypes de lo cosechado (seccion 5).
+3. Respaldo fuera del servidor (seccion 3).
+4. Paginas "Fuentes" y "Acerca de", pie de pagina propio (seccion 1).
+5. Deuda de harvest: imagenes de grupos, bugs de ckanext-harvest
+   (log_scope, harvest_source_patch), la org propia que cuenta las
+   fuentes como datasets (secciones 2 y 5).
+
 - [x] 2026-09-13: extension pelada (`ckan generate extension`), CI verde
       contra el CKAN solo-PostgreSQL.
 - [x] 2026-09-13: instancia `cbadatos` definida en el repo de deploy (rama
@@ -18,16 +40,19 @@ vive en el repo de deploy, no aca.
 - [x] 2026-09-13: rama `cbadatos` del deploy mezclada en main.
 - [x] 2026-09-13: instancia local andando (ckanito-cbadatos.ini, puerto
       5001, bases ckanito_cbadatos*, admin / cbadatos-dev-2026) con la home.
-- [ ] Servidor: `deploy.sh demo` (units nuevas), `bootstrap.sh cbadatos`
-      (root corre el SQL de los pasos 3 y 4), `deploy.sh cbadatos`, root
-      instala los vhosts por instancia y borra el `ckanito.conf` viejo.
+- [x] 2026-09-13: servidor: bootstrap y deploy de cbadatos, vhosts por
+      instancia instalados por root. 2026-09-14: root subio
+      max_connections de Postgres a 300 (con 100 compartidas con otra app
+      hubo 500 por falta de conexiones; pools de SQLAlchemy acotados a
+      4+6 en las dos instancias).
 
 ## 1. Home page
 
 - [x] 2026-09-13: tema Midnight Blue (env de la instancia y test.ini).
 - [x] 2026-09-13: `home/index.html`: iniciativa ciudadana, buscador grande,
       contadores (datasets, organizaciones), datasets recientes. Test.
-- [ ] Contador y accesos por portal de origen cuando exista `source_portal`.
+- [x] 2026-09-14: portales de origen con su cantidad de datasets y link,
+      debajo del buscador de la home.
 - [x] 2026-09-13: seccion "Recent Datasets" quitada de la home (andres):
       ordenaba por `metadata_modified`, que en lo cosechado mezcla la fecha
       remota con la de la copia de archivos. Sin valor.
@@ -449,12 +474,13 @@ Revisados el 2026-09-14 y descartados por ahora (sin datos o ya cubiertos): turi
       ckanext-sitemap.
 - [ ] Decidido NO por ahora (andres): spatial, showcase, dbquery.
       Tampoco: hierarchy, archiver/qa, googleanalytics, fluent, superset.
-- [ ] Al terminar la primera cosecha: `ckan views create pdf_view
-      geojson_view geo_view` (los consumers viejos no crean esas vistas),
-      poner `mimetype` a las copias sin el (por extension), reiniciar los
-      consumers (`RESTART_HARVEST=1 deploy.sh cbadatos` o systemctl).
-- [ ] deploy.sh ya no reinicia los consumers de harvest si hay un job
-      corriendo (RESTART_HARVEST=1 fuerza).
+- [ ] Vistas: `ckan views create -y pdf_view geojson_view geo_view
+      datatables_view` para lo cosechado el 2026-09-14/15 (idecor ya
+      tiene las suyas), y que los harvesters las creen solos en adelante
+      (ckan.views.default_views). Poner `mimetype` a las copias sin el.
+- [x] 2026-09-14: deploy.sh no reinicia los consumers de harvest si hay
+      un job corriendo (RESTART_HARVEST=1 fuerza); antes de un deploy que
+      deba reiniciarlos, `ckan harvester run` marca los jobs terminados.
 - [ ] Imagenes de grupos: el harvester estandar (`remote_groups: create`)
       crea el grupo con el dict remoto y `image_url` es un nombre de
       archivo del portal remoto -> imagen rota (mismo bug que harvest PR #2
@@ -462,10 +488,9 @@ Revisados el 2026-09-14 y descartados por ahora (sin datos o ya cubiertos): turi
       imagen bajada y subida por API). Falta que el harvester lo haga solo
       (copiar la imagen como con los logos de orgs), cuando termine la
       cosecha en curso.
-- [ ] Harvester: si la copia de un archivo falla (p. ej. "File upload too
-      large"), seguir con el siguiente en vez de cortar el dataset
-      (2026-09-14: 3 datasets afectados por el tope de 10 MB; ya subido a
-      200 MB en la instancia). Los 404 del origen quedan como link.
+- [x] 2026-09-14: si la copia de un archivo falla, el harvester sigue con
+      el siguiente (FileCopyMixin._copy_files). Tope de subida en prod:
+      1 GB. Los 404 del origen quedan como link.
 - [ ] Cloudflare devuelve 403 a los POST a la API con User-Agent
       `Python-urllib`; usar curl o requests con otro UA.
 
