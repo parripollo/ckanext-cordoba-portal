@@ -27,6 +27,14 @@ via `init-sources`), `ckan harvester job <fuente>` + `harvester run`.
 5. Deuda de harvest: imagenes de grupos, bugs de ckanext-harvest
    (log_scope, harvest_source_patch), la org propia que cuenta las
    fuentes como datasets (secciones 2 y 5).
+6. 500 en `POST /_tracking` (bug viejo de CKAN core, `ckanext/tracking/
+   middleware.py`): el beacon de visitas se parsea a mano con
+   `k, v = part.split('=')` y revienta con un `&` final, un `=` sin
+   codificar o sin User-Agent. Pasa 1 a 11 veces por hora desde el
+   2026-09-13, cada una es una notificacion de push_errors; el visitante
+   no lo nota. Fix ya hecho y testeado en CKANito core (commit local
+   57e3ea46d8 en master: `parse_qs` + headers con `.get` + 7 tests),
+   falta pushear y `deploy.sh cbadatos`.
 
 - [x] 2026-09-13: extension pelada (`ckan generate extension`), CI verde
       contra el CKAN solo-PostgreSQL.
