@@ -21,3 +21,17 @@
     </ul>
   </li>
 {% endblock %}
+
+{# Midnight Blue drops the site-wide search box of the default theme, but
+   people should be able to search from every page, not only the home. It
+   goes right after the tabs, prefilled with the current query. #}
+{% block header_site_navigation %}
+  {{ super() }}
+  <form class="cba-site-search" role="search" method="get" action="{{ h.url_for(dataset_type ~ '.search') }}">
+    <label class="d-none" for="field-sitewide-search">Buscar datos</label>
+    <input id="field-sitewide-search" type="search" name="q" autocomplete="off"
+           value="{{ request.args.get('q', '') if request.blueprint == dataset_type else '' }}"
+           placeholder="Buscar datos..." aria-label="Buscar datos" />
+    <button type="submit" aria-label="Buscar"><i class="fa fa-search" aria-hidden="true"></i></button>
+  </form>
+{% endblock %}

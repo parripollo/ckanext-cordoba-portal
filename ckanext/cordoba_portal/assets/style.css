@@ -174,3 +174,90 @@ footer .site-footer {
   width: fit-content;
 }
 .cba-org-badge i { margin-right: 3px; }
+
+/* Site-wide search in the header, between the tabs and the login button.
+   The tabs of the theme take a fixed col-md-10; the box is one pill that
+   grows with the space left. */
+.masthead .main-navbar {
+  align-items: center;
+  gap: 16px;
+}
+.masthead .main-navbar > ul {
+  flex: 1 1 auto;
+  width: auto;
+  padding-right: 0;
+}
+.masthead .main-navbar > .login {
+  flex: none;
+  width: auto;
+}
+.cba-site-search {
+  display: flex;
+  align-items: center;
+  flex: 0 1 250px;
+  min-width: 180px;
+  height: 40px;
+  padding: 0 4px 0 16px;
+  border-radius: 999px;
+  border: 1px solid #c5cde0;
+  background: #f4f6fb;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.cba-site-search:focus-within {
+  background: #fff;
+  border-color: #0a1d5e;
+  box-shadow: 0 0 0 3px rgba(10, 29, 94, 0.15);
+}
+.cba-site-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font-size: 15px;
+  color: #000312;
+  outline: none;
+}
+.cba-site-search input::placeholder { color: #6b7590; }
+.cba-site-search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+.cba-site-search button {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: #0a1d5e;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cba-site-search button:hover,
+.cba-site-search button:focus-visible {
+  background: #1c2a63;
+}
+@media (max-width: 991px) {
+  /* the collapsed menu is a column, with the box first, before the tabs */
+  .masthead .main-navbar.show,
+  .masthead .main-navbar.collapsing {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  .cba-site-search {
+    order: -1;
+    flex: none;
+    width: 100%;
+    margin: 16px 0 4px;
+  }
+}
+/* the theme spaces the tabs 24px apart; with the box next to them there
+   is no room for that, and the tabs have their own padding anyway */
+@media (min-width: 992px) {
+  .masthead .main-navbar > ul { gap: 4px; }
+  .masthead .main-navbar > ul li a { padding-left: 0.7rem; padding-right: 0.7rem; }
+}
+@media (min-width: 992px) and (max-width: 1399px) {
+  .cba-site-search { flex-basis: 200px; }
+}
