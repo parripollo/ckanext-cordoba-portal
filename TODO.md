@@ -34,7 +34,15 @@ via `init-sources`), `ckan harvester job <fuente>` + `harvester run`.
    2026-09-13, cada una es una notificacion de push_errors; el visitante
    no lo nota. Fix ya hecho y testeado en CKANito core (commit local
    57e3ea46d8 en master: `parse_qs` + headers con `.get` + 7 tests),
-   falta pushear y `deploy.sh cbadatos`.
+   falta pushear y `deploy.sh cbadatos`. Pero lo relevante (andres): el
+   plugin `tracking` de core esta en cbadatos solo porque el README de
+   api_tracking dice que es requerido, y NO lo es: el codigo de
+   api_tracking no importa nada de ckanext.tracking y sus tests corren
+   con `ckan.plugins = api_tracking` solo. Sacar `tracking` de PLUGINS en
+   `instances/cbadatos.env` (deploy.sh deja de habilitar el timer
+   ckanito-tracking-update@cbadatos; deshabilitarlo a mano la primera
+   vez) y corregir el README del fork de api_tracking. Se pierde
+   `tracking_summary`/`sort=views_recent`, que el portal no muestra.
 
 - [x] 2026-09-13: extension pelada (`ckan generate extension`), CI verde
       contra el CKAN solo-PostgreSQL.
