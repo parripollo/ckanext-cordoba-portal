@@ -201,9 +201,15 @@ Propuesta (conversada el 2026-09-13, sigue abierta):
       eso se detecta por URL y no por `url_type`.
       Si el harvester queda generico y probado, se propone despues como
       mejora del fork de ckanext-harvest (opcion `download_resources`).
-- [ ] Con cuidado con el servidor remoto: un archivo por vez, pausa de
+- [x] Con cuidado con el servidor remoto: un archivo por vez, pausa de
       unos segundos entre pedidos, reintentos con espera, tope de tamano
-      por archivo (decidir: 200 MB?).
+      por archivo. Decidido 2026-09-25 (andres): archivos de hasta 10 GB
+      son bienvenidos; el tope es `ckan.max_resource_size` de la instancia
+      (10240 en cbadatos) y `copy_max_mb` solo lo baja. La descarga va a
+      `<storage>/tmp` (el /tmp del server es tmpfs). Si la copia falta en
+      disco se vuelve a bajar (incidente 2026-09-25: 44 archivos > 10 MB
+      rechazados por el default de 10 MB y metadata committeada sin
+      rollback; reparados con refetch-missing.py en el server).
 - [ ] User-Agent (medido 2026-09-13): los dos portales dan 404 a cualquier
       UA que no tenga tokens de Chrome (probados "cbadatos.com.ar
       harvester", "Mozilla/5.0 (compatible; ...)", python-requests,
@@ -368,8 +374,8 @@ pisarnos entre sesiones.
       (3) `ckan views create geo_view geojson_view pdf_view` (o agregarlos a
       `ckan.views.default_views`) - en prod todavia falta. Pendiente en el
       fork: el titulo de la vista dice "Map viewer" sin traducir.
-      Pendiente: decidir con andres si vale un tope > 200 MB para los 12
-      rasters grandes (~7 GB) o quedan como link; licencia (el portal dice
+      2026-09-25: tope subido a 10 GB (andres), los 12 rasters grandes se
+      copian en el proximo harvest mensual; licencia (el portal dice
       "datos libres", sin licencia formal -> notspecified).
 - [x] 2026-09-14: Rio Cuarto, portal de transparencia de la Secretaria de
       Economia (https://economiariocuarto.gob.ar/transparencia): harvester

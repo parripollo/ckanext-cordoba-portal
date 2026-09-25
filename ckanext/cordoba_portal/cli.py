@@ -41,7 +41,7 @@ SOURCES = [
             "notes": "Portal de datos abiertos de la Municipalidad de Córdoba.",
             "config": json.dumps({
                 "single_org": "municba", "pause": 1, "copy_pause": 3,
-                "copy_max_mb": 1024, "recheck_days": 30, "user_agent": USER_AGENT,
+                "recheck_days": 30, "user_agent": USER_AGENT,
             }),
         },
     },
@@ -107,7 +107,7 @@ SOURCES = [
             "notes": "Geoportal de la Infraestructura de Datos Espaciales de Córdoba.",
             "config": json.dumps({
                 "single_org": "idecor", "pause": 1, "copy_pause": 3,
-                "copy_max_mb": 200, "recheck_days": 30, "user_agent": USER_AGENT,
+                "recheck_days": 30, "user_agent": USER_AGENT,
             }),
         },
     },

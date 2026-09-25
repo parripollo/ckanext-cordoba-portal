@@ -24,7 +24,7 @@ Source config (JSON), on top of the ``ckan`` harvester's own keys::
      "remote_groups": "create",
      "copy_files": true,          # default
      "copy_pause": 3,             # seconds between two downloads (default)
-     "copy_max_mb": 200}          # bigger files stay as links (default)
+     "copy_max_mb": 200}          # optional: bigger files stay as links
 
     {"source_portal": "datosestadistica",
      "single_org": "estadistica-dgeyc",
@@ -46,7 +46,7 @@ import requests
 from werkzeug.datastructures import FileStorage
 
 from ckan import model
-from ckan.lib import uploader
+from ckan.lib import files, uploader
 from ckan.plugins import toolkit
 from ckanext.harvest.harvesters.ckanharvester import CKANHarvester, RemoteResourceError
 
@@ -84,7 +84,8 @@ class FileCopyMixin:
     resource is an upload of ours and keeps its provenance fields.
 
     Config keys read: ``copy_files`` (default true), ``copy_pause``
-    (seconds between two downloads, 3), ``copy_max_mb`` (200),
+    (seconds between two downloads, 3), ``copy_max_mb`` (optional, the
+    limit is otherwise what this CKAN accepts, ``ckan.max_resource_size``),
     ``user_agent``.
     """
 
@@ -133,8 +134,15 @@ class FileCopyMixin:
         for resource in package.get("resources", []):
             if not self._copyable(resource):
                 continue
-            if not self._needs_copy(resource):
+            missing = self._copy_is_missing(resource)
+            if not missing and not self._needs_copy(resource):
                 continue
+            if missing:
+                log.warning("Copy of resource %s is not on disk, fetching it again",
+                            resource.get("id"))
+                # with these the download would be skipped as unchanged
+                resource = {k: v for k, v in resource.items()
+                            if k not in ("hash", "source_etag")}
             try:
                 self._copy_file(resource)
             except Exception as e:
@@ -147,11 +155,42 @@ class FileCopyMixin:
                 model.Session.rollback()
             time.sleep(pause)
 
+    @staticmethod
+    def _copy_is_missing(resource):
+        """True when the resource is an upload of ours whose file is not in
+        the storage (never written, or lost): it has to be fetched again."""
+        if resource.get("url_type") != "upload" or not resource.get("id"):
+            return False
+        upload = uploader.get_resource_uploader(dict(resource))
+        location = upload.get_path(resource["id"])
+        storage = getattr(upload, "storage", None)
+        if storage is not None:                      # a file-keeper storage
+            try:
+                return not storage.exists(files.FileData(location))
+            except files.exc.UnsupportedOperationError:
+                return False
+        if getattr(upload, "storage_path", None):    # ckan.storage_path on disk
+            return not os.path.exists(location)
+        return False
+
     def _max_copy_bytes(self):
-        """``copy_max_mb``, but never more than what this CKAN accepts as
-        an upload (``ckan.max_resource_size``)."""
-        max_mb = min(float(self.config.get("copy_max_mb", 200)), uploader.get_max_resource_size())
+        """What this CKAN accepts as an upload (``ckan.max_resource_size``),
+        lowered by ``copy_max_mb`` when the source config sets it."""
+        max_mb = float(uploader.get_max_resource_size())
+        if self.config.get("copy_max_mb") is not None:
+            max_mb = min(float(self.config["copy_max_mb"]), max_mb)
         return int(max_mb * 1024 * 1024)
+
+    @staticmethod
+    def _tempfile():
+        """Where a download lands before the upload: next to the storage, on
+        disk. /tmp can be RAM (tmpfs) and the files can weigh gigabytes."""
+        directory = None
+        storage = toolkit.config.get("ckan.storage_path")
+        if storage and os.path.isdir(storage):
+            directory = os.path.join(storage, "tmp")
+            os.makedirs(directory, exist_ok=True)
+        return tempfile.TemporaryFile(dir=directory)
 
     def _copy_file(self, resource):
         max_bytes = self._max_copy_bytes()
@@ -189,7 +228,7 @@ class FileCopyMixin:
                 return
             digest = hashlib.sha256()
             size = 0
-            tmp = tempfile.TemporaryFile()
+            tmp = self._tempfile()
             for chunk in response.iter_content(chunk_size=1024 * 64):
                 size += len(chunk)
                 if size > max_bytes:

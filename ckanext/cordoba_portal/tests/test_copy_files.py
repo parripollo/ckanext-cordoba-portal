@@ -2,10 +2,13 @@
 only when they change."""
 import hashlib
 import json
+import os
+import tempfile
 from unittest import mock
 
 import pytest
 
+from ckan.lib import files, uploader
 from ckan.tests import factories
 from ckan.tests.helpers import call_action
 
@@ -159,7 +162,7 @@ class TestCopy:
 
         with mock.patch("ckanext.cordoba_portal.harvester.requests.get") as get:
             get.return_value = big
-            harvester()._copy_files(dataset["id"])   # copy_max_mb is 200 here
+            harvester()._copy_files(dataset["id"])   # no copy_max_mb: the CKAN limit rules
 
         same = call_action("resource_show", id=resource["id"])
         assert same["url"] == FILE_URL and not same.get("url_type")
@@ -237,3 +240,81 @@ class TestUpdatesKeepTheCopy:
 
         assert patch.call_count == 2
         assert patch.call_args_list[1][0][0]["id"] == other["id"]
+
+
+STORAGE = tempfile.mkdtemp(prefix="cordoba-storage-")
+
+
+def stored(resource_id):
+    """(storage, file) of the copy of a resource. test-core.ini keeps the
+    uploads in a memory storage of file-keeper; production writes them
+    under ckan.storage_path (see TestTheFileOnDisk.test_on_disk)."""
+    resource = call_action("resource_show", id=resource_id)
+    upload = uploader.get_resource_uploader(resource)
+    return upload.storage, files.FileData(upload.get_path(resource_id))
+
+
+class TestTheLimit:
+
+    @pytest.mark.ckan_config("ckan.max_resource_size", 10240)
+    def test_the_limit_is_what_this_ckan_accepts(self, ckan_config):
+        assert harvester()._max_copy_bytes() == 10240 * 1024 * 1024
+
+    @pytest.mark.ckan_config("ckan.max_resource_size", 10240)
+    def test_copy_max_mb_only_lowers_it(self, ckan_config):
+        h = harvester()
+        h.config["copy_max_mb"] = 100
+        assert h._max_copy_bytes() == 100 * 1024 * 1024
+        h.config["copy_max_mb"] = 99999
+        assert h._max_copy_bytes() == 10240 * 1024 * 1024
+
+
+class TestTheFileOnDisk:
+
+    def test_a_copy_missing_from_the_storage_is_fetched_again(self, linked):
+        dataset, resource = linked
+        copy(dataset)
+        storage, data = stored(resource["id"])
+        assert storage.exists(data)
+        storage.remove(data)
+
+        with mock.patch("ckanext.cordoba_portal.harvester.requests.get") as get:
+            get.return_value = FakeResponse()
+            harvester()._copy_files(dataset["id"])
+
+        get.assert_called_once()
+        assert "If-None-Match" not in get.call_args[1]["headers"]
+        assert storage.exists(data)
+        again = call_action("resource_show", id=resource["id"])
+        assert again["url_type"] == "upload" and again["hash"] == SHA
+
+    def test_a_copy_in_the_storage_is_not_fetched_again(self, linked):
+        dataset, resource = linked
+        copy(dataset)
+        storage, data = stored(resource["id"])
+        assert storage.exists(data)
+
+        with mock.patch("ckanext.cordoba_portal.harvester.requests.get") as get:
+            harvester()._copy_files(dataset["id"])
+        get.assert_not_called()
+
+    @pytest.mark.ckan_config("ckan.storage_path", STORAGE)
+    def test_on_disk(self, ckan_config):
+        """The uploader of production: files under ckan.storage_path."""
+        resource = {"id": "0123456789abcdef", "url_type": "upload"}
+        classic = uploader.ResourceUpload(dict(resource))
+        with mock.patch("ckanext.cordoba_portal.harvester.uploader.get_resource_uploader",
+                        return_value=classic):
+            assert CordobaCKANHarvester._copy_is_missing(resource)
+            path = classic.get_path(resource["id"])
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            open(path, "wb").close()
+            assert not CordobaCKANHarvester._copy_is_missing(resource)
+        assert not CordobaCKANHarvester._copy_is_missing(dict(resource, url_type=""))
+
+    @pytest.mark.ckan_config("ckan.storage_path", STORAGE)
+    def test_the_download_lands_next_to_the_storage(self, ckan_config):
+        tmp = harvester()._tempfile()
+        tmp.write(b"x")
+        tmp.close()
+        assert os.path.isdir(os.path.join(STORAGE, "tmp"))
