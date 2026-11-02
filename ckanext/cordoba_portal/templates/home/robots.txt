@@ -1,5 +1,17 @@
 {% ckan_extends %}
 
+{#- Filtered listings (tags, formats, groups...) are endless combinations of
+    the same datasets: Googlebot walked them at 10+ req/s (2026-11-02). Every
+    dataset, organization and group is in the sitemap, so crawlers do not
+    need the listings with a query string. -#}
+{% block all_user_agents -%}
+{{ super() }}
+Disallow: /dataset/?
+Disallow: /dataset?
+Disallow: /organization/*?
+Disallow: /group/*?
+{%- endblock %}
+
 {% block additional_user_agents -%}
 Sitemap: {{ h.url_for('cordoba_portal.sitemap', _external=True) }}
 {%- endblock %}

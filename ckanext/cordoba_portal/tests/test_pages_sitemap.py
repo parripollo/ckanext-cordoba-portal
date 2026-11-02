@@ -64,6 +64,9 @@ class TestSitemap:
 
         robots = app.get("/robots.txt").body
         assert "Sitemap: http://test.ckan.net/sitemap.xml" in robots
+        assert "Disallow: /api/" in robots
+        assert "Disallow: /dataset/?" in robots
+        assert "Disallow: /organization/*?" in robots
 
 
 @pytest.mark.usefixtures("with_plugins", "clean_db")
