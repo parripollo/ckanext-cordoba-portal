@@ -1,5 +1,15 @@
 {% ckan_extends %}
 
+{# The logo of the portal in its two versions: the theme shows the one
+   that fits the light or the dark mode (classes logo-light and logo-dark). #}
+{% block header_logo %}
+  {% set label = _('Navigate to Home - {site_title}').format(site_title=g.site_title) %}
+  <a class="logo" href="{{ h.url_for('home.index') }}">
+    <img src="{{ h.url_for_static_or_external(g.site_logo) }}" alt="{{ g.site_title }}" aria-label="{{ label }}" class="logo-light"/>
+    <img src="/images/cba-datos-logo-white.svg" alt="{{ g.site_title }}" aria-label="{{ label }}" class="logo-dark" style="display:none"/>
+  </a>
+{% endblock %}
+
 {# The tabs: datasets, organizations, groups, and one "Acerca de" menu that
    holds the about page and every public page of ckanext-pages, so the
    pages never take a tab each. #}

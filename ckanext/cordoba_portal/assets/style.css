@@ -261,3 +261,49 @@ footer .site-footer {
 @media (min-width: 992px) and (max-width: 1399px) {
   .cba-site-search { flex-basis: 200px; }
 }
+
+/* Dark mode (the Theme button of the core sets data-theme="dark" on <html>).
+   Only what this file paints with light colours needs a dark version; the
+   --dm-* variables are the palette of the core theme. */
+html[data-theme="dark"] .cba-source,
+html[data-theme="dark"] .cba-source-line,
+html[data-theme="dark"] .cba-source-org,
+html[data-theme="dark"] .cba-org-badge {
+  background: #2e2613;
+  border-color: #6b5320;
+  color: #f3dfb0;
+}
+html[data-theme="dark"] .cba-source .module-heading {
+  background: #3d3117;
+  border-bottom-color: #6b5320;
+  color: #f9e7c3;
+}
+html[data-theme="dark"] .cba-source .module-content,
+html[data-theme="dark"] .cba-source .module-content p {
+  color: #f3dfb0;
+}
+html[data-theme="dark"] .cba-source a:not(.btn),
+html[data-theme="dark"] .cba-source-line a:not(.btn),
+html[data-theme="dark"] .cba-source-org a:not(.btn),
+html[data-theme="dark"] .cba-org-badge a:not(.btn) {
+  color: #ffd98a;
+}
+html[data-theme="dark"] .cba-site-search {
+  background: var(--dm-bg);
+  border-color: var(--dm-border);
+}
+html[data-theme="dark"] .cba-site-search:focus-within {
+  background: var(--dm-bg);
+  border-color: var(--dm-link);
+  box-shadow: 0 0 0 3px rgba(142, 169, 232, 0.25);
+}
+html[data-theme="dark"] .cba-site-search input {
+  background: transparent;
+  color: var(--dm-text);
+}
+html[data-theme="dark"] .cba-site-search input::placeholder {
+  color: var(--dm-text-muted);
+}
+html[data-theme="dark"] .cba-site-search button {
+  background: #1f3aa0;
+}
