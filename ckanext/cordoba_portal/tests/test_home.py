@@ -35,3 +35,13 @@ def test_about_page_names_the_source_portals(app):
     assert "https://datosestadistica.cba.gov.ar/" in page
     assert "procesar más datos" in page
     assert "instancia experimental de CKAN" in page
+
+
+@pytest.mark.usefixtures("with_plugins", "clean_db")
+def test_account_bar_only_for_logged_in_users(app):
+    assert "account-masthead" not in app.get("/").body
+
+    sysadmin = factories.SysadminWithToken()
+    page = app.get("/", headers={"Authorization": sysadmin["token"]}).body
+    assert "account-masthead" in page
+    assert sysadmin["name"] in page

@@ -1,5 +1,12 @@
 {% ckan_extends %}
 
+{# The account bar is for logged-in users. Since the dark theme arrived the
+   core renders it for everyone, to hold the theme button. This portal runs
+   with dark mode off, so for a visitor it would be an empty strip. #}
+{% block header_account %}
+  {% if c.userobj %}{{ super() }}{% endif %}
+{% endblock %}
+
 {# The tabs: datasets, organizations, groups, and one "Acerca de" menu that
    holds the about page and every public page of ckanext-pages, so the
    pages never take a tab each. #}
