@@ -10,3 +10,21 @@
   {{ super() }}
   {% asset 'cordoba_portal/cordoba_portal-css' %}
 {% endblock %}
+
+{# Dark mode is there for whoever picks it with the Theme button, but the
+   portal opens in light mode: the core script would also follow the
+   system preference of the visitor. This one only applies a saved choice,
+   before the page renders. #}
+{% block theme_mode_script %}
+  {% if h.dark_mode_enabled() %}
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem('ckan.theme-mode') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  {% endif %}
+{% endblock %}

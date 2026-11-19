@@ -37,11 +37,16 @@ def test_about_page_names_the_source_portals(app):
     assert "instancia experimental de CKAN" in page
 
 
-@pytest.mark.usefixtures("with_plugins", "clean_db")
-def test_account_bar_only_for_logged_in_users(app):
-    assert "account-masthead" not in app.get("/").body
+@pytest.mark.usefixtures("with_plugins")
+def test_dark_mode_is_a_choice_of_the_visitor(app):
+    page = app.get("/").body
 
-    sysadmin = factories.SysadminWithToken()
-    page = app.get("/", headers={"Authorization": sysadmin["token"]}).body
-    assert "account-masthead" in page
-    assert sysadmin["name"] in page
+    # the Theme button of the core is there for everyone
+    assert 'data-module="theme-toggle"' in page
+    # a saved choice is applied, the system preference is not followed:
+    # the portal opens in light mode
+    assert "ckan.theme-mode" in page
+    assert "prefers-color-scheme" not in page
+    # the header has the logo for each mode
+    assert 'class="logo-light"' in page
+    assert 'class="logo-dark"' in page
